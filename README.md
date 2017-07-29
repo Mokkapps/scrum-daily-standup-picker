@@ -14,7 +14,8 @@ Corresponding variables are located in /src/app/app.component.ts and can be adju
 * Angular CLI (https://cli.angular.io/)
 
 # Run
-* Run "ng serve"
+* Run `npm install` once
+* Run `ng serve`
 * Open browser and go to "http://localhost:4200"
 
 # Used assets
