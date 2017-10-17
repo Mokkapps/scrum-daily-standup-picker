@@ -1,19 +1,13 @@
 <div style="text-align:center">
-    <div>
+    <section>
         <button (click)="triggerPicker($event)">{{title}}</button>
         <h2>{{time}}</h2>
-    </div>
+    </section>
 
-    <div class="row">
-        <ng-container *ngFor="let member of teamMembers">
-            <div class="column">
-                <div [ngClass]="{'card': !member.disabled, 'card-disabled': member.disabled}" (click)="onMemberClick(member)">
-                    <img src="{{member.image}}" alt="Jane" style="height:200px;width:300px">
-                    <div class="container">
-                        <h2>{{member.name}}</h2>
-                    </div>
-                </div>
-            </div>
-        </ng-container>
-    </div>
+    <ng-container class="row" *ngFor="let member of teamMembers">
+        <div class="column" [ngClass]="{'card': !member.disabled, 'card-disabled': member.disabled}" (click)="onMemberClick(member)">
+            <img class="image" src="{{member.image}}">
+            <h2 class="container">{{member.name}}</h2>
+        </div>
+    </ng-container>
 </div>
