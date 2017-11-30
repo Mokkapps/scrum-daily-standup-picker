@@ -129,6 +129,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private playAudio(filePath: string) {
     const audio = new Audio();
     audio.src = filePath;
+    audio.msAudioCategory = 'BackgroundCapableMedia'
     audio.load();
     audio.play();
   }
