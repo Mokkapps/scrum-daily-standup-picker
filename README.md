@@ -2,7 +2,7 @@
 
 This is a tool which can be used in Scrum teams to initiate the daily Scrum meeting.
 
-![Scrum Daily Standup Picker](http://mokkapps.de/wp-content/uploads/2017/07/2017-07-27-1918-04.gif)
+![Scrum Daily Standup Picker](http://www.mokkapps.de/img/standup_picker.gif)
 
 # Features
 
