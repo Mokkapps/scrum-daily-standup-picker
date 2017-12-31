@@ -8,7 +8,7 @@ const STANDUP_MAX_TIME_IN_SEC = 15 * 60; // The time for the daily standup
 const TICK_TIME_IN_SEC = 13 * 60; // Play tick sound shortly before standup ends
 const STANDUP_SOUND_HOUR = 9; // Hour when the standup sound should play
 const STANDUP_SOUND_MINUTE = 59; // Minute when the standup sound should play
-const STANDUP_SOUND_PATHS = [ '../../assets/sounds/cheerful-song.wav' ];
+const STANDUP_SOUND_PATHS = ['../../assets/sounds/cheerful-song.wav'];
 
 const TRANSLATIONS = {
   CLICK_TO_SELECT_TEAM_MEMBER: 'Hier klicken um Standup Picker zu starten',
@@ -21,7 +21,7 @@ const TRANSLATIONS = {
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: [ './app.component.css' ]
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit, OnDestroy {
   title = TRANSLATIONS.CLICK_TO_SELECT_TEAM_MEMBER;
@@ -29,11 +29,27 @@ export class AppComponent implements OnInit, OnDestroy {
   time: string;
 
   teamMembers: TeamMember[] = [
-    { name: 'Developer 1', disabled: false, image: '../../assets/images/user1.jpeg' },
-    { name: 'Scrum Master', disabled: false, image: '../../assets/images/user2.jpeg' },
+    {
+      name: 'Developer 1',
+      disabled: false,
+      image: '../../assets/images/user1.jpeg'
+    },
+    {
+      name: 'Scrum Master',
+      disabled: false,
+      image: '../../assets/images/user2.jpeg'
+    },
     { name: 'QA', disabled: false, image: '../../assets/images/user3.jpeg' },
-    { name: 'Architect', disabled: false, image: '../../assets/images/user4.jpeg' },
-    { name: 'Developer 2', disabled: false, image: '../../assets/images/user5.jpeg' }
+    {
+      name: 'Architect',
+      disabled: false,
+      image: '../../assets/images/user4.jpeg'
+    },
+    {
+      name: 'Developer 2',
+      disabled: false,
+      image: '../../assets/images/user5.jpeg'
+    }
   ];
 
   private standupTimeInSeconds: number = STANDUP_MAX_TIME_IN_SEC;
@@ -49,11 +65,20 @@ export class AppComponent implements OnInit, OnDestroy {
     this.teamMembers = this.shuffle(this.teamMembers);
 
     // Play standup sound at certain time of day
-    this.standupSoundTimerSubscription = Observable.interval(60 * 1000).map(() => new Date()).subscribe((date) => {
-      if (date.getHours() === STANDUP_SOUND_HOUR && date.getMinutes() === STANDUP_SOUND_MINUTE) {
-        this.playAudio(STANDUP_SOUND_PATHS[this.getRandomInt(0, STANDUP_SOUND_PATHS.length - 1)]);
-      }
-    });
+    this.standupSoundTimerSubscription = Observable.interval(60 * 1000)
+      .map(() => new Date())
+      .subscribe(date => {
+        if (
+          date.getHours() === STANDUP_SOUND_HOUR &&
+          date.getMinutes() === STANDUP_SOUND_MINUTE
+        ) {
+          this.playAudio(
+            STANDUP_SOUND_PATHS[
+              this.getRandomInt(0, STANDUP_SOUND_PATHS.length - 1)
+            ]
+          );
+        }
+      });
   }
 
   ngOnDestroy(): void {
@@ -84,7 +109,8 @@ export class AppComponent implements OnInit, OnDestroy {
         const remainingMinutes = Math.round(secondsPassed / 60);
         this.time =
           secondsPassed !== 0
-            ? `${TRANSLATIONS.REMAINING_STANDUP_TIME} ${remainingMinutes}` + ` ${TRANSLATIONS.MINUTES}`
+            ? `${TRANSLATIONS.REMAINING_STANDUP_TIME} ${remainingMinutes}` +
+              ` ${TRANSLATIONS.MINUTES}`
             : '';
 
         // Reset labels if standup time is over
@@ -111,7 +137,9 @@ export class AppComponent implements OnInit, OnDestroy {
       this.timerSubscription.unsubscribe();
     }
     this.title = TRANSLATIONS.PLEASE_WAIT;
-    const shuffledAndAvailableMember = this.shuffle(this.teamMembers).filter((m: TeamMember) => !m.disabled);
+    const shuffledAndAvailableMember = this.shuffle(this.teamMembers).filter(
+      (m: TeamMember) => !m.disabled
+    );
 
     this.shuffleSubscription = Observable.zip(
       Observable.from(shuffledAndAvailableMember),
@@ -129,7 +157,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private playAudio(filePath: string) {
     const audio = new Audio();
     audio.src = filePath;
-    audio.msAudioCategory = 'BackgroundCapableMedia'
+    audio.msAudioCategory = 'BackgroundCapableMedia';
     audio.load();
     audio.play();
   }
