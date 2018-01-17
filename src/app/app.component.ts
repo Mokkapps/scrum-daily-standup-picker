@@ -93,6 +93,29 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
+  triggerPicker() {
+    if (this.timerSubscription) {
+      this.time = '';
+      this.timerSubscription.unsubscribe();
+    }
+    this.title = TRANSLATIONS.PLEASE_WAIT;
+    const shuffledAndAvailableMember = this.shuffle(this.teamMembers).filter(
+      (m: TeamMember) => !m.disabled
+    );
+
+    this.shuffleSubscription = Observable.zip(
+      Observable.from(shuffledAndAvailableMember),
+      Observable.timer(500, 500),
+      function(item, i) {
+        return item;
+      }
+    )
+      .finally(() => this.onPickComplete())
+      .subscribe((member: TeamMember) => {
+        this.teamMembers = this.shuffle(this.teamMembers);
+      });
+  }
+
   private onMemberClick(member: TeamMember) {
     member.disabled = !member.disabled;
   }
@@ -129,29 +152,6 @@ export class AppComponent implements OnInit, OnDestroy {
   private pickRandomMember(): TeamMember {
     const filteredArr = this.teamMembers.filter((m: TeamMember) => !m.disabled);
     return filteredArr[Math.floor(Math.random() * filteredArr.length)];
-  }
-
-  private triggerPicker() {
-    if (this.timerSubscription) {
-      this.time = '';
-      this.timerSubscription.unsubscribe();
-    }
-    this.title = TRANSLATIONS.PLEASE_WAIT;
-    const shuffledAndAvailableMember = this.shuffle(this.teamMembers).filter(
-      (m: TeamMember) => !m.disabled
-    );
-
-    this.shuffleSubscription = Observable.zip(
-      Observable.from(shuffledAndAvailableMember),
-      Observable.timer(500, 500),
-      function(item, i) {
-        return item;
-      }
-    )
-      .finally(() => this.onPickComplete())
-      .subscribe((member: TeamMember) => {
-        this.teamMembers = this.shuffle(this.teamMembers);
-      });
   }
 
   private playAudio(filePath: string) {
