@@ -1,13 +1,8 @@
-<div style="text-align:center">
-    <section>
-        <button (click)="triggerPicker()">{{title}}</button>
-        <h2>{{time}}</h2>
-    </section>
-
-    <ng-container class="row" *ngFor="let member of teamMembers">
-        <div class="column" [ngClass]="{'card': !member.disabled, 'card-disabled': member.disabled}" (click)="onMemberClick(member)">
-            <img class="image" src="{{member.image}}">
-            <h2 class="container">{{member.name}}</h2>
-        </div>
-    </ng-container>
-</div>
+<mat-drawer-container>
+    <mat-drawer mode="side" opened="true">
+        <app-sidenav></app-sidenav>
+    </mat-drawer>
+    <mat-drawer-content>
+        <app-standup-picker></app-standup-picker>
+    </mat-drawer-content>
+</mat-drawer-container>

@@ -1,5 +1,11 @@
 {
   "name": "scrum-daily-standup-picker",
+  "author": {
+    "name": "Michael Hoffmann",
+    "email": "kontakt@mokkapps.de",
+    "url": "http://www.mokkapps.de"
+  },
+  "description": "Tool for scrum teams to initiate the daily standup meeting",
   "version": "0.1.0",
   "license": "MIT",
   "main": "main.js",
@@ -15,12 +21,14 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^5.1.2",
+    "@angular/animations": "^5.2.1",
+    "@angular/cdk": "^5.0.4",
     "@angular/common": "^5.1.2",
     "@angular/compiler": "^5.1.2",
     "@angular/core": "^5.1.2",
     "@angular/forms": "^5.1.2",
     "@angular/http": "^5.1.2",
+    "@angular/material": "^5.0.4",
     "@angular/platform-browser": "^5.1.2",
     "@angular/platform-browser-dynamic": "^5.1.2",
     "@angular/router": "^5.1.2",
