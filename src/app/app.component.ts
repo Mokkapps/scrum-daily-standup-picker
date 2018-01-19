@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SettingsService } from 'app/settings/settings.service';
 
 @Component({
   selector: 'app-root',
@@ -6,11 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
+  constructor(settingsService: SettingsService) {}
 
-  constructor() { }
-
-  ngOnInit() {
-
-  }
+  ngOnInit() {}
 }
-

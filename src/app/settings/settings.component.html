@@ -1,0 +1,17 @@
+<!-- <h1>JIRA URL: {{(settings | async).jiraUrl}}</h1>
+<h1>Standup Music: {{(settings | async).standupMusic}}</h1>
+<h1>Slideshow Time in seconds: {{(settings | async).slideshowTimeInSec}}</h1>
+<h1>Slideshow URLs: {{(settings | async).slideshowURLs}}</h1> -->
+
+<div class="container">
+    <h1>Einstellungen</h1>
+    <form [formGroup]="settingsForm" novalidate>
+        <div class="form-group">
+            <label class="center-block">Name:
+                <input class="form-control" formControlName="name">
+            </label>
+        </div>
+    </form>
+
+    <button (click)="openElectronWindow()">Trigger Electron</button>
+</div>

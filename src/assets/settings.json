@@ -1,0 +1,6 @@
+{
+  "memberImages": ["Test1", "Test2"],
+  "jiraUrl": "JIRA",
+  "slideshowURLs": ["URL1", "URL2"],
+  "standupMusic": ["Music1", "Music2"]
+}

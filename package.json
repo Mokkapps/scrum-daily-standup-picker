@@ -32,6 +32,7 @@
     "@angular/platform-browser": "^5.1.2",
     "@angular/platform-browser-dynamic": "^5.1.2",
     "@angular/router": "^5.1.2",
+    "@types/electron": "^1.6.10",
     "core-js": "^2.4.1",
     "rxjs": "^5.1.0",
     "zone.js": "^0.8.4"
@@ -42,7 +43,7 @@
     "@angular/language-service": "^5.1.2",
     "@types/jasmine": "~2.5.53",
     "@types/jasminewd2": "~2.0.2",
-    "@types/node": "~6.0.60",
+    "@types/node": "^9.3.0",
     "codelyzer": "~3.0.1",
     "electron": "^1.7.10",
     "jasmine-core": "~2.6.2",
