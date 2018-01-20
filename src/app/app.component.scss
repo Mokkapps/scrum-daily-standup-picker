@@ -1,4 +1,11 @@
 mat-drawer-content {
-    width:100vw; 
-    height:100vh;
+  height: 100vh;
+}
+
+mat-drawer-container {
+  background-color: transparent;
+}
+
+mat-drawer {
+  background-color: darkgray;
 }

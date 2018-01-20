@@ -1,6 +1,34 @@
 {
-  "memberImages": ["Test1", "Test2"],
-  "jiraUrl": "JIRA",
-  "slideshowURLs": ["URL1", "URL2"],
-  "standupMusic": ["Music1", "Music2"]
+  "standupPicker": {
+    "standupHour": 9,
+    "standupMinute": 59,
+    "standupTimeInMin": 15,
+    "standupEndReminderAfterMin": 10,
+    "successSound": "/assets/sounds/success.wav",
+    "standupEndReminderSound": "/assets/sounds/tickTock.wav",
+    "standupMusic": ["/assets/sounds/cheerful-song.wav"],
+    "teamMembers": [
+      {
+        "name": "Max Mustermann",
+        "imageUrl": "/assets/images/user1.jpeg",
+        "role": "Architekt"
+      },
+      {
+        "name": "Rainer Zufall",
+        "imageUrl": "/assets/images/user2.jpeg",
+        "role": "Developer"
+      },
+      {
+        "name": "Anna Bolika",
+        "imageUrl": "/assets/images/user3.jpeg",
+        "role": "Scrum Master"
+      }
+    ]
+  },
+  "jiraUrl": "http://www.mokkapps.de",
+  "slideshow": {
+    "urls": ["http://www.github.com", "http://www.atlassian.com"],
+    "timerInSec": 30
+  },
+  "background": "/assets/images/wallpaper.jpg"
 }

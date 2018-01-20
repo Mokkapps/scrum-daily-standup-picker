@@ -1,24 +1,23 @@
-import { Http, HttpModule } from '@angular/http';
-import { SafePipe } from './safe-url.pipe';
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-import { RouterModule, Routes } from '@angular/router';
+import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Http, HttpModule } from '@angular/http';
 import {
-  MatCardModule,
   MatButtonModule,
-  MatSidenavModule,
-  MatGridListModule
+  MatCardModule,
+  MatGridListModule,
+  MatSidenavModule
 } from '@angular/material';
+import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-import { AppComponent } from './app.component';
-import { SideNavComponent } from './sidenav/sidenav.component';
-import { StandupPickerComponent } from './standup-picker/standup-picker.component';
-import { ExternalPageComponent } from './external-page/external-page.component';
+import { RouterModule, Routes } from '@angular/router';
 import { SettingsComponent } from 'app/settings/settings.component';
 import { SettingsService } from 'app/settings/settings.service';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppComponent } from './app.component';
+import { ExternalPageComponent } from './external-page/external-page.component';
+import { SafePipe } from './safe-url.pipe';
+import { SideNavComponent } from './sidenav/sidenav.component';
+import { StandupPickerComponent } from './standup-picker/standup-picker.component';
 
 const appRoutes: Routes = [
   {
