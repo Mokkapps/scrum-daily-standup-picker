@@ -1,15 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { TeamMember } from 'app/models/team-member';
 import { SettingsService } from 'app/settings/settings.service';
 import { Observable, Subscription } from 'rxjs/Rx';
-
-const SUCCESS_SOUND_PATH = './assets/sounds/success.wav'; // Sound which is played if team member was randomly selected
-const TICK_SOUND_PATH = './assets/sounds/tickTock.wav'; // Sound which is played shortly before standup ends
-const STANDUP_MAX_TIME_IN_SEC = 15 * 60; // The time for the daily standup
-const TICK_TIME_IN_SEC = 13 * 60; // Play tick sound shortly before standup ends
-const STANDUP_SOUND_HOUR = 9; // Hour when the standup sound should play
-const STANDUP_SOUND_MINUTE = 59; // Minute when the standup sound should play
+import { AppSettings } from './../models/app-settings';
+import { TeamMember } from './../models/team-member';
 
 const TRANSLATIONS = {
   CLICK_TO_SELECT_TEAM_MEMBER: 'Hier klicken um Standup Picker zu starten',
@@ -31,9 +25,7 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
 
   teamMembers: TeamMember[] = [];
 
-  private standupMusic: string[];
-
-  private standupTimeInSeconds: number = STANDUP_MAX_TIME_IN_SEC;
+  private settings: AppSettings;
 
   private timerSubscription: Subscription;
 
@@ -41,19 +33,18 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
 
   private shuffleSubscription: Subscription;
 
-  private settingsSubscription: Subscription;
-
   constructor(settingsService: SettingsService) {
-    this.settingsSubscription = settingsService.settings.subscribe(settings => {
+    settingsService.settings.subscribe(settings => {
+      console.log('New standup picker settings event', settings);
       if (!settings) {
         return;
       }
-      this.teamMembers = settings.standupPicker.teamMembers;
-      this.standupMusic = settings.standupPicker.standupMusic;
+      this.settings = settings;
+      this.teamMembers = this.shuffle(this.settings.standupPicker.teamMembers);
     });
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     // Shuffle array initially
     this.teamMembers = this.shuffle(this.teamMembers);
 
@@ -61,14 +52,18 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
     this.standupSoundTimerSubscription = Observable.interval(60 * 1000)
       .map(() => new Date())
       .subscribe(date => {
+        console.log(
+          date,
+          this.settings.standupPicker.standupHour,
+          this.settings.standupPicker.standupMinute
+        );
         if (
-          date.getHours() === STANDUP_SOUND_HOUR &&
-          date.getMinutes() === STANDUP_SOUND_MINUTE
+          date.getHours() === this.settings.standupPicker.standupHour &&
+          date.getMinutes() === this.settings.standupPicker.standupMinute
         ) {
+          const standupMusic = this.settings.standupPicker.standupMusic;
           this.playAudio(
-            this.standupMusic[
-              this.getRandomInt(0, this.standupMusic.length - 1)
-            ]
+            standupMusic[this.getRandomInt(0, standupMusic.length - 1)]
           );
         }
       });
@@ -78,18 +73,12 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
     if (this.timerSubscription) {
       this.timerSubscription.unsubscribe();
     }
-    if (this.standupSoundTimerSubscription) {
-      this.standupSoundTimerSubscription.unsubscribe();
-    }
     if (this.shuffleSubscription) {
       this.shuffleSubscription.unsubscribe();
     }
-    if (this.settingsSubscription) {
-      this.settingsSubscription.unsubscribe();
-    }
   }
 
-  triggerPicker() {
+  triggerPicker(): void {
     if (this.timerSubscription) {
       this.time = '';
       this.timerSubscription.unsubscribe();
@@ -102,7 +91,7 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
     this.shuffleSubscription = Observable.zip(
       Observable.from(shuffledAndAvailableMember),
       Observable.timer(500, 500),
-      function(item, i) {
+      (item, i) => {
         return item;
       }
     )
@@ -112,18 +101,20 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
       });
   }
 
-  private onMemberClick(member: TeamMember) {
+  private onMemberClick(member: TeamMember): void {
     member.disabled = !member.disabled;
   }
 
-  private onPickComplete() {
-    this.playAudio(SUCCESS_SOUND_PATH);
+  private onPickComplete(): void {
+    this.playAudio(this.settings.standupPicker.successSound);
 
     this.title = `${this.pickRandomMember().name} ${TRANSLATIONS.STARTS_TODAY}`;
 
+    let standupTimeInSec = this.settings.standupPicker.standupTimeInMin * 60;
+
     this.timerSubscription = Observable.timer(0, 1000)
-      .take(this.standupTimeInSeconds)
-      .map(() => --this.standupTimeInSeconds)
+      .take(standupTimeInSec)
+      .map(() => --standupTimeInSec)
       .subscribe((secondsPassed: number) => {
         const remainingMinutes = Math.round(secondsPassed / 60);
         this.time =
@@ -139,8 +130,11 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
         }
 
         // Play tick sound some seconds before standup ends
-        if (secondsPassed === TICK_TIME_IN_SEC) {
-          this.playAudio(TICK_SOUND_PATH);
+        if (
+          secondsPassed ===
+          this.settings.standupPicker.standupEndReminderAfterMin * 1000
+        ) {
+          this.playAudio(this.settings.standupPicker.standupEndReminderSound);
         }
       });
   }
@@ -150,7 +144,7 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
     return filteredArr[Math.floor(Math.random() * filteredArr.length)];
   }
 
-  private playAudio(filePath: string) {
+  private playAudio(filePath: string): void {
     const audio = new Audio();
     audio.src = filePath;
     audio.msAudioCategory = 'BackgroundCapableMedia';
@@ -158,11 +152,11 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
     audio.play();
   }
 
-  private getRandomInt(min: number, max: number) {
+  private getRandomInt(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-  private shuffle = function(input: TeamMember[]) {
+  private shuffle(input: TeamMember[]): TeamMember[] {
     for (let i = input.length - 1; i >= 0; i--) {
       const randomIndex = Math.floor(Math.random() * (i + 1));
       const itemAtIndex = input[randomIndex];
@@ -171,5 +165,5 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
       input[i] = itemAtIndex;
     }
     return input;
-  };
+  }
 }

@@ -3,10 +3,15 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Http, HttpModule } from '@angular/http';
 import {
+  MAT_LABEL_GLOBAL_OPTIONS,
   MatButtonModule,
   MatCardModule,
+  MatFormFieldModule,
   MatGridListModule,
-  MatSidenavModule
+  MatIconModule,
+  MatInputModule,
+  MatSidenavModule,
+  MatSnackBarModule
 } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -28,7 +33,7 @@ const appRoutes: Routes = [
   { path: 'standup-picker', component: StandupPickerComponent },
   { path: 'agile-board', component: ExternalPageComponent },
   { path: 'slideshow', component: ExternalPageComponent },
-  { path: 'settings', component: SettingsComponent },
+  { path: 'settings', component: SettingsComponent }
 ];
 
 @NgModule({
@@ -50,9 +55,16 @@ const appRoutes: Routes = [
     MatSidenavModule,
     MatButtonModule,
     MatCardModule,
-    MatGridListModule
+    MatGridListModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatSnackBarModule
   ],
-  providers: [SettingsService],
+  providers: [
+    SettingsService,
+    { provide: MAT_LABEL_GLOBAL_OPTIONS, useValue: { float: 'always' } }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

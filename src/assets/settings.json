@@ -4,23 +4,23 @@
     "standupMinute": 59,
     "standupTimeInMin": 15,
     "standupEndReminderAfterMin": 10,
-    "successSound": "/assets/sounds/success.wav",
-    "standupEndReminderSound": "/assets/sounds/tickTock.wav",
-    "standupMusic": ["/assets/sounds/cheerful-song.wav"],
+    "successSound": "./assets/sounds/success.wav",
+    "standupEndReminderSound": "./assets/sounds/tickTock.wav",
+    "standupMusic": ["./assets/sounds/cheerful-song.wav"],
     "teamMembers": [
       {
         "name": "Max Mustermann",
-        "imageUrl": "/assets/images/user1.jpeg",
+        "imageUrl": "./assets/images/user1.jpeg",
         "role": "Architekt"
       },
       {
         "name": "Rainer Zufall",
-        "imageUrl": "/assets/images/user2.jpeg",
+        "imageUrl": "./assets/images/user2.jpeg",
         "role": "Developer"
       },
       {
         "name": "Anna Bolika",
-        "imageUrl": "/assets/images/user3.jpeg",
+        "imageUrl": "./assets/images/user3.jpeg",
         "role": "Scrum Master"
       }
     ]
@@ -30,5 +30,5 @@
     "urls": ["http://www.github.com", "http://www.atlassian.com"],
     "timerInSec": 30
   },
-  "background": "/assets/images/wallpaper.jpg"
+  "background": "./assets/images/wallpaper.jpg"
 }

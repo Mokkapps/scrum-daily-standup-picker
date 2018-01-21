@@ -27,7 +27,7 @@ export class ExternalPageComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     if (this.router.url.includes('slideshow')) {
       console.log('SLIDESHOW');
       setInterval(() => {
@@ -41,13 +41,13 @@ export class ExternalPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (this.settingsSubscription) {
       this.settingsSubscription.unsubscribe();
     }
   }
 
-  private getRandomInt(min: number, max: number) {
+  private getRandomInt(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 }

@@ -1,9 +1,18 @@
 .container {
-    padding: 10px;
-    background-color: gray;
-    margin: 50px;
+  padding: 10px;
+  background-color: white;
+  margin: 50px;
+}
+
+.form-group-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group-container > * {
+  width: 100%;
 }
 
 .team-members-container {
-    background-color: burlywood;
+  background-color: lightgray;
 }

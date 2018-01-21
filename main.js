@@ -10,6 +10,8 @@ function createWindow() {
     backgroundColor: '#ffffff'
   });
 
+  win.maximize();
+
   win.loadURL(`file://${__dirname}/dist/index.html`);
 
   // uncomment below to open the DevTools

@@ -1,5 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { MatSnackBar } from '@angular/material';
 import { AppSettings } from 'app/models/app-settings';
 import { TeamMember } from 'app/models/team-member';
 import { SettingsService } from 'app/settings/settings.service';
@@ -8,8 +9,8 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
 // see https://github.com/electron/electron/issues/7300
-// const electron = (<any>window).require('electron');
-// const fs = (<any>window).require('fs');
+const electron = (<any>window).require('electron');
+const fs = (<any>window).require('fs');
 
 @Component({
   selector: 'app-settings',
@@ -21,18 +22,13 @@ export class SettingsComponent implements OnDestroy {
 
   settingsForm: FormGroup;
 
-  teamMembers: TeamMember[];
-
-  slideshowURLs: string[];
-
-  standupMusic: string[];
-
   private appSettings: AppSettings;
   private settingsSubscription: Subscription;
 
   constructor(
     private settingsService: SettingsService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    public snackBar: MatSnackBar
   ) {
     console.log('Init SettingsComponent');
 
@@ -42,147 +38,190 @@ export class SettingsComponent implements OnDestroy {
     settingsService.settings.subscribe(settings => {
       this.appSettings = settings;
 
-      // Patch values
       this.settingsForm.patchValue({
-        jiraUrl: settings.jiraUrl,
-        slideshowTimer: settings.slideshow.timerInSec
+        jiraUrl: settings.jiraUrl
       });
 
-      // Update team members
-      this.teamMembers = this.appSettings.standupPicker.teamMembers;
-      this.teamMembers.forEach(teamMember => {
+      this.getStandupPickerFormGroup().patchValue({
+        standupHour: settings.standupPicker.standupHour,
+        standupMinute: settings.standupPicker.standupMinute,
+        standupTimeInMin: settings.standupPicker.standupTimeInMin,
+        standupEndReminderAfterMin:
+          settings.standupPicker.standupEndReminderAfterMin,
+        successSound: settings.standupPicker.successSound,
+        standupEndReminderSound: settings.standupPicker.standupEndReminderSound
+      });
+
+      this.appSettings.standupPicker.teamMembers.forEach(teamMember => {
         this.addNewTeamMemberRow(
           teamMember.name,
           teamMember.imageUrl,
           teamMember.role
         );
       });
-      // Update slideshow URLs
-      this.slideshowURLs = this.appSettings.slideshow.urls;
-      this.slideshowURLs.forEach(url => {
+
+      this.appSettings.slideshow.urls.forEach(url => {
         this.addNewSlideshowUrlRow(url);
       });
-      // Update standup music paths
-      this.standupMusic = this.appSettings.standupPicker.standupMusic;
-      this.standupMusic.forEach(path => {
+
+      this.appSettings.standupPicker.standupMusic.forEach(path => {
         this.addNewStandupMusicPathRow(path);
+      });
+
+      this.getSlideshowFormGroup().patchValue({
+        timerInSec: settings.slideshow.timerInSec
       });
     });
   }
 
-  onSubmit() {
+  get teamMembers(): FormArray {
+    return <FormArray>this.getStandupPickerFormGroup().controls.teamMembers;
+  }
+
+  get standupMusic(): FormArray {
+    return <FormArray>this.getStandupPickerFormGroup().controls.standupMusic;
+  }
+
+  get slideshowUrls(): FormArray {
+    return <FormArray>this.getSlideshowFormGroup().controls.urls;
+  }
+
+  onSubmit(): void {
     console.log('SUBMIT');
-    // this.settingsService.updateSettings({
-    //   teamMembers: this.settingsForm.value.teamMembers,
-    //   jiraUrl: this.settingsForm.value.jiraUrl,
-    //   slideshowTimeInSec: this.settingsForm.value.slideshowTimer,
-    //   slideshowURLs: this.settingsForm.value.slideshowURLs,
-    //   standupMusic: this.settingsForm.value.standupMusic
-    // });
+    this.settingsService
+      .updateSettings({
+        standupPicker: this.settingsForm.value.standupPicker,
+        jiraUrl: this.settingsForm.value.jiraUrl,
+        slideshow: this.settingsForm.value.slideshow
+      })
+      .then(() => {
+        this.snackBar.open('Einstellungen wurden gespeichert', undefined, {
+          duration: 2000
+        });
+      })
+      .catch(err => {
+        this.snackBar.open(
+          `Fehler beim Speichern der Einstellungen: ${err}`,
+          undefined,
+          {
+            duration: 3000
+          }
+        );
+      });
   }
 
-  revert() {
+  revert(): void {
     console.log('REVERT');
-    // this.settingsForm.setValue({});
   }
 
-  addNewTeamMemberRow(name?: string, imageUrl?: string, role?: string) {
-    // control refers to your formarray
-    const control = <FormArray>this.settingsForm.controls.teamMembers;
-    // add new formgroup
+  addNewTeamMemberRow(name?: string, imageUrl?: string, role?: string): void {
+    const control = <FormArray>this.getStandupPickerFormGroup().controls
+      .teamMembers;
     control.push(this.createTeamMember(name, imageUrl, role));
-    console.log(this.settingsForm);
   }
 
-  deleteTeamMemberRow(index: number) {
-    const control = <FormArray>this.settingsForm.controls.teamMembers;
+  deleteTeamMemberRow(index: number): void {
+    const control = <FormArray>this.getStandupPickerFormGroup().controls
+      .teamMembers;
     control.removeAt(index);
   }
 
-  addNewSlideshowUrlRow(url?: string) {
-    const control = <FormArray>this.settingsForm.controls.slideshowURLs;
-    control.push(this.createSlideshowURL(url));
+  addNewSlideshowUrlRow(url?: string): void {
+    const control = <FormArray>this.getSlideshowFormGroup().controls.urls;
+    control.push(new FormControl(url));
   }
 
-  deleteSlideshowUrlRow(index: number) {
-    const control = <FormArray>this.settingsForm.controls.slideshowURLs;
+  deleteSlideshowUrlRow(index: number): void {
+    const control = <FormArray>this.getSlideshowFormGroup().controls.urls;
     control.removeAt(index);
   }
 
-  addNewStandupMusicPathRow(path?: string) {
-    const control = <FormArray>this.settingsForm.controls.standupMusic;
-    control.push(this.createStandupMusicPath(path));
+  addNewStandupMusicPathRow(path?: string): void {
+    const control = <FormArray>this.getStandupPickerFormGroup().controls
+      .standupMusic;
+    control.push(new FormControl(path));
   }
 
-  deleteStandupMusicPathRow(index: number) {
-    const control = <FormArray>this.settingsForm.controls.standupMusic;
+  deleteStandupMusicPathRow(index: number): void {
+    const control = <FormArray>this.getStandupPickerFormGroup().controls
+      .standupMusic;
     control.removeAt(index);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (this.settingsSubscription) {
       this.settingsSubscription.unsubscribe();
     }
   }
 
-  openElectronWindow() {
-    // electron.remote.dialog.showOpenDialog(
-    //   {
-    //     title: 'Select a image',
-    //     properties: ['openFile'],
-    //     filters: [{ name: 'Images', extensions: ['jpg', 'png'] }]
-    //   },
-    //   folderPath => {
-    //     if (folderPath === undefined) {
-    //       console.warn('You did not select an image');
-    //       return;
-    //     }
-    //     console.log(`Selected image path ${folderPath}`);
-    //     fs.readFile(folderPath.toString(), (err, data) => {
-    //       if (err) {
-    //         console.error(`Error reading file from ${folderPath}: ${err}`);
-    //         return;
-    //       }
-    //       console.log(data);
-    //       // tslint:disable-next-line:no-shadowed-variable
-    //       fs.writeFile('test.png', data, (err) => {
-    //         if (err) {
-    //           throw err;
-    //         }
-    //         console.log('It iss saved!');
-    //        });
-    //     });
-    //   }
-    // );
+  openElectronWindow(): void {
+    electron.remote.dialog.showOpenDialog(
+      {
+        title: 'Select a image',
+        properties: ['openFile'],
+        filters: [{ name: 'Images', extensions: ['jpg', 'png'] }]
+      },
+      folderPath => {
+        if (folderPath === undefined) {
+          console.warn('You did not select an image');
+          return;
+        }
+        console.log(`Selected image path ${folderPath}`);
+        fs.readFile(folderPath.toString(), (err, data) => {
+          if (err) {
+            console.error(`Error reading file from ${folderPath}: ${err}`);
+            return;
+          }
+          console.log(data);
+          // tslint:disable-next-line:no-shadowed-variable
+          fs.writeFile('./dist/assets/images/test.png', data, err => {
+            if (err) {
+              throw err;
+            }
+            console.log('It is saved!');
+          });
+        });
+      }
+    );
   }
 
-  private createForm() {
+  private getStandupPickerFormGroup(): FormGroup {
+    return <FormGroup>this.settingsForm.controls.standupPicker;
+  }
+
+  private getSlideshowFormGroup(): FormGroup {
+    return <FormGroup>this.settingsForm.controls.slideshow;
+  }
+
+  private createForm(): void {
     this.settingsForm = this.formBuilder.group({
-      jiraUrl: '',
-      teamMembers: this.formBuilder.array([]),
-      slideshowTimer: 30 * 1000,
-      slideshowURLs: this.formBuilder.array([]),
-      standupMusic: this.formBuilder.array([])
+      standupPicker: this.formBuilder.group({
+        teamMembers: this.formBuilder.array([]),
+        standupMusic: this.formBuilder.array([]),
+        standupHour: undefined,
+        standupMinute: undefined,
+        standupTimeInMin: undefined,
+        standupEndReminderAfterMin: undefined,
+        successSound: undefined,
+        standupEndReminderSound: undefined
+      }),
+      jiraUrl: undefined,
+      slideshow: this.formBuilder.group({
+        timerInSec: undefined,
+        urls: this.formBuilder.array([])
+      })
     });
   }
 
-  private createTeamMember(name?: string, imageUrl?: string, role?: string) {
+  private createTeamMember(
+    name?: string,
+    imageUrl?: string,
+    role?: string
+  ): FormGroup {
     return this.formBuilder.group({
-      name: name ? name : 'Bitte Namen eintragen',
-      imageUrl: imageUrl ? imageUrl : 'Bildpfad angeben',
-      role: role ? role : 'Rolle eingeben'
-    });
-  }
-
-  private createSlideshowURL(url?: string) {
-    return this.formBuilder.group({
-      url: url ? url : 'https://www.mokkapps.de'
-    });
-  }
-
-  private createStandupMusicPath(path?: string) {
-    return this.formBuilder.group({
-      path: path ? path : '/assets/sounds/cheerful-song.wav'
+      name: name ? name : '',
+      imageUrl: imageUrl ? imageUrl : '',
+      role: role ? role : ''
     });
   }
 }

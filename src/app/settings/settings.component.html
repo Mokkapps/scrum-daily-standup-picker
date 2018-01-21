@@ -1,67 +1,89 @@
-<!-- <h1>JIRA URL: {{(settings | async).jiraUrl}}</h1>
-<h1>Standup Music: {{(settings | async).standupMusic}}</h1>
-<h1>Slideshow Time in seconds: {{(settings | async).slideshowTimeInSec}}</h1>
-<h1>Slideshow URLs: {{(settings | async).slideshowURLs}}</h1> -->
-
 <div class="container">
     <h1>Einstellungen</h1>
     <form [formGroup]="settingsForm" (ngSubmit)="onSubmit()" novalidate>
-        <h2>Standup Picker</h2>
-        <label class="center-block">Standup Zeit in Minuten:
-            <input class="form-control" formControlName="standupTime">
-        </label>
-        <label class="center-block">Erinnerungssound nach x Minuten:
-            <input class="form-control" formControlName="standupReminderTime">
-        </label>
-        <h3>Team Mitglieder</h3>
-        <div class="team-members-container" formArrayName="teamMembers">
-            <!-- Check the correct way to iterate your form array -->
-            <div *ngFor="let teamMember of settingsForm.controls.teamMembers.controls; let i=index" [formGroupName]="i">
-                <h4>Team Mitglied {{ i + 1 }}</h4>
-                <div class="form-group">
-                    <input formControlName="name" class="form-control">
-                    <input formControlName="imageUrl" class="form-control">
-                    <input formControlName="role" class="form-control">
+        <div class="form-group-container" formGroupName="standupPicker">
+            <h2>Standup Picker</h2>
+            <mat-form-field>
+                <input matInput formControlName="standupEndReminderSound" placeholder="Erinnerungssound">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput formControlName="standupHour" placeholder="Standup Stunde">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput formControlName="standupMinute" placeholder="Standup Minute">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput formControlName="standupTimeInMin" placeholder="Standup Dauer in Minuten">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput formControlName="standupEndReminderAfterMin" placeholder="Erinnerungssound nach x Minuten">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput formControlName="successSound" placeholder="Standup Picker Auswahl Sound">
+            </mat-form-field>
+
+            <h3>Team Mitglieder</h3>
+            <div class="team-members-container" formArrayName="teamMembers">
+                <div *ngFor="let teamMember of teamMembers.controls; let i=index" [formGroupName]="i">
+                    <h4>Mitglied {{ i + 1 }}</h4>
+                    <div class="form-group-container">
+                        <mat-form-field>
+                            <input matInput formControlName="name" placeholder="Name">
+                        </mat-form-field>
+                        <mat-form-field>
+                            <input matInput formControlName="imageUrl" placeholder="Bild">
+                        </mat-form-field>
+                        <mat-form-field>
+                            <input matInput formControlName="role" placeholder="Rolle">
+                        </mat-form-field>
+                    </div>
+
+                    <button mat-raised-button color="warn" type="button" *ngIf="teamMembers.controls.length > 1" (click)="deleteTeamMemberRow(i)">Teammitglied entfernen</button>
                 </div>
-                <button type="button" *ngIf="settingsForm.controls.teamMembers.controls.length > 1" (click)="deleteTeamMemberRow(i)" class="btn btn-danger">Teammitglied entfernen</button>
+                <button mat-raised-button mat-primary type="button" (click)="addNewTeamMemberRow()">Neues Teammitglied hinzufügen</button>
             </div>
-            <button type="button" (click)="addNewTeamMemberRow()" class="btn btn-primary">Neues Teammitglied hinzufügen</button>
-        </div>
-        <h3>Standup Musik</h3>
-        <div class="team-members-container" formArrayName="standupMusic">
-            <!-- Check the correct way to iterate your form array -->
-            <div *ngFor="let url of settingsForm.controls.standupMusic.controls; let i=index" [formGroupName]="i">
-                <h4>Standup Musik {{ i + 1 }}</h4>
-                <div class="form-group">
-                    <input formControlName="path" class="form-control">
+
+            <h3>Standup Musik</h3>
+            <div class="team-members-container" formArrayName="standupMusic">
+                <div *ngFor="let url of standupMusic.controls; let i=index">
+                    <h4>Titel {{ i + 1 }}</h4>
+                    <div class="form-group-container">
+                        <mat-form-field>
+                            <input matInput [formControlName]="i" placeholder="Titel">
+                        </mat-form-field>
+                    </div>
+                    <button mat-raised-button color="warn" type="button" *ngIf="standupMusic.controls.length > 1" (click)="deleteStandupMusicPathRow(i)">Standup Musik entfernen</button>
                 </div>
-                <button type="button" *ngIf="settingsForm.controls.standupMusic.controls.length > 1" (click)="deleteStandupMusicPathRow(i)"
-                    class="btn btn-danger">Standup Musik entfernen</button>
+                <button mat-raised-button mat-primary type="button" (click)="addNewStandupMusicPathRow()">Neue Standup Musik hinzufügen</button>
             </div>
-            <button type="button" (click)="addNewStandupMusicPathRow()" class="btn btn-primary">Neue Standup Musik hinzufügen</button>
         </div>
+
         <h2>JIRA Board</h2>
-        <label class="center-block">JIRA Board URL:
-            <input class="form-control" formControlName="jiraUrl">
-        </label>
-        <h2>Slideshow</h2>
-        <label class="center-block">Slideshow-Timer in Sekunden:
-            <input class="form-control" formControlName="slideshowTimer">
-        </label>
-        <div class="team-members-container" formArrayName="slideshowURLs">
-            <!-- Check the correct way to iterate your form array -->
-            <div *ngFor="let url of settingsForm.controls.slideshowURLs.controls; let i=index" [formGroupName]="i">
-                <h4>Slideshow URL {{ i + 1 }}</h4>
-                <div class="form-group">
-                    <input formControlName="url" class="form-control">
+        <mat-form-field class="form-group-container">
+            <input matInput formControlName="jiraUrl" placeholder="JIRA Board URL">
+        </mat-form-field>
+
+        <div class="form-group-container" formGroupName="slideshow">
+            <h2>Slideshow</h2>
+            <mat-form-field class="form-group-container">
+                <input matInput formControlName="timerInSec" placeholder="Slideshow-Timer in Sekunden">
+            </mat-form-field>
+            <div class="team-members-container" formArrayName="urls">
+                <div *ngFor="let url of slideshowUrls.controls; let i=index">
+                    <h4>Slideshow URL {{ i + 1 }}</h4>
+                    <div class="form-group-container">
+                        <mat-form-field>
+                            <input matInput [formControlName]="i" placeholder="URL">
+                        </mat-form-field>
+                        <button mat-raised-button color="warn" type="button" *ngIf="slideshowUrls.controls.length > 1" (click)="deleteSlideshowUrlRow(i)">Slideshow URL entfernen</button>
+                    </div>
                 </div>
-                <button type="button" *ngIf="settingsForm.controls.slideshowURLs.controls.length > 1" (click)="deleteSlideshowUrlRow(i)"
-                    class="btn btn-danger">Slideshow URL entfernen</button>
+                <button mat-raised-button mat-primary type="button" (click)="addNewSlideshowUrlRow()">Neue Slideshow URL hinzufügen</button>
             </div>
-            <button type="button" (click)="addNewSlideshowUrlRow()" class="btn btn-primary">Neue Slideshow URL hinzufügen</button>
         </div>
+
         <button type="submit" mat-raised-button mat-primary>Speichern</button>
         <button type="reset" (click)="revert()" mat-raised-button mat-primary>Zurücksetzen</button>
     </form>
-    <button (click)="openElectronWindow()">Trigger Electron</button>
+    <button (click)="openElectronWindow()">Trigger Electron (FOR TESTING PURPOSES)</button>
 </div>

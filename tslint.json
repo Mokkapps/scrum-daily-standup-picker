@@ -36,8 +36,10 @@
     "no-unnecessary-initializer": true,
     "no-unused-expression": true,
     "no-use-before-declare": true,
+    "no-unused-variable": true,
     "no-var-keyword": true,
     "object-literal-sort-keys": false,
+    "typedef": [true, "call-signature", "property-declaration"],
     "one-line": [
       true,
       "check-open-brace",
