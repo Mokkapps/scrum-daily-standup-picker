@@ -7,7 +7,7 @@
     <mat-grid-list cols="3" rowHeight="300px" gutterSize="10px">
         <ng-container *ngFor="let member of teamMembers">
             <mat-grid-tile>
-                <mat-card [ngClass]="{'mat-card-disabled': member.disabled}" (click)="onMemberClick(member)">
+                <mat-card [ngClass]="{'mat-card-selected': member.selected, 'mat-card-disabled': member.disabled}" (click)="onMemberClick(member)">
                     <mat-card-header>
                         <mat-card-title class="member-title">{{member.name}}</mat-card-title>
                     </mat-card-header>

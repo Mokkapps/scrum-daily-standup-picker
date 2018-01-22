@@ -4,6 +4,17 @@
   margin: 50px;
 }
 
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.select-image {
+  width: 150px;
+  height: 100px;
+}
+
 .form-group-container {
   display: flex;
   flex-direction: column;

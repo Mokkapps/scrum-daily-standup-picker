@@ -6,7 +6,6 @@ import {
   MAT_LABEL_GLOBAL_OPTIONS,
   MatButtonModule,
   MatCardModule,
-  MatDialogModule,
   MatFormFieldModule,
   MatGridListModule,
   MatIconModule,
@@ -22,7 +21,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { SettingsComponent } from 'app/settings/settings.component';
 import { SettingsService } from 'app/settings/settings.service';
 import { AppComponent } from './app.component';
-import { ChooseDialogComponent } from './choose-dialog/choose-dialog.component';
 import { ExternalPageComponent } from './external-page/external-page.component';
 import { SafePipe } from './safe-url.pipe';
 import { SideNavComponent } from './sidenav/sidenav.component';
@@ -47,8 +45,7 @@ const appRoutes: Routes = [
     StandupPickerComponent,
     ExternalPageComponent,
     SettingsComponent,
-    SafePipe,
-    ChooseDialogComponent
+    SafePipe
   ],
   imports: [
     RouterModule.forRoot(appRoutes),
@@ -65,11 +62,9 @@ const appRoutes: Routes = [
     MatIconModule,
     MatInputModule,
     MatSnackBarModule,
-    MatDialogModule,
     MatRadioModule,
     MatSelectModule
   ],
-  entryComponents: [ChooseDialogComponent],
   providers: [
     SettingsService,
     { provide: MAT_LABEL_GLOBAL_OPTIONS, useValue: { float: 'always' } }

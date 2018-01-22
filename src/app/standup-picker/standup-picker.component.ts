@@ -23,7 +23,7 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
 
   time: string;
 
-  teamMembers: TeamMember[] = [];
+  teamMembers: Member[] = [];
 
   private settings: AppSettings;
 
@@ -108,7 +108,12 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
   private onPickComplete(): void {
     this.playAudio(this.settings.standupPicker.successSound);
 
-    this.title = `${this.pickRandomMember().name} ${TRANSLATIONS.STARTS_TODAY}`;
+    const selectedTeamMember = this.pickRandomMember();
+    this.teamMembers.forEach((m) => {
+      m.selected = m.name === selectedTeamMember.name;
+    });
+
+    this.title = `${selectedTeamMember.name} ${TRANSLATIONS.STARTS_TODAY}`;
 
     let standupTimeInSec = this.settings.standupPicker.standupTimeInMin * 60;
 
@@ -139,8 +144,8 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
       });
   }
 
-  private pickRandomMember(): TeamMember {
-    const filteredArr = this.teamMembers.filter((m: TeamMember) => !m.disabled);
+  private pickRandomMember(): Member {
+    const filteredArr = this.teamMembers.filter((m: Member) => !m.disabled);
     return filteredArr[Math.floor(Math.random() * filteredArr.length)];
   }
 
@@ -156,7 +161,7 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-  private shuffle(input: TeamMember[]): TeamMember[] {
+  private shuffle(input: TeamMember[]): Member[] {
     for (let i = input.length - 1; i >= 0; i--) {
       const randomIndex = Math.floor(Math.random() * (i + 1));
       const itemAtIndex = input[randomIndex];
@@ -164,6 +169,10 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
       input[randomIndex] = input[i];
       input[i] = itemAtIndex;
     }
-    return input;
+    return input.map(m => Object.assign(m, { selected: false }));
   }
+}
+
+interface Member extends TeamMember {
+  selected: boolean;
 }

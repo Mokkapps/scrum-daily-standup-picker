@@ -1,10 +1,17 @@
 <div class="container">
     <h1>Einstellungen</h1>
+    <h2>Neue Dateien hochladen</h2>
+    <button mat-raised-button color="primary" (click)="openElectronFilePicker('image')">Neues Bild hochladen</button>
+    <button mat-raised-button color="primary" (click)="openElectronFilePicker('sound')">Neuen Sound hochladen</button>
     <form [formGroup]="settingsForm" (ngSubmit)="onSubmit()" novalidate>
         <div class="form-group-container" formGroupName="standupPicker">
             <h2>Standup Picker</h2>
             <mat-form-field>
-                <input matInput formControlName="standupEndReminderSound" placeholder="Erinnerungssound">
+                <mat-select placeholder="Erinnerungssound" formControlName="standupEndReminderSound">
+                    <mat-option *ngFor="let file of soundFiles" value="{{'./assets/sounds/' + file}}">
+                        {{file}}
+                    </mat-option>
+                </mat-select>
             </mat-form-field>
             <mat-form-field>
                 <input matInput formControlName="standupHour" placeholder="Standup Stunde">
@@ -19,7 +26,11 @@
                 <input matInput formControlName="standupEndReminderAfterMin" placeholder="Erinnerungssound nach x Minuten">
             </mat-form-field>
             <mat-form-field>
-                <input matInput formControlName="successSound" placeholder="Standup Picker Auswahl Sound">
+                <mat-select placeholder="Standup Picker Auswahl Sound" formControlName="successSound">
+                    <mat-option *ngFor="let file of soundFiles" value="{{'./assets/sounds/' + file}}">
+                        {{file}}
+                    </mat-option>
+                </mat-select>
             </mat-form-field>
 
             <h3>Team Mitglieder</h3>
@@ -31,7 +42,14 @@
                             <input matInput formControlName="name" placeholder="Name">
                         </mat-form-field>
                         <mat-form-field>
-                            <input matInput formControlName="imageUrl" placeholder="Bild">
+                            <mat-select placeholder="Bild" formControlName="imageUrl">
+                                <mat-option *ngFor="let file of imageFiles" value="{{'./assets/images/' + file}}">
+                                    <div class="flex-container">
+                                        <img class="select-image" src="{{'./assets/images/' + file}}">
+                                        <p>{{file}}</p>
+                                    </div>
+                                </mat-option>
+                            </mat-select>
                         </mat-form-field>
                         <mat-form-field>
                             <input matInput formControlName="role" placeholder="Rolle">
@@ -49,7 +67,11 @@
                     <h4>Titel {{ i + 1 }}</h4>
                     <div class="form-group-container">
                         <mat-form-field>
-                            <input matInput [formControlName]="i" placeholder="Titel">
+                            <mat-select placeholder="Titel" [formControlName]="i">
+                                <mat-option *ngFor="let file of soundFiles" value="{{'./assets/sounds/' + file}}">
+                                    {{file}}
+                                </mat-option>
+                            </mat-select>
                         </mat-form-field>
                     </div>
                     <button mat-raised-button color="warn" type="button" *ngIf="standupMusic.controls.length > 1" (click)="deleteStandupMusicPathRow(i)">Standup Musik entfernen</button>
@@ -85,6 +107,4 @@
         <button type="submit" mat-raised-button mat-primary>Speichern</button>
         <button type="reset" (click)="revert()" mat-raised-button mat-primary>Zurücksetzen</button>
     </form>
-    <button (click)="openDialog('image')">Open Image Dialog (FOR TESTING PURPOSES)</button>
-    <button (click)="openDialog('sound')">Open Sounds Dialog (FOR TESTING PURPOSES)</button>
 </div>

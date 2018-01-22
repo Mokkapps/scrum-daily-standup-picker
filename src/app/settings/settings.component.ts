@@ -1,13 +1,25 @@
 import { Component, OnDestroy } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 import { AppSettings } from 'app/models/app-settings';
 import { TeamMember } from 'app/models/team-member';
 import { SettingsService } from 'app/settings/settings.service';
 import { readFile } from 'jsonfile';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { ChooseDialogComponent } from './../choose-dialog/choose-dialog.component';
+
+// see https://github.com/electron/electron/issues/7300
+const electron = (<any>window).require('electron');
+const fs = (<any>window).require('fs');
+
+const DIST_PATH = './dist';
+const IMAGES_PATH = '/assets/images/';
+const SOUNDS_PATH = '/assets/sounds/';
+const IMAGES_FILTER = { name: 'Images', extensions: ['jpg', 'jpeg', 'png'] };
+const SOUNDS_FILTER = {
+  name: 'Sounds',
+  extensions: ['wav', 'mp3', 'ogg', 'm4a']
+};
 
 @Component({
   selector: 'app-settings',
@@ -19,16 +31,24 @@ export class SettingsComponent implements OnDestroy {
 
   settingsForm: FormGroup;
 
+  imageFiles: string[];
+
+  soundFiles: string[];
+
   private appSettings: AppSettings;
   private settingsSubscription: Subscription;
 
   constructor(
     private settingsService: SettingsService,
     private formBuilder: FormBuilder,
-    public dialog: MatDialog,
     public snackBar: MatSnackBar
   ) {
     console.log('Init SettingsComponent');
+
+    this.getImagesAndSounds().then(values => {
+      this.imageFiles = values[0];
+      this.soundFiles = values[1];
+    });
 
     this.createForm();
 
@@ -57,7 +77,7 @@ export class SettingsComponent implements OnDestroy {
   }
 
   onSubmit(): void {
-    console.log('SUBMIT');
+    console.log(this.settingsForm);
     this.settingsService
       .updateSettings({
         standupPicker: this.settingsForm.value.standupPicker,
@@ -124,14 +144,82 @@ export class SettingsComponent implements OnDestroy {
     }
   }
 
-  openDialog(type: string): void {
-    const dialogRef = this.dialog.open(ChooseDialogComponent, {
-      width: '500px',
-      data: { type }
-    });
+  openElectronFilePicker(type: string): void {
+    const filter = type === 'image' ? IMAGES_FILTER : SOUNDS_FILTER;
+    electron.remote.dialog.showOpenDialog(
+      {
+        title: 'Select an image or sound',
+        properties: ['openFile'],
+        filters: [IMAGES_FILTER, SOUNDS_FILTER]
+      },
+      folderPath => {
+        if (folderPath === undefined) {
+          console.warn(`You did not select a ${type}`);
+          return;
+        }
+        console.log(`Selected ${type} path ${folderPath}`);
+        fs.readFile(folderPath.toString(), (err, data) => {
+          if (err) {
+            console.error(`Error reading file from ${folderPath}: ${err}`);
+            this.snackBar.open(`Fehler beim Lesen: ${err}`, undefined, {
+              duration: 2000
+            });
+            return;
+          }
+          const filename = (
+            folderPath.toString().match(/[^\\/]+\.[^\\/]+$/) || []
+          ).pop();
+          fs.writeFile(
+            `${DIST_PATH}${
+              type === 'image' ? IMAGES_PATH : SOUNDS_PATH
+            }${filename}`,
+            data,
+            // tslint:disable-next-line:no-shadowed-variable
+            err => {
+              if (err) {
+                console.error(err);
+                this.snackBar.open(`Fehler beim Speichern: ${err}`, undefined, {
+                  duration: 2000
+                });
+                return;
+              }
+              console.log(`Successfully saved ${type}`);
+              this.snackBar.open('Datei erfolgreich gespeichert', undefined, {
+                duration: 2000
+              });
+              this.getImagesAndSounds().then(values => {
+                this.imageFiles = values[0];
+                this.soundFiles = values[1];
+              });
+            }
+          );
+        });
+      }
+    );
+  }
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed with ' + result);
+  playSound(filePath: string): void {
+    const audio = new Audio();
+    audio.src = filePath;
+    audio.load();
+    audio.play();
+  }
+
+  private getImagesAndSounds(): Promise<any> {
+    return Promise.all([this.readFiles('image'), this.readFiles('sound')]);
+  }
+
+  private readFiles(type: FileType): Promise<string[]> {
+    return new Promise((resolve, reject) => {
+      fs.readdir(
+        `${DIST_PATH}${type === 'image' ? IMAGES_PATH : SOUNDS_PATH}`,
+        (err, files) => {
+          if (err) {
+            reject(err);
+          }
+          resolve(files);
+        }
+      );
     });
   }
 
@@ -211,3 +299,5 @@ export class SettingsComponent implements OnDestroy {
     });
   }
 }
+
+export type FileType = 'image' | 'sound';
