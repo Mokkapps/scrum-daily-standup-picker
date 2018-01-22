@@ -1,0 +1,32 @@
+<h2 mat-dialog-title>Auswahldialog</h2>
+<mat-dialog-content>
+    <mat-form-field>
+        <ng-container *ngIf="type === 'image'">
+            <mat-select placeholder="Wähle ein Bild aus" [(value)]="selected">
+                <mat-option *ngFor="let file of files" value="{{file}}">
+                    <div class="flex-container">
+                        <img src="{{'.' + directory + file}}">
+                        <p>{{file}}</p>
+                    </div>
+                </mat-option>
+            </mat-select>
+        </ng-container>
+        <ng-container *ngIf="type === 'sound'">
+            <mat-select placeholder="Wähle einen Sound aus" [(value)]="selected">
+                <mat-option *ngFor="let file of files" value="{{file}}">
+                    {{file}}
+                </mat-option>
+            </mat-select>
+        </ng-container>
+    </mat-form-field>
+    <ng-container *ngIf="type === 'sound'">
+        <button mat-mini-fab (click)="playSound()">
+            <mat-icon aria-label="Play sound">play_arrow</mat-icon>
+        </button>
+    </ng-container>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button mat-dialog-close>Abbrechen</button>
+    <button mat-button (click)="closeDialog()">Bestätigen</button>
+    <button mat-button (click)="openElectronFilePicker()">Neue Datei hochladen</button>
+</mat-dialog-actions>

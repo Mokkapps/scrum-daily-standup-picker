@@ -1,16 +1,13 @@
 import { Component, OnDestroy } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { MatSnackBar } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { AppSettings } from 'app/models/app-settings';
 import { TeamMember } from 'app/models/team-member';
 import { SettingsService } from 'app/settings/settings.service';
 import { readFile } from 'jsonfile';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-
-// see https://github.com/electron/electron/issues/7300
-const electron = (<any>window).require('electron');
-const fs = (<any>window).require('fs');
+import { ChooseDialogComponent } from './../choose-dialog/choose-dialog.component';
 
 @Component({
   selector: 'app-settings',
@@ -28,6 +25,7 @@ export class SettingsComponent implements OnDestroy {
   constructor(
     private settingsService: SettingsService,
     private formBuilder: FormBuilder,
+    public dialog: MatDialog,
     public snackBar: MatSnackBar
   ) {
     console.log('Init SettingsComponent');
@@ -36,41 +34,13 @@ export class SettingsComponent implements OnDestroy {
 
     this.settings = settingsService.settings;
     settingsService.settings.subscribe(settings => {
+      if (this.appSettings) {
+        this.appSettings = settings;
+        return;
+      }
+
       this.appSettings = settings;
-
-      this.settingsForm.patchValue({
-        jiraUrl: settings.jiraUrl
-      });
-
-      this.getStandupPickerFormGroup().patchValue({
-        standupHour: settings.standupPicker.standupHour,
-        standupMinute: settings.standupPicker.standupMinute,
-        standupTimeInMin: settings.standupPicker.standupTimeInMin,
-        standupEndReminderAfterMin:
-          settings.standupPicker.standupEndReminderAfterMin,
-        successSound: settings.standupPicker.successSound,
-        standupEndReminderSound: settings.standupPicker.standupEndReminderSound
-      });
-
-      this.appSettings.standupPicker.teamMembers.forEach(teamMember => {
-        this.addNewTeamMemberRow(
-          teamMember.name,
-          teamMember.imageUrl,
-          teamMember.role
-        );
-      });
-
-      this.appSettings.slideshow.urls.forEach(url => {
-        this.addNewSlideshowUrlRow(url);
-      });
-
-      this.appSettings.standupPicker.standupMusic.forEach(path => {
-        this.addNewStandupMusicPathRow(path);
-      });
-
-      this.getSlideshowFormGroup().patchValue({
-        timerInSec: settings.slideshow.timerInSec
-      });
+      this.initForm(settings);
     });
   }
 
@@ -154,35 +124,51 @@ export class SettingsComponent implements OnDestroy {
     }
   }
 
-  openElectronWindow(): void {
-    electron.remote.dialog.showOpenDialog(
-      {
-        title: 'Select a image',
-        properties: ['openFile'],
-        filters: [{ name: 'Images', extensions: ['jpg', 'png'] }]
-      },
-      folderPath => {
-        if (folderPath === undefined) {
-          console.warn('You did not select an image');
-          return;
-        }
-        console.log(`Selected image path ${folderPath}`);
-        fs.readFile(folderPath.toString(), (err, data) => {
-          if (err) {
-            console.error(`Error reading file from ${folderPath}: ${err}`);
-            return;
-          }
-          console.log(data);
-          // tslint:disable-next-line:no-shadowed-variable
-          fs.writeFile('./dist/assets/images/test.png', data, err => {
-            if (err) {
-              throw err;
-            }
-            console.log('It is saved!');
-          });
-        });
-      }
-    );
+  openDialog(type: string): void {
+    const dialogRef = this.dialog.open(ChooseDialogComponent, {
+      width: '500px',
+      data: { type }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed with ' + result);
+    });
+  }
+
+  private initForm(settings: AppSettings): void {
+    this.settingsForm.patchValue({
+      jiraUrl: settings.jiraUrl
+    });
+
+    this.getStandupPickerFormGroup().patchValue({
+      standupHour: settings.standupPicker.standupHour,
+      standupMinute: settings.standupPicker.standupMinute,
+      standupTimeInMin: settings.standupPicker.standupTimeInMin,
+      standupEndReminderAfterMin:
+        settings.standupPicker.standupEndReminderAfterMin,
+      successSound: settings.standupPicker.successSound,
+      standupEndReminderSound: settings.standupPicker.standupEndReminderSound
+    });
+
+    this.appSettings.standupPicker.teamMembers.forEach(teamMember => {
+      this.addNewTeamMemberRow(
+        teamMember.name,
+        teamMember.imageUrl,
+        teamMember.role
+      );
+    });
+
+    this.appSettings.slideshow.urls.forEach(url => {
+      this.addNewSlideshowUrlRow(url);
+    });
+
+    this.appSettings.standupPicker.standupMusic.forEach(path => {
+      this.addNewStandupMusicPathRow(path);
+    });
+
+    this.getSlideshowFormGroup().patchValue({
+      timerInSec: settings.slideshow.timerInSec
+    });
   }
 
   private getStandupPickerFormGroup(): FormGroup {
