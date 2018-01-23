@@ -5,7 +5,7 @@ import * as fs from 'fs';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 
-const SETTINGS_FILE_PATH = './dist/assets/settings.json';
+const SETTINGS_FILE_PATH = `${__dirname}/assets/settings.json`;
 
 @Injectable()
 export class SettingsService {

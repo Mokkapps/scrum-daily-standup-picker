@@ -327,7 +327,7 @@ module.exports = {
         use: ['html-loader']
       },
       {
-        test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2|json|xml|ico|cur|ani)$/,
+        test: /\.(png|jpg|jpeg|json|gif|wav|mp3|ogg|m4a|svg|eot|ttf|woff|woff2|json|xml|ico|cur|ani)$/,
         use: ['file-loader?name=[path][name].[ext]']
       },
       {

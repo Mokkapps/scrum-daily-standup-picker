@@ -22,6 +22,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ExternalPageComponent } from 'app/components/external-page/external-page.component';
 import { SettingsComponent } from 'app/components/settings/settings.component';
 import { StandupPickerComponent } from 'app/components/standup-picker/standup-picker.component';
+import { SettingsService } from 'app/providers/settings.service';
 import { SafePipe } from 'app/safe-url.pipe';
 import 'polyfills';
 import 'reflect-metadata';
@@ -30,7 +31,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SideNavComponent } from './components/sidenav/sidenav.component';
 import { ElectronService } from './providers/electron.service';
-import { SettingsService } from 'app/providers/settings.service';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {

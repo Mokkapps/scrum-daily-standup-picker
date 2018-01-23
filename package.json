@@ -34,6 +34,7 @@
     "electron:dev": "npm run build && electron ./dist",
     "electron:prod": "npm run build:prod && electron ./dist",
     "electron:linux": "npm run build:prod && npx electron-builder build --linux",
+    "electron:arm": "npm run build:prod && npx electron-builder build --linux --armv7l",
     "electron:windows": "npm run build:prod && npx electron-builder build --windows",
     "electron:mac": "npm run build:prod && npx electron-builder build --mac",
     "electron:mac-unsigned": "npm run build:prod && npx electron-builder build --mac -c.mac.identity=null",

@@ -10,9 +10,8 @@ import { readFile } from 'jsonfile';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
-const DIST_PATH = './dist';
-const IMAGES_PATH = '/assets/images/';
-const SOUNDS_PATH = '/assets/sounds/';
+const IMAGES_PATH = `${__dirname}/assets/images/`;
+const SOUNDS_PATH = `${__dirname}/assets/sounds/`;
 const IMAGES_FILTER = { name: 'Images', extensions: ['jpg', 'jpeg', 'png'] };
 const SOUNDS_FILTER = {
   name: 'Sounds',
@@ -41,6 +40,8 @@ export class SettingsComponent implements OnDestroy {
     private formBuilder: FormBuilder,
     public snackBar: MatSnackBar
   ) {
+    console.log('Dirname', __dirname);
+    console.log('Process env', process.env);
     console.log('Init SettingsComponent');
 
     this.getImagesAndSounds().then(values => {
@@ -168,9 +169,7 @@ export class SettingsComponent implements OnDestroy {
             folderPath.toString().match(/[^\\/]+\.[^\\/]+$/) || []
           ).pop();
           fs.writeFile(
-            `${DIST_PATH}${
-              type === 'image' ? IMAGES_PATH : SOUNDS_PATH
-            }${filename}`,
+            `${type === 'image' ? IMAGES_PATH : SOUNDS_PATH}${filename}`,
             data,
             // tslint:disable-next-line:no-shadowed-variable
             err => {
@@ -210,7 +209,7 @@ export class SettingsComponent implements OnDestroy {
   private readFiles(type: FileType): Promise<string[]> {
     return new Promise((resolve, reject) => {
       fs.readdir(
-        `${DIST_PATH}${type === 'image' ? IMAGES_PATH : SOUNDS_PATH}`,
+        `${type === 'image' ? IMAGES_PATH : SOUNDS_PATH}`,
         (err, files) => {
           if (err) {
             reject(err);
