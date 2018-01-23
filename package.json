@@ -6,7 +6,7 @@
     "url": "http://www.mokkapps.de"
   },
   "description": "Tool for scrum teams to initiate the daily standup meeting",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": "MIT",
   "main": "main.js",
   "scripts": {
@@ -18,9 +18,11 @@
     "e2e": "ng e2e",
     "electron": "electron .",
     "electron-build-dev": "ng build && electron .",
-    "electron-build-prod": "ng build --prod && electron ."
+    "electron-build-prod": "ng build --prod && electron .",
+    "electron:linux": "ng build --prod && npx electron-builder build --linux",
+    "electron:windows": "ng build --prod && npx electron-builder build --windows",
+    "electron:mac": "ng build --prod && npx electron-builder build --mac"
   },
-  "private": true,
   "dependencies": {
     "@angular/animations": "^5.2.1",
     "@angular/cdk": "^5.0.4",
@@ -47,6 +49,7 @@
     "@types/node": "^9.3.0",
     "codelyzer": "~3.0.1",
     "electron": "^1.7.10",
+    "electron-builder": "^19.54.0",
     "jasmine-core": "~2.6.2",
     "jasmine-spec-reporter": "~4.1.0",
     "karma": "~1.7.0",
@@ -55,6 +58,7 @@
     "karma-coverage-istanbul-reporter": "~1.2.1",
     "karma-jasmine": "1.1.0",
     "karma-jasmine-html-reporter": "~0.2.2",
+    "npx": "^9.7.1",
     "ts-node": "~3.0.4",
     "tslint": "~5.3.2",
     "typescript": "2.4.2"
