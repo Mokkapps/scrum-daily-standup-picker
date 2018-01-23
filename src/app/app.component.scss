@@ -1,5 +1,11 @@
 mat-drawer-content {
   height: 100vh;
+  background-image: url('../assets/images/background.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  margin: 0;
 }
 
 mat-drawer-container {

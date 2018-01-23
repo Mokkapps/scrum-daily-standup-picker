@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppSettings } from 'app/models/app-settings';
-import { SettingsService } from 'app/settings/settings.service';
+import { SettingsService } from 'app/providers/settings.service';
 import { Subscription } from 'rxjs/Rx';
 
 const DEFAULT_URL = 'https://www.mokkapps.de';

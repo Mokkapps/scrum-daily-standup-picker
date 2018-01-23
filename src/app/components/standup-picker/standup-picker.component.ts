@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { SettingsService } from 'app/settings/settings.service';
+import { AppSettings } from 'app/models/app-settings';
+import { TeamMember } from 'app/models/team-member';
 import { Observable, Subscription } from 'rxjs/Rx';
-import { AppSettings } from './../models/app-settings';
-import { TeamMember } from './../models/team-member';
+import { SettingsService } from 'app/providers/settings.service';
 
 const TRANSLATIONS = {
   CLICK_TO_SELECT_TEAM_MEMBER: 'Hier klicken um Standup Picker zu starten',
@@ -109,7 +109,7 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
     this.playAudio(this.settings.standupPicker.successSound);
 
     const selectedTeamMember = this.pickRandomMember();
-    this.teamMembers.forEach((m) => {
+    this.teamMembers.forEach(m => {
       m.selected = m.name === selectedTeamMember.name;
     });
 

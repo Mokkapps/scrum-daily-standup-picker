@@ -1,9 +1,7 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Http, HttpModule } from '@angular/http';
 import {
-  MAT_LABEL_GLOBAL_OPTIONS,
   MatButtonModule,
   MatCardModule,
   MatFormFieldModule,
@@ -13,30 +11,31 @@ import {
   MatRadioModule,
   MatSelectModule,
   MatSidenavModule,
-  MatSnackBarModule
+  MatSnackBarModule,
+  MAT_LABEL_GLOBAL_OPTIONS
 } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
-import { SettingsComponent } from 'app/settings/settings.component';
-import { SettingsService } from 'app/settings/settings.service';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { ExternalPageComponent } from 'app/components/external-page/external-page.component';
+import { SettingsComponent } from 'app/components/settings/settings.component';
+import { StandupPickerComponent } from 'app/components/standup-picker/standup-picker.component';
+import { SafePipe } from 'app/safe-url.pipe';
+import 'polyfills';
+import 'reflect-metadata';
+import 'zone.js/dist/zone-mix';
+import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ExternalPageComponent } from './external-page/external-page.component';
-import { SafePipe } from './safe-url.pipe';
-import { SideNavComponent } from './sidenav/sidenav.component';
-import { StandupPickerComponent } from './standup-picker/standup-picker.component';
+import { SideNavComponent } from './components/sidenav/sidenav.component';
+import { ElectronService } from './providers/electron.service';
+import { SettingsService } from 'app/providers/settings.service';
 
-const appRoutes: Routes = [
-  {
-    path: '',
-    redirectTo: '/standup-picker',
-    pathMatch: 'full'
-  },
-  { path: 'standup-picker', component: StandupPickerComponent },
-  { path: 'agile-board', component: ExternalPageComponent },
-  { path: 'slideshow', component: ExternalPageComponent },
-  { path: 'settings', component: SettingsComponent }
-];
+// AoT requires an exported function for factories
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
 
 @NgModule({
   declarations: [
@@ -48,12 +47,20 @@ const appRoutes: Routes = [
     SafePipe
   ],
   imports: [
-    RouterModule.forRoot(appRoutes),
-    BrowserAnimationsModule,
     BrowserModule,
+    FormsModule,
     ReactiveFormsModule,
-    HttpModule,
     HttpClientModule,
+    AppRoutingModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    }),
+    // Angular Material Design
+    BrowserAnimationsModule,
     MatSidenavModule,
     MatButtonModule,
     MatCardModule,
@@ -66,6 +73,7 @@ const appRoutes: Routes = [
     MatSelectModule
   ],
   providers: [
+    ElectronService,
     SettingsService,
     { provide: MAT_LABEL_GLOBAL_OPTIONS, useValue: { float: 'always' } }
   ],

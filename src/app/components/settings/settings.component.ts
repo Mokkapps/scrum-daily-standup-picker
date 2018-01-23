@@ -3,14 +3,12 @@ import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { AppSettings } from 'app/models/app-settings';
 import { TeamMember } from 'app/models/team-member';
-import { SettingsService } from 'app/settings/settings.service';
+import { SettingsService } from 'app/providers/settings.service';
+import * as electron from 'electron';
+import * as fs from 'fs';
 import { readFile } from 'jsonfile';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-
-// see https://github.com/electron/electron/issues/7300
-const electron = (<any>window).require('electron');
-const fs = (<any>window).require('fs');
 
 const DIST_PATH = './dist';
 const IMAGES_PATH = '/assets/images/';

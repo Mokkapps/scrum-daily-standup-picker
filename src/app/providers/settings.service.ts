@@ -1,10 +1,9 @@
 import { Injectable, NgZone } from '@angular/core';
 import { AppSettings } from 'app/models/app-settings';
 import { TeamMember } from 'app/models/team-member';
+import * as fs from 'fs';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
-
-const fs = (<any>window).require('fs');
 
 const SETTINGS_FILE_PATH = './dist/assets/settings.json';
 
