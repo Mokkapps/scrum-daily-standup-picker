@@ -12,6 +12,8 @@ import * as path from 'path';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
+const electronDirectory = require('electron-directory');
+
 const IMAGES_FILTER = { name: 'Images', extensions: ['jpg', 'jpeg', 'png'] };
 const SOUNDS_FILTER = {
   name: 'Sounds',
@@ -47,11 +49,10 @@ export class SettingsComponent implements OnDestroy {
     public snackBar: MatSnackBar,
     private router: Router
   ) {
-    this.imagesPath = path.join(global.__static, '/images/');
-    this.soundsPath = path.join(global.__static, '/sounds/');
+    const appPath = electron.remote.app.getAppPath();
+    this.imagesPath = path.join(appPath, '/assets/images/').replace('app.asar', 'app.asar.unpacked');
+    this.soundsPath = path.join(appPath, '/assets/sounds/').replace('app.asar', 'app.asar.unpacked');
 
-    console.log('Dirname', __dirname);
-    console.log('Process env', process.env);
     console.log('Init SettingsComponent');
 
     this.getImagesAndSounds().then(values => {
@@ -123,7 +124,6 @@ export class SettingsComponent implements OnDestroy {
     control.removeAt(index);
   }
 
-  // tslint:disable-next-line:no-shadowed-variable
   addNewStandupMusicPathRow(path?: string): void {
     const control = <FormArray>this.getStandupPickerFormGroup().controls
       .standupMusic;
@@ -168,9 +168,10 @@ export class SettingsComponent implements OnDestroy {
             folderPath.toString().match(/[^\\/]+\.[^\\/]+$/) || []
           ).pop();
           fs.writeFile(
-            `${type === 'image' ? this.imagesPath : this.soundsPath}${filename}`,
+            `${
+              type === 'image' ? this.imagesPath : this.soundsPath
+            }${filename}`,
             data,
-            // tslint:disable-next-line:no-shadowed-variable
             err => {
               if (err) {
                 console.error(err);

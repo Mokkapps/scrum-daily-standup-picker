@@ -1,6 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import { AppSettings } from 'app/models/app-settings';
 import { TeamMember } from 'app/models/team-member';
+import { remote } from 'electron';
 import * as fs from 'fs';
 import * as path from 'path';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -10,8 +11,6 @@ let settingsFilePath = '';
 let imagesPath = '';
 let soundsPath = '';
 
-declare var global: any;
-
 @Injectable()
 export class SettingsService {
   private appSettings: BehaviorSubject<
@@ -19,9 +18,11 @@ export class SettingsService {
   > = new BehaviorSubject(undefined);
 
   constructor(private zone: NgZone) {
-    settingsFilePath = path.join(global.__static, '/settings.json');
-    imagesPath = path.join(global.__static, '/images/');
-    soundsPath = path.join(global.__static, '/sounds/');
+    const appPath = remote.app.getAppPath();
+
+    settingsFilePath = path.join(appPath, '/assets/settings.json').replace('app.asar', 'app.asar.unpacked');
+    imagesPath = path.join(appPath, '/assets/images/').replace('app.asar', 'app.asar.unpacked');
+    soundsPath = path.join(appPath, '/assets/sounds/').replace('app.asar', 'app.asar.unpacked');
 
     fs.readFile(settingsFilePath, 'utf8', (err, data) => {
       if (err) {
@@ -34,7 +35,6 @@ export class SettingsService {
               this.appSettings.next(this.getDefaultSettings());
             });
           })
-          // tslint:disable-next-line:no-shadowed-variable
           .catch(err => {
             console.error(err);
           });

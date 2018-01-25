@@ -1,4 +1,5 @@
 {
+  "asarUnpack": "assets",
   "productName": "Standup Picker",
   "directories": {
     "app": "dist",

@@ -8,13 +8,6 @@ if (environment.production) {
   enableProdMode();
 }
 
-declare var global: any;
-
-// Set `__static` path to static files in production
-(global.__static) = require('path')
-.join(__dirname, '/static')
-.replace(/\\/g, '\\\\');
-
 platformBrowserDynamic()
   .bootstrapModule(AppModule, {
     preserveWhitespaces: false
