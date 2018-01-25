@@ -2,8 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppSettings } from 'app/models/app-settings';
 import { TeamMember } from 'app/models/team-member';
-import { Observable, Subscription } from 'rxjs/Rx';
 import { SettingsService } from 'app/providers/settings.service';
+import { Observable, Subscription } from 'rxjs/Rx';
 
 const TRANSLATIONS = {
   CLICK_TO_SELECT_TEAM_MEMBER: 'Hier klicken um Standup Picker zu starten',

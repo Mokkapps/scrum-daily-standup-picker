@@ -32,6 +32,10 @@ export class SettingsComponent implements OnDestroy {
 
   soundFiles: string[];
 
+  imagesPath = IMAGES_PATH;
+
+  soundsPath = SOUNDS_PATH;
+
   private appSettings: AppSettings;
   private settingsSubscription: Subscription;
 
@@ -103,10 +107,10 @@ export class SettingsComponent implements OnDestroy {
     console.log('REVERT');
   }
 
-  addNewTeamMemberRow(name?: string, imageUrl?: string, role?: string): void {
+  addNewTeamMemberRow(name?: string, image?: string, role?: string): void {
     const control = <FormArray>this.getStandupPickerFormGroup().controls
       .teamMembers;
-    control.push(this.createTeamMember(name, imageUrl, role));
+    control.push(this.createTeamMember(name, image, role));
   }
 
   deleteTeamMemberRow(index: number): void {
@@ -149,7 +153,7 @@ export class SettingsComponent implements OnDestroy {
       {
         title: 'Select an image or sound',
         properties: ['openFile'],
-        filters: [IMAGES_FILTER, SOUNDS_FILTER]
+        filters: [filter]
       },
       folderPath => {
         if (folderPath === undefined) {
@@ -236,11 +240,7 @@ export class SettingsComponent implements OnDestroy {
     });
 
     this.appSettings.standupPicker.teamMembers.forEach(teamMember => {
-      this.addNewTeamMemberRow(
-        teamMember.name,
-        teamMember.imageUrl,
-        teamMember.role
-      );
+      this.addNewTeamMemberRow(teamMember.name, teamMember.image);
     });
 
     this.appSettings.slideshow.urls.forEach(url => {
@@ -286,12 +286,12 @@ export class SettingsComponent implements OnDestroy {
 
   private createTeamMember(
     name?: string,
-    imageUrl?: string,
+    image?: string,
     role?: string
   ): FormGroup {
     return this.formBuilder.group({
       name: name ? name : '',
-      imageUrl: imageUrl ? imageUrl : '',
+      image: image ? image : '',
       role: role ? role : ''
     });
   }

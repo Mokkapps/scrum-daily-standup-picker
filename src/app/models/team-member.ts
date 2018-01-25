@@ -1,6 +1,5 @@
 export interface TeamMember {
   name: string;
-  imageUrl: string;
-  role: string;
+  image: string;
   disabled: boolean;
 }

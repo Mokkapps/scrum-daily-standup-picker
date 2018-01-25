@@ -8,7 +8,7 @@
             <h2>Standup Picker</h2>
             <mat-form-field>
                 <mat-select placeholder="Erinnerungssound" formControlName="standupEndReminderSound">
-                    <mat-option *ngFor="let file of soundFiles" value="{{'./assets/sounds/' + file}}">
+                    <mat-option *ngFor="let file of soundFiles" value="{{soundsPath + file}}">
                         {{file}}
                     </mat-option>
                 </mat-select>
@@ -27,7 +27,7 @@
             </mat-form-field>
             <mat-form-field>
                 <mat-select placeholder="Standup Picker Auswahl Sound" formControlName="successSound">
-                    <mat-option *ngFor="let file of soundFiles" value="{{'./assets/sounds/' + file}}">
+                    <mat-option *ngFor="let file of soundFiles" value="{{soundsPath + file}}">
                         {{file}}
                     </mat-option>
                 </mat-select>
@@ -42,17 +42,14 @@
                             <input matInput formControlName="name" placeholder="Name">
                         </mat-form-field>
                         <mat-form-field>
-                            <mat-select placeholder="Bild" formControlName="imageUrl">
-                                <mat-option *ngFor="let file of imageFiles" value="{{'./assets/images/' + file}}">
+                            <mat-select placeholder="Bild" formControlName="image">
+                                <mat-option *ngFor="let file of imageFiles" value="{{imagesPath + file}}">
                                     <div class="flex-container">
-                                        <img class="select-image" src="{{'./assets/images/' + file}}">
+                                        <img class="select-image" src="{{imagesPath + file}}">
                                         <p>{{file}}</p>
                                     </div>
                                 </mat-option>
                             </mat-select>
-                        </mat-form-field>
-                        <mat-form-field>
-                            <input matInput formControlName="role" placeholder="Rolle">
                         </mat-form-field>
                     </div>
 
@@ -68,7 +65,7 @@
                     <div class="form-group-container">
                         <mat-form-field>
                             <mat-select placeholder="Titel" [formControlName]="i">
-                                <mat-option *ngFor="let file of soundFiles" value="{{'./assets/sounds/' + file}}">
+                                <mat-option *ngFor="let file of soundFiles" value="{{soundsPath + file}}">
                                     {{file}}
                                 </mat-option>
                             </mat-select>
