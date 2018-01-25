@@ -1,8 +1,6 @@
-<mat-drawer-container>
-    <mat-drawer mode="side" opened="true">
-        <app-sidenav></app-sidenav>
-    </mat-drawer>
-    <mat-drawer-content layout-fill>
-        <router-outlet></router-outlet>
-    </mat-drawer-content>
-</mat-drawer-container>
+<div class="background">
+    <a mat-fab color="primary" routerLink="/settings" *ngIf="router.url != '/settings'">
+        <mat-icon aria-label="Go to settings">settings</mat-icon>
+    </a>
+    <router-outlet></router-outlet>
+</div>

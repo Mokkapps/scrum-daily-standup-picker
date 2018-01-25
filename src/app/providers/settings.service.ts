@@ -93,11 +93,6 @@ export class SettingsService {
             disabled: false
           }
         ]
-      },
-      jiraUrl: 'http://www.mokkapps.de',
-      slideshow: {
-        urls: ['http://www.github.com', 'http://www.atlassian.com'],
-        timerInSec: 30
       }
     };
   }

@@ -1,3 +1,6 @@
+<button mat-raised-button color="primary" (click)="navigateBack()">
+    <mat-icon aria-label="Navigate back">navigate_before</mat-icon>
+</button>
 <div class="container">
     <h1>Einstellungen</h1>
     <h2>Neue Dateien hochladen</h2>
@@ -74,30 +77,6 @@
                     <button mat-raised-button color="warn" type="button" *ngIf="standupMusic.controls.length > 1" (click)="deleteStandupMusicPathRow(i)">Standup Musik entfernen</button>
                 </div>
                 <button mat-raised-button mat-primary type="button" (click)="addNewStandupMusicPathRow()">Neue Standup Musik hinzufügen</button>
-            </div>
-        </div>
-
-        <h2>JIRA Board</h2>
-        <mat-form-field class="form-group-container">
-            <input matInput formControlName="jiraUrl" placeholder="JIRA Board URL">
-        </mat-form-field>
-
-        <div class="form-group-container" formGroupName="slideshow">
-            <h2>Slideshow</h2>
-            <mat-form-field class="form-group-container">
-                <input matInput formControlName="timerInSec" placeholder="Slideshow-Timer in Sekunden">
-            </mat-form-field>
-            <div class="team-members-container" formArrayName="urls">
-                <div *ngFor="let url of slideshowUrls.controls; let i=index">
-                    <h4>Slideshow URL {{ i + 1 }}</h4>
-                    <div class="form-group-container">
-                        <mat-form-field>
-                            <input matInput [formControlName]="i" placeholder="URL">
-                        </mat-form-field>
-                        <button mat-raised-button color="warn" type="button" *ngIf="slideshowUrls.controls.length > 1" (click)="deleteSlideshowUrlRow(i)">Slideshow URL entfernen</button>
-                    </div>
-                </div>
-                <button mat-raised-button mat-primary type="button" (click)="addNewSlideshowUrlRow()">Neue Slideshow URL hinzufügen</button>
             </div>
         </div>
 

@@ -1,4 +1,4 @@
-mat-drawer-content {
+.background {
   height: 100vh;
   background-image: url('../assets/images/background.jpg');
   background-size: cover;
@@ -6,12 +6,4 @@ mat-drawer-content {
   background-attachment: fixed;
   background-position: center;
   margin: 0;
-}
-
-mat-drawer-container {
-  background-color: transparent;
-}
-
-mat-drawer {
-  background-color: darkgray;
 }

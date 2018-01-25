@@ -1,6 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
+import { Router } from '@angular/router';
 import { AppSettings } from 'app/models/app-settings';
 import { TeamMember } from 'app/models/team-member';
 import { SettingsService } from 'app/providers/settings.service';
@@ -12,6 +13,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 const IMAGES_PATH = `${__dirname}/assets/images/`;
 const SOUNDS_PATH = `${__dirname}/assets/sounds/`;
+
 const IMAGES_FILTER = { name: 'Images', extensions: ['jpg', 'jpeg', 'png'] };
 const SOUNDS_FILTER = {
   name: 'Sounds',
@@ -42,7 +44,8 @@ export class SettingsComponent implements OnDestroy {
   constructor(
     private settingsService: SettingsService,
     private formBuilder: FormBuilder,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
+    private router: Router
   ) {
     console.log('Dirname', __dirname);
     console.log('Process env', process.env);
@@ -75,17 +78,15 @@ export class SettingsComponent implements OnDestroy {
     return <FormArray>this.getStandupPickerFormGroup().controls.standupMusic;
   }
 
-  get slideshowUrls(): FormArray {
-    return <FormArray>this.getSlideshowFormGroup().controls.urls;
+  navigateBack() {
+    this.router.navigate(['../']);
   }
 
   onSubmit(): void {
     console.log(this.settingsForm);
     this.settingsService
       .updateSettings({
-        standupPicker: this.settingsForm.value.standupPicker,
-        jiraUrl: this.settingsForm.value.jiraUrl,
-        slideshow: this.settingsForm.value.slideshow
+        standupPicker: this.settingsForm.value.standupPicker
       })
       .then(() => {
         this.snackBar.open('Einstellungen wurden gespeichert', undefined, {
@@ -107,25 +108,15 @@ export class SettingsComponent implements OnDestroy {
     console.log('REVERT');
   }
 
-  addNewTeamMemberRow(name?: string, image?: string, role?: string): void {
+  addNewTeamMemberRow(name?: string, image?: string): void {
     const control = <FormArray>this.getStandupPickerFormGroup().controls
       .teamMembers;
-    control.push(this.createTeamMember(name, image, role));
+    control.push(this.createTeamMember(name, image));
   }
 
   deleteTeamMemberRow(index: number): void {
     const control = <FormArray>this.getStandupPickerFormGroup().controls
       .teamMembers;
-    control.removeAt(index);
-  }
-
-  addNewSlideshowUrlRow(url?: string): void {
-    const control = <FormArray>this.getSlideshowFormGroup().controls.urls;
-    control.push(new FormControl(url));
-  }
-
-  deleteSlideshowUrlRow(index: number): void {
-    const control = <FormArray>this.getSlideshowFormGroup().controls.urls;
     control.removeAt(index);
   }
 
@@ -225,10 +216,6 @@ export class SettingsComponent implements OnDestroy {
   }
 
   private initForm(settings: AppSettings): void {
-    this.settingsForm.patchValue({
-      jiraUrl: settings.jiraUrl
-    });
-
     this.getStandupPickerFormGroup().patchValue({
       standupHour: settings.standupPicker.standupHour,
       standupMinute: settings.standupPicker.standupMinute,
@@ -243,16 +230,8 @@ export class SettingsComponent implements OnDestroy {
       this.addNewTeamMemberRow(teamMember.name, teamMember.image);
     });
 
-    this.appSettings.slideshow.urls.forEach(url => {
-      this.addNewSlideshowUrlRow(url);
-    });
-
     this.appSettings.standupPicker.standupMusic.forEach(path => {
       this.addNewStandupMusicPathRow(path);
-    });
-
-    this.getSlideshowFormGroup().patchValue({
-      timerInSec: settings.slideshow.timerInSec
     });
   }
 
@@ -275,24 +254,17 @@ export class SettingsComponent implements OnDestroy {
         standupEndReminderAfterMin: undefined,
         successSound: undefined,
         standupEndReminderSound: undefined
-      }),
-      jiraUrl: undefined,
-      slideshow: this.formBuilder.group({
-        timerInSec: undefined,
-        urls: this.formBuilder.array([])
       })
     });
   }
 
   private createTeamMember(
     name?: string,
-    image?: string,
-    role?: string
+    image?: string
   ): FormGroup {
     return this.formBuilder.group({
       name: name ? name : '',
-      image: image ? image : '',
-      role: role ? role : ''
+      image: image ? image : ''
     });
   }
 }
