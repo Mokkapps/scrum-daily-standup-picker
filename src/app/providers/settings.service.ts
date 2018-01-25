@@ -2,12 +2,15 @@ import { Injectable, NgZone } from '@angular/core';
 import { AppSettings } from 'app/models/app-settings';
 import { TeamMember } from 'app/models/team-member';
 import * as fs from 'fs';
+import * as path from 'path';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 
-const SETTINGS_FILE_PATH = `${__dirname}/assets/settings.json`;
-const IMAGES_PATH = `${__dirname}/assets/images/`;
-const SOUNDS_PATH = `${__dirname}/assets/sounds/`;
+let settingsFilePath = '';
+let imagesPath = '';
+let soundsPath = '';
+
+declare var global: any;
 
 @Injectable()
 export class SettingsService {
@@ -16,7 +19,11 @@ export class SettingsService {
   > = new BehaviorSubject(undefined);
 
   constructor(private zone: NgZone) {
-    fs.readFile(SETTINGS_FILE_PATH, 'utf8', (err, data) => {
+    settingsFilePath = path.join(global.__static, '/settings.json');
+    imagesPath = path.join(global.__static, '/images/');
+    soundsPath = path.join(global.__static, '/sounds/');
+
+    fs.readFile(settingsFilePath, 'utf8', (err, data) => {
       if (err) {
         console.log(err);
 
@@ -56,7 +63,7 @@ export class SettingsService {
 
   private storeSettings(settings: AppSettings): Promise<any> {
     return new Promise((resolve, reject) => {
-      fs.writeFile(SETTINGS_FILE_PATH, JSON.stringify(settings), err => {
+      fs.writeFile(settingsFilePath, JSON.stringify(settings), err => {
         if (err) {
           reject(err);
         } else {
@@ -73,23 +80,23 @@ export class SettingsService {
         standupMinute: 59,
         standupTimeInMin: 15,
         standupEndReminderAfterMin: 10,
-        successSound: `${SOUNDS_PATH}success.wav`,
-        standupEndReminderSound: `${SOUNDS_PATH}tickTock.wav`,
-        standupMusic: [`${SOUNDS_PATH}cheerful-song.wav`],
+        successSound: `${soundsPath}success.wav`,
+        standupEndReminderSound: `${soundsPath}tickTock.wav`,
+        standupMusic: [`${soundsPath}cheerful-song.wav`],
         teamMembers: [
           {
             name: 'Max Mustermann',
-            image: `${IMAGES_PATH}user1.jpeg`,
+            image: `${imagesPath}user1.jpeg`,
             disabled: false
           },
           {
             name: 'Rainer Zufall',
-            image: `${IMAGES_PATH}user2.jpeg`,
+            image: `${imagesPath}user2.jpeg`,
             disabled: false
           },
           {
             name: 'Anna Bolika',
-            image: `${IMAGES_PATH}user3.jpeg`,
+            image: `${imagesPath}user3.jpeg`,
             disabled: false
           }
         ]

@@ -103,6 +103,12 @@ function getPlugins() {
     })
   );
 
+  plugins.push(
+    new DefinePlugin({
+      __static: `"${path.join(__dirname, '/static').replace(/\\/g, '\\\\')}"`
+    })
+  );
+
   plugins.push(new NoEmitOnErrorsPlugin());
 
   if (scripts.length > 0) {
@@ -121,6 +127,11 @@ function getPlugins() {
   plugins.push(
     new CopyWebpackPlugin(
       [
+        {
+          from: path.join(__dirname, '/static/**/*'),
+          to: path.join(__dirname, '/dist/'),
+          ignore: ['.*']
+        },
         {
           context: 'src',
           to: '',

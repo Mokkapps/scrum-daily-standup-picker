@@ -8,17 +8,17 @@ import { SettingsService } from 'app/providers/settings.service';
 import * as electron from 'electron';
 import * as fs from 'fs';
 import { readFile } from 'jsonfile';
+import * as path from 'path';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-
-const IMAGES_PATH = `${__dirname}/assets/images/`;
-const SOUNDS_PATH = `${__dirname}/assets/sounds/`;
 
 const IMAGES_FILTER = { name: 'Images', extensions: ['jpg', 'jpeg', 'png'] };
 const SOUNDS_FILTER = {
   name: 'Sounds',
   extensions: ['wav', 'mp3', 'ogg', 'm4a']
 };
+
+declare var global: any;
 
 @Component({
   selector: 'app-settings',
@@ -34,9 +34,9 @@ export class SettingsComponent implements OnDestroy {
 
   soundFiles: string[];
 
-  imagesPath = IMAGES_PATH;
+  imagesPath = '';
 
-  soundsPath = SOUNDS_PATH;
+  soundsPath = '';
 
   private appSettings: AppSettings;
   private settingsSubscription: Subscription;
@@ -47,6 +47,9 @@ export class SettingsComponent implements OnDestroy {
     public snackBar: MatSnackBar,
     private router: Router
   ) {
+    this.imagesPath = path.join(global.__static, '/images/');
+    this.soundsPath = path.join(global.__static, '/sounds/');
+
     console.log('Dirname', __dirname);
     console.log('Process env', process.env);
     console.log('Init SettingsComponent');
@@ -120,6 +123,7 @@ export class SettingsComponent implements OnDestroy {
     control.removeAt(index);
   }
 
+  // tslint:disable-next-line:no-shadowed-variable
   addNewStandupMusicPathRow(path?: string): void {
     const control = <FormArray>this.getStandupPickerFormGroup().controls
       .standupMusic;
@@ -164,7 +168,7 @@ export class SettingsComponent implements OnDestroy {
             folderPath.toString().match(/[^\\/]+\.[^\\/]+$/) || []
           ).pop();
           fs.writeFile(
-            `${type === 'image' ? IMAGES_PATH : SOUNDS_PATH}${filename}`,
+            `${type === 'image' ? this.imagesPath : this.soundsPath}${filename}`,
             data,
             // tslint:disable-next-line:no-shadowed-variable
             err => {
@@ -204,7 +208,7 @@ export class SettingsComponent implements OnDestroy {
   private readFiles(type: FileType): Promise<string[]> {
     return new Promise((resolve, reject) => {
       fs.readdir(
-        `${type === 'image' ? IMAGES_PATH : SOUNDS_PATH}`,
+        `${type === 'image' ? this.imagesPath : this.soundsPath}`,
         (err, files) => {
           if (err) {
             reject(err);
@@ -258,10 +262,7 @@ export class SettingsComponent implements OnDestroy {
     });
   }
 
-  private createTeamMember(
-    name?: string,
-    image?: string
-  ): FormGroup {
+  private createTeamMember(name?: string, image?: string): FormGroup {
     return this.formBuilder.group({
       name: name ? name : '',
       image: image ? image : ''
