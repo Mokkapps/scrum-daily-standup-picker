@@ -36,7 +36,6 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
 
   constructor(settingsService: SettingsService) {
     settingsService.settings.subscribe(settings => {
-      console.log('New standup picker settings event', settings);
       if (!settings) {
         return;
       }

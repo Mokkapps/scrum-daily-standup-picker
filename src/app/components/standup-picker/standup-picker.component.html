@@ -1,19 +1,19 @@
-<div style="text-align:center">
-    <section>
-        <button mat-raised-button mat-primary (click)="triggerPicker()">{{title}}</button>
-        <h2>{{time}}</h2>
+<div>
+    <section style="text-align:center">
+        <button mat-raised-button mat-primary class="trigger-button" (click)="triggerPicker()">{{title}}</button>
+        <h2 class="mt-4">{{time}}</h2>
     </section>
 
-    <mat-grid-list cols="3" rowHeight="300px" gutterSize="10px">
-        <ng-container *ngFor="let member of teamMembers">
-            <mat-grid-tile>
-                <mat-card [ngClass]="{'mat-card-selected': member.selected, 'mat-card-disabled': member.disabled}" (click)="onMemberClick(member)">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col" *ngFor="let member of teamMembers">
+                <mat-card class="mt-5" [ngClass]="{'mat-card-selected': member.selected, 'mat-card-disabled': member.disabled}" (click)="onMemberClick(member)">
                     <mat-card-header>
                         <mat-card-title class="member-title">{{member.name}}</mat-card-title>
                     </mat-card-header>
-                    <img mat-card-image class="member-image" src="{{member.image}}">
+                    <img mat-card-image src="{{member.image}}" alt="{{member.name}}">
                 </mat-card>
-            </mat-grid-tile>
-        </ng-container>
-    </mat-grid-list>
+            </div>
+        </div>
+    </div>
 </div>

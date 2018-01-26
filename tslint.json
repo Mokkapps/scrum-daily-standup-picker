@@ -20,11 +20,14 @@
         "order": [
           "public-static-field",
           "public-instance-field",
+          "protected-static-field",
+          "protected-instance-field",
           "private-static-field",
           "private-instance-field",
           "public-constructor",
-          "public-instance-method",
+          "protected-constructor",
           "private-constructor",
+          "public-instance-method",
           "protected-instance-method",
           "private-instance-method"
         ]
@@ -56,14 +59,7 @@
       "check-else",
       "check-whitespace"
     ],
-    "ordered-imports": [
-      true,
-      {
-        "module-source-path": "full",
-        "import-sources-order": "lowercase-last",
-        "named-imports-order": "lowercase-first"
-      }
-    ],
+    "ordered-imports": true,
     "prefer-const": true,
     "quotemark": [true, "single"],
     "radix": true,

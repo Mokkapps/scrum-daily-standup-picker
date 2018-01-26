@@ -1,9 +1,5 @@
-.background {
-  height: 100vh;
-  background-image: url('../assets/images/background.jpg');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-position: center;
-  margin: 0;
+.settings-button {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
 }

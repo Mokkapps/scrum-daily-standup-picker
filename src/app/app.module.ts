@@ -2,17 +2,17 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
+  MAT_LABEL_GLOBAL_OPTIONS,
   MatButtonModule,
   MatCardModule,
+  MatDividerModule,
   MatFormFieldModule,
-  MatGridListModule,
   MatIconModule,
   MatInputModule,
   MatRadioModule,
   MatSelectModule,
   MatSidenavModule,
-  MatSnackBarModule,
-  MAT_LABEL_GLOBAL_OPTIONS
+  MatSnackBarModule
 } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -54,13 +54,13 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatSidenavModule,
     MatButtonModule,
     MatCardModule,
-    MatGridListModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
     MatSnackBarModule,
     MatRadioModule,
-    MatSelectModule
+    MatSelectModule,
+    MatDividerModule
   ],
   providers: [
     ElectronService,

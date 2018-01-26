@@ -1,6 +1,4 @@
-<div class="background">
-    <a mat-fab color="primary" routerLink="/settings" *ngIf="router.url != '/settings'">
-        <mat-icon aria-label="Go to settings">settings</mat-icon>
-    </a>
-    <router-outlet></router-outlet>
-</div>
+<a class="settings-button" mat-fab color="primary" routerLink="/settings" *ngIf="router.url != '/settings'">
+    <mat-icon aria-label="Go to settings">settings</mat-icon>
+</a>
+<router-outlet></router-outlet>

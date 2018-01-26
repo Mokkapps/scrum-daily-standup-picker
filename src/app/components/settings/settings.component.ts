@@ -2,9 +2,6 @@ import { Component, OnDestroy } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
-import { AppSettings } from 'app/models/app-settings';
-import { TeamMember } from 'app/models/team-member';
-import { SettingsService } from 'app/providers/settings.service';
 import * as electron from 'electron';
 import * as fs from 'fs';
 import { readFile } from 'jsonfile';
@@ -12,7 +9,9 @@ import * as path from 'path';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
-const electronDirectory = require('electron-directory');
+import { AppSettings } from 'app/models/app-settings';
+import { TeamMember } from 'app/models/team-member';
+import { SettingsService } from 'app/providers/settings.service';
 
 const IMAGES_FILTER = { name: 'Images', extensions: ['jpg', 'jpeg', 'png'] };
 const SOUNDS_FILTER = {
@@ -50,10 +49,12 @@ export class SettingsComponent implements OnDestroy {
     private router: Router
   ) {
     const appPath = electron.remote.app.getAppPath();
-    this.imagesPath = path.join(appPath, '/assets/images/').replace('app.asar', 'app.asar.unpacked');
-    this.soundsPath = path.join(appPath, '/assets/sounds/').replace('app.asar', 'app.asar.unpacked');
-
-    console.log('Init SettingsComponent');
+    this.imagesPath = path
+      .join(appPath, '/assets/images/')
+      .replace('app.asar', 'app.asar.unpacked');
+    this.soundsPath = path
+      .join(appPath, '/assets/sounds/')
+      .replace('app.asar', 'app.asar.unpacked');
 
     this.getImagesAndSounds().then(values => {
       this.imageFiles = values[0];

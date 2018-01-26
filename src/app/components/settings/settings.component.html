@@ -1,16 +1,20 @@
 <button mat-raised-button color="primary" (click)="navigateBack()">
     <mat-icon aria-label="Navigate back">navigate_before</mat-icon>
 </button>
-<h1>{{soundsPath}}</h1>
-<h1>{{imagesPath}}</h1>
-<div class="container">
-    <h1>Einstellungen</h1>
-    <h2>Neue Dateien hochladen</h2>
-    <button mat-raised-button color="primary" (click)="openElectronFilePicker('image')">Neues Bild hochladen</button>
-    <button mat-raised-button color="primary" (click)="openElectronFilePicker('sound')">Neuen Sound hochladen</button>
+<h1 class="m-5">Einstellungen</h1>
+
+<div class="container m-5 p-3">
+    <h2 class="mb-4">Neue Dateien hochladen</h2>
+    <div class="flex-container">
+        <button mat-raised-button color="primary" (click)="openElectronFilePicker('image')">Neues Bild hochladen</button>
+        <button mat-raised-button class="ml-4" color="primary" (click)="openElectronFilePicker('sound')">Neuen Sound hochladen</button>
+    </div>
+</div>
+
+<div class="container m-5 p-3">
     <form [formGroup]="settingsForm" (ngSubmit)="onSubmit()" novalidate>
         <div class="form-group-container" formGroupName="standupPicker">
-            <h2>Standup Picker</h2>
+            <h2 class="mb-4">Standup Picker</h2>
             <mat-form-field>
                 <mat-select placeholder="Erinnerungssound" formControlName="standupEndReminderSound">
                     <mat-option *ngFor="let file of soundFiles" value="{{soundsPath + file}}">
@@ -38,10 +42,10 @@
                 </mat-select>
             </mat-form-field>
 
-            <h3>Team Mitglieder</h3>
-            <div class="team-members-container" formArrayName="teamMembers">
+            <h3 class="mb-4">Team Mitglieder</h3>
+            <div class="team-members-container p-3" formArrayName="teamMembers">
                 <div *ngFor="let teamMember of teamMembers.controls; let i=index" [formGroupName]="i">
-                    <h4>Mitglied {{ i + 1 }}</h4>
+                    <h4 class="mb-4">Mitglied {{ i + 1 }}</h4>
                     <div class="form-group-container">
                         <mat-form-field>
                             <input matInput formControlName="name" placeholder="Name">
@@ -57,16 +61,16 @@
                             </mat-select>
                         </mat-form-field>
                     </div>
-
                     <button mat-raised-button color="warn" type="button" *ngIf="teamMembers.controls.length > 1" (click)="deleteTeamMemberRow(i)">Teammitglied entfernen</button>
+                    <mat-divider class="mx-2 my-4"></mat-divider>
                 </div>
                 <button mat-raised-button mat-primary type="button" (click)="addNewTeamMemberRow()">Neues Teammitglied hinzufügen</button>
             </div>
 
-            <h3>Standup Musik</h3>
-            <div class="team-members-container" formArrayName="standupMusic">
+            <h3 class="mb-4 mt-4">Standup Musik</h3>
+            <div class="team-members-container p-3" formArrayName="standupMusic">
                 <div *ngFor="let url of standupMusic.controls; let i=index">
-                    <h4>Titel {{ i + 1 }}</h4>
+                    <h4 class="mb-4 mt-4">Titel {{ i + 1 }}</h4>
                     <div class="form-group-container">
                         <mat-form-field>
                             <mat-select placeholder="Titel" [formControlName]="i">
@@ -77,12 +81,15 @@
                         </mat-form-field>
                     </div>
                     <button mat-raised-button color="warn" type="button" *ngIf="standupMusic.controls.length > 1" (click)="deleteStandupMusicPathRow(i)">Standup Musik entfernen</button>
+                    <mat-divider class="mx-2 my-4"></mat-divider>
                 </div>
                 <button mat-raised-button mat-primary type="button" (click)="addNewStandupMusicPathRow()">Neue Standup Musik hinzufügen</button>
             </div>
         </div>
-
-        <button type="submit" mat-raised-button mat-primary>Speichern</button>
-        <button type="reset" (click)="revert()" mat-raised-button mat-primary>Zurücksetzen</button>
     </form>
+</div>
+
+<div class="m-5">
+    <button type="submit" mat-raised-button mat-primary>Speichern</button>
+    <button type="reset" class="ml-4" (click)="revert()" mat-raised-button mat-primary>Zurücksetzen</button>
 </div>

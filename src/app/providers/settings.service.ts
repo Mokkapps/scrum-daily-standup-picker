@@ -20,37 +20,31 @@ export class SettingsService {
   constructor(private zone: NgZone) {
     const appPath = remote.app.getAppPath();
 
-    settingsFilePath = path.join(appPath, '/assets/settings.json').replace('app.asar', 'app.asar.unpacked');
-    imagesPath = path.join(appPath, '/assets/images/').replace('app.asar', 'app.asar.unpacked');
-    soundsPath = path.join(appPath, '/assets/sounds/').replace('app.asar', 'app.asar.unpacked');
+    settingsFilePath = path
+      .join(appPath, '/assets/settings.json')
+      .replace('app.asar', 'app.asar.unpacked');
+    imagesPath = path
+      .join(appPath, '/assets/images/')
+      .replace('app.asar', 'app.asar.unpacked');
+    soundsPath = path
+      .join(appPath, '/assets/sounds/')
+      .replace('app.asar', 'app.asar.unpacked');
 
     fs.readFile(settingsFilePath, 'utf8', (err, data) => {
       if (err) {
         console.log(err);
-
-        this.storeSettings(this.getDefaultSettings())
-          .then(() => {
-            console.log('Set inital settings');
-            this.zone.run(() => {
-              this.appSettings.next(this.getDefaultSettings());
-            });
-          })
-          .catch(err => {
-            console.error(err);
-          });
+        // Store default settings if no settings are available
+        this.storeDefaultSettings();
         return;
       }
 
-      const settings = JSON.parse(data);
-      console.log('Got settings:', settings);
       this.zone.run(() => {
-        this.appSettings.next(settings);
+        this.appSettings.next(JSON.parse(data));
       });
     });
   }
 
   updateSettings(settings: AppSettings): Promise<any> {
-    console.log('Update settings with', settings);
     this.zone.run(() => {
       this.appSettings.next(settings);
     });
@@ -59,6 +53,18 @@ export class SettingsService {
 
   get settings(): Observable<AppSettings | undefined> {
     return this.appSettings.asObservable();
+  }
+
+  private storeDefaultSettings() {
+    this.storeSettings(this.getDefaultSettings())
+      .then(() => {
+        this.zone.run(() => {
+          this.appSettings.next(this.getDefaultSettings());
+        });
+      })
+      .catch(err => {
+        console.error(err);
+      });
   }
 
   private storeSettings(settings: AppSettings): Promise<any> {
