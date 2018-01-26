@@ -9,9 +9,7 @@ import {
   MatFormFieldModule,
   MatIconModule,
   MatInputModule,
-  MatRadioModule,
   MatSelectModule,
-  MatSidenavModule,
   MatSnackBarModule
 } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
@@ -51,14 +49,12 @@ export function HttpLoaderFactory(http: HttpClient) {
     }),
     // Angular Material Design
     BrowserAnimationsModule,
-    MatSidenavModule,
     MatButtonModule,
     MatCardModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
     MatSnackBarModule,
-    MatRadioModule,
     MatSelectModule,
     MatDividerModule
   ],

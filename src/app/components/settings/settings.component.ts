@@ -19,8 +19,6 @@ const SOUNDS_FILTER = {
   extensions: ['wav', 'mp3', 'ogg', 'm4a']
 };
 
-declare var global: any;
-
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.component.html',
