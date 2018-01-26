@@ -1,20 +1,20 @@
 <button mat-raised-button color="primary" (click)="navigateBack()">
     <mat-icon aria-label="Navigate back">navigate_before</mat-icon>
 </button>
-<h1 class="m-5">Einstellungen</h1>
+<h1 class="m-5">{{'PAGES.SETTINGS.TITLE' | translate}}</h1>
 
 <div class="container m-5 p-3">
-    <h2 class="mb-4">Neue Dateien hochladen</h2>
+    <h2 class="mb-4">{{'PAGES.SETTINGS.FILE_UPLOAD.TITLE' | translate}}</h2>
     <div class="flex-container">
-        <button mat-raised-button color="primary" (click)="openElectronFilePicker('image')">Neues Bild hochladen</button>
-        <button mat-raised-button class="ml-4" color="primary" (click)="openElectronFilePicker('sound')">Neuen Sound hochladen</button>
+        <button mat-raised-button color="primary" (click)="openElectronFilePicker('image')">{{'PAGES.SETTINGS.FILE_UPLOAD.IMAGE_UPLOAD' | translate}}</button>
+        <button mat-raised-button class="ml-4" color="primary" (click)="openElectronFilePicker('sound')">{{'PAGES.SETTINGS.FILE_UPLOAD.SOUND_UPLOAD' | translate}}</button>
     </div>
 </div>
 
 <div class="container m-5 p-3">
     <form [formGroup]="settingsForm" (ngSubmit)="onSubmit()" novalidate>
         <div class="form-group-container" formGroupName="standupPicker">
-            <h2 class="mb-4">Standup Picker</h2>
+            <h2 class="mb-4">{{'PAGES.SETTINGS.STANDUP_PICKER.TITLE' | translate}}</h2>
             <mat-form-field>
                 <mat-select placeholder="Erinnerungssound" formControlName="standupEndReminderSound">
                     <mat-option *ngFor="let file of soundFiles" value="{{soundsPath + file}}">
@@ -42,10 +42,10 @@
                 </mat-select>
             </mat-form-field>
 
-            <h3 class="mb-4">Team Mitglieder</h3>
+            <h3 class="mb-4">{{'PAGES.SETTINGS.STANDUP_PICKER.TEAM_MEMBERS' | translate}}</h3>
             <div class="team-members-container p-3" formArrayName="teamMembers">
                 <div *ngFor="let teamMember of teamMembers.controls; let i=index" [formGroupName]="i">
-                    <h4 class="mb-4">Mitglied {{ i + 1 }}</h4>
+                    <h4 class="mb-4">{{'PAGES.SETTINGS.STANDUP_PICKER.TEAM_MEMBER' | translate : { count: (i + 1)} }}</h4>
                     <div class="form-group-container">
                         <mat-form-field>
                             <input matInput formControlName="name" placeholder="Name">
@@ -64,13 +64,13 @@
                     <button mat-raised-button color="warn" type="button" *ngIf="teamMembers.controls.length > 1" (click)="deleteTeamMemberRow(i)">Teammitglied entfernen</button>
                     <mat-divider class="mx-2 my-4"></mat-divider>
                 </div>
-                <button mat-raised-button mat-primary type="button" (click)="addNewTeamMemberRow()">Neues Teammitglied hinzufügen</button>
+                <button mat-raised-button mat-primary type="button" (click)="addNewTeamMemberRow()">{{'PAGES.SETTINGS.STANDUP_PICKER.ADD_NEW_TEAM_MEMBER' | translate}}</button>
             </div>
 
-            <h3 class="mb-4 mt-4">Standup Musik</h3>
+            <h3 class="mb-4 mt-4">{{'PAGES.SETTINGS.STANDUP_PICKER.STANDUP_MUSIC.TITLE' | translate}}</h3>
             <div class="team-members-container p-3" formArrayName="standupMusic">
                 <div *ngFor="let url of standupMusic.controls; let i=index">
-                    <h4 class="mb-4 mt-4">Titel {{ i + 1 }}</h4>
+                    <h4 class="mb-4 mt-4">{{'PAGES.SETTINGS.STANDUP_PICKER.STANDUP_MUSIC.SOUND' | translate : { count: (i + 1)} }}</h4>
                     <div class="form-group-container">
                         <mat-form-field>
                             <mat-select placeholder="Titel" [formControlName]="i">
@@ -83,13 +83,13 @@
                     <button mat-raised-button color="warn" type="button" *ngIf="standupMusic.controls.length > 1" (click)="deleteStandupMusicPathRow(i)">Standup Musik entfernen</button>
                     <mat-divider class="mx-2 my-4"></mat-divider>
                 </div>
-                <button mat-raised-button mat-primary type="button" (click)="addNewStandupMusicPathRow()">Neue Standup Musik hinzufügen</button>
+                <button mat-raised-button mat-primary type="button" (click)="addNewStandupMusicPathRow()">{{'PAGES.SETTINGS.STANDUP_PICKER.STANDUP_MUSIC.ADD' | translate}}</button>
             </div>
         </div>
     </form>
 </div>
 
 <div class="m-5">
-    <button mat-raised-button mat-primary (click)="onSubmit()">Speichern</button>
-    <button class="ml-4" (click)="revert()" mat-raised-button mat-primary>Zurücksetzen</button>
+    <button mat-raised-button mat-primary (click)="onSubmit()">{{'PAGES.SETTINGS.SAVE' | translate}}</button>
+    <button class="ml-4" (click)="revert()" mat-raised-button mat-primary>{{'PAGES.SETTINGS.RESET' | translate}}</button>
 </div>

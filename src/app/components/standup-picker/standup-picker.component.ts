@@ -1,18 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { AppSettings } from 'app/models/app-settings';
 import { TeamMember } from 'app/models/team-member';
 import { SettingsService } from 'app/providers/settings.service';
 import { Observable, Subscription } from 'rxjs/Rx';
-
-const TRANSLATIONS = {
-  CLICK_TO_SELECT_TEAM_MEMBER: 'Hier klicken um Standup Picker zu starten',
-  STARTS_TODAY: 'beginnt heute',
-  REMAINING_STANDUP_TIME: 'Restliche Standup Zeit:',
-  MINUTES: 'Minuten',
-  PLEASE_WAIT: 'Bitte warten...'
-};
 
 @Component({
   selector: 'app-standup-picker',
@@ -20,7 +13,7 @@ const TRANSLATIONS = {
   styleUrls: ['./standup-picker.component.scss']
 })
 export class StandupPickerComponent implements OnInit, OnDestroy {
-  title = TRANSLATIONS.CLICK_TO_SELECT_TEAM_MEMBER;
+  title = '';
 
   time: string;
 
@@ -34,7 +27,10 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
 
   private shuffleSubscription: Subscription;
 
-  constructor(settingsService: SettingsService) {
+  constructor(
+    settingsService: SettingsService,
+    private translateService: TranslateService
+  ) {
     settingsService.settings.subscribe(settings => {
       if (!settings) {
         return;
@@ -45,6 +41,12 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.translateService
+      .get('PAGES.STANDUP_PICKER.CLICK_TO_SELECT_TEAM_MEMBER')
+      .first()
+      .subscribe(text => {
+        this.title = text;
+      });
     // Shuffle array initially
     this.teamMembers = this.shuffle(this.teamMembers);
 
@@ -83,7 +85,9 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
       this.time = '';
       this.timerSubscription.unsubscribe();
     }
-    this.title = TRANSLATIONS.PLEASE_WAIT;
+    this.title = this.translateService.instant(
+      'PAGES.STANDUP_PICKER.PLEASE_WAIT'
+    );
     const shuffledAndAvailableMember = this.shuffle(this.teamMembers).filter(
       (m: TeamMember) => !m.disabled
     );
@@ -113,7 +117,10 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
       m.selected = m.name === selectedTeamMember.name;
     });
 
-    this.title = `${selectedTeamMember.name} ${TRANSLATIONS.STARTS_TODAY}`;
+    this.title = this.translateService.instant(
+      'PAGES.STANDUP_PICKER.CLICK_TO_SELECT_TEAM_MEMBER',
+      { name: selectedTeamMember.name }
+    );
 
     let standupTimeInSec = this.settings.standupPicker.standupTimeInMin * 60;
 
@@ -122,15 +129,20 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
       .map(() => --standupTimeInSec)
       .subscribe((secondsPassed: number) => {
         const remainingMinutes = Math.round(secondsPassed / 60);
+
         this.time =
           secondsPassed !== 0
-            ? `${TRANSLATIONS.REMAINING_STANDUP_TIME} ${remainingMinutes}` +
-              ` ${TRANSLATIONS.MINUTES}`
+            ? this.translateService.instant(
+                'PAGES.STANDUP_PICKER.REMAINING_STANDUP_TIME',
+                { remainingMinutes }
+              )
             : '';
 
         // Reset labels if standup time is over
         if (secondsPassed === 0) {
-          this.title = TRANSLATIONS.CLICK_TO_SELECT_TEAM_MEMBER;
+          this.title = this.translateService.instant(
+            'PAGES.STANDUP_PICKER.CLICK_TO_SELECT_TEAM_MEMBER'
+          );
           this.time = '';
         }
 

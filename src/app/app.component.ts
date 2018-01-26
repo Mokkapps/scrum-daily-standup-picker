@@ -14,7 +14,7 @@ export class AppComponent {
     public router: Router,
     private translate: TranslateService
   ) {
-    translate.setDefaultLang('en');
+    translate.setDefaultLang('de');
 
     if (electronService.isElectron()) {
       console.log('Mode electron');

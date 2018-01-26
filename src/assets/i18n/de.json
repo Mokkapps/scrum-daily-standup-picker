@@ -1,0 +1,34 @@
+{
+  "PAGES": {
+    "STANDUP_PICKER": {
+      "TITLE": "Standup Picker",
+      "CLICK_TO_SELECT_TEAM_MEMBER":
+        "Hier klicken um Standup Picker zu starten",
+      "STARTS_TODAY": "{{name}} beginnt heute",
+      "REMAINING_STANDUP_TIME":
+        "Restliche Standup Zeit: {{remainingMinutes}} Minuten",
+      "PLEASE_WAIT": "Bitte warten..."
+    },
+    "SETTINGS": {
+        "TITLE": "Einstellungen",
+        "FILE_UPLOAD": {
+            "TITLE": "Datei hochladen",
+            "IMAGE_UPLOAD": "Neues Bild hochladen",
+            "SOUND_UPLOAD": "Neuen Sound hochladen"
+        },
+        "STANDUP_PICKER": {
+            "TITLE": "Standup Picker",
+            "TEAM_MEMBERS": "Team Mitglieder",
+            "TEAM_MEMBER": "Team Mitglied {{count}}",
+            "ADD_NEW_TEAM_MEMBER": "Neues Teammitglied hinzufügen",
+            "STANDUP_MUSIC": {
+                "TITLE": "Standup Musik",
+                "SOUND": "Sound {{count}}",
+                "ADD": "Neue Standup Musik hinzufügen"
+            }
+        },
+        "SAVE": "Speichern",
+        "RESET": "Zurücksetzen"
+    }
+  }
+}
