@@ -5,6 +5,7 @@ import {
   MAT_LABEL_GLOBAL_OPTIONS,
   MatButtonModule,
   MatCardModule,
+  MatDialogModule,
   MatDividerModule,
   MatFormFieldModule,
   MatIconModule,
@@ -25,6 +26,7 @@ import 'reflect-metadata';
 import 'zone.js/dist/zone-mix';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { LeavePageDialogComponent } from './components/settings/dialog/leave-dialog.component';
 import { ElectronService } from './providers/electron.service';
 
 // AoT requires an exported function for factories
@@ -33,7 +35,12 @@ export function HttpLoaderFactory(http: HttpClient) {
 }
 
 @NgModule({
-  declarations: [AppComponent, StandupPickerComponent, SettingsComponent],
+  declarations: [
+    AppComponent,
+    StandupPickerComponent,
+    SettingsComponent,
+    LeavePageDialogComponent
+  ],
   imports: [
     BrowserModule,
     FormsModule,
@@ -56,8 +63,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatInputModule,
     MatSnackBarModule,
     MatSelectModule,
-    MatDividerModule
+    MatDividerModule,
+    MatDialogModule
   ],
+  entryComponents: [LeavePageDialogComponent],
   providers: [
     ElectronService,
     SettingsService,

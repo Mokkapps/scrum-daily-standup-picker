@@ -14,6 +14,7 @@
 <div class="container m-5 p-3">
     <form [formGroup]="settingsForm" (ngSubmit)="onSubmit()" novalidate>
         <div class="form-group-container" formGroupName="standupPicker">
+
             <h2 class="mb-4">{{'PAGES.SETTINGS.STANDUP_PICKER.TITLE' | translate}}</h2>
 
             <div class="container">
@@ -68,9 +69,8 @@
                             <mat-form-field>
                                 <mat-select placeholder="Bild" formControlName="image" required>
                                     <mat-option *ngFor="let file of imageFiles" value="{{imagesPath + file}}">
-                                        <div class="flex-container">
-                                            <img class="select-image" src="{{imagesPath + file}}">
-                                            <p>{{file}}</p>
+                                        <div class="mat-option-flex-container">
+                                            <img class="select-image" src="{{imagesPath + file}}"> {{file}}
                                         </div>
                                     </mat-option>
                                 </mat-select>
@@ -84,6 +84,7 @@
             </div>
 
             <h3 class="mb-4 mt-4">{{'PAGES.SETTINGS.STANDUP_PICKER.STANDUP_MUSIC.TITLE' | translate}}</h3>
+
             <div class="container team-members-container p-3" formArrayName="standupMusic">
                 <div class="row justify-content-center">
                     <div class="col" *ngFor="let url of standupMusic.controls; let i=index">

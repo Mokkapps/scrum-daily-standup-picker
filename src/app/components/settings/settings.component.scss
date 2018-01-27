@@ -8,9 +8,16 @@
   justify-content: flex-start;
 }
 
+.mat-option-flex-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .select-image {
-  width: 150px;
-  height: 100px;
+  width: 50px;
+  height: 25px;
 }
 
 .form-group-container {

@@ -6,7 +6,7 @@ import {
   FormGroup,
   Validators
 } from '@angular/forms';
-import { MatSnackBar } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import * as electron from 'electron';
@@ -19,6 +19,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { AppSettings } from 'app/models/app-settings';
 import { TeamMember } from 'app/models/team-member';
 import { SettingsService } from 'app/providers/settings.service';
+import { LeavePageDialogComponent } from 'app/components/settings/dialog/leave-dialog.component';
 
 const NUMBER_PATTERN = '[0-9]+';
 const IMAGES_FILTER = { name: 'Images', extensions: ['jpg', 'jpeg', 'png'] };
@@ -49,6 +50,7 @@ export class SettingsComponent implements OnDestroy {
   private settingsSubscription: Subscription;
 
   constructor(
+    public dialog: MatDialog,
     public snackBar: MatSnackBar,
     private settingsService: SettingsService,
     private formBuilder: FormBuilder,
@@ -91,7 +93,19 @@ export class SettingsComponent implements OnDestroy {
   }
 
   navigateBack() {
-    this.router.navigate(['../']);
+    if (this.settingsForm.dirty) {
+      const dialogRef = this.dialog.open(LeavePageDialogComponent, {
+        width: '500px'
+      });
+
+      dialogRef.afterClosed().first().subscribe(result => {
+        if (result === true) {
+          this.router.navigate(['../']);
+        }
+      });
+    } else {
+      this.router.navigate(['../']);
+    }
   }
 
   onSubmit(): void {

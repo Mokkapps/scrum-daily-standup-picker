@@ -1,4 +1,8 @@
 {
+  "GENERAL": {
+    "YES": "Ja",
+    "NO": "Nein"
+  },
   "PAGES": {
     "STANDUP_PICKER": {
       "TITLE": "Standup Picker",
@@ -33,6 +37,11 @@
           "SOUND": "Sound {{count}}",
           "ADD": "Neue Standup Musik hinzufügen"
         }
+      },
+      "LEAVE_DIALOG": {
+        "TITLE": "Seite verlassen",
+        "MESSAGE":
+          "Wollen Sie die Seite wirklich verlassen? Nicht gespeicherte Einstellungen gehen dabei verloren."
       },
       "SAVE": "Speichern",
       "RESET": "Zurücksetzen",
