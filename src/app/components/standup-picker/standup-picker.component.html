@@ -1,13 +1,18 @@
 <div>
     <section style="text-align:center">
-        <button mat-raised-button mat-primary class="trigger-button" (click)="triggerPicker()">{{title}}</button>
-        <h2 class="mt-4">{{time}}</h2>
+        <div class="flex-container">
+            <button mat-raised-button mat-primary class="trigger-button my-4 mr-2" (click)="triggerPicker()">{{title}}</button>
+            <button mat-mini-fab color="primary" (click)="reset()">
+                <mat-icon aria-label="Reset">refresh</mat-icon>
+            </button>
+        </div>
+        <h2 class="remaining-time">{{time}}</h2>
     </section>
 
-    <div class="container-fluid">
+    <div class="container-fluid mb-4">
         <div class="row">
             <div class="col" *ngFor="let member of teamMembers">
-                <mat-card class="mt-5" [ngClass]="{'mat-card-selected': member.selected, 'mat-card-disabled': member.disabled}" (click)="onMemberClick(member)">
+                <mat-card class="mt-4" [ngClass]="{'mat-card-selected': member.selected, 'mat-card-disabled': member.disabled}" (click)="onMemberClick(member)">
                     <mat-card-header>
                         <mat-card-title class="member-title">{{member.name}}</mat-card-title>
                     </mat-card-header>

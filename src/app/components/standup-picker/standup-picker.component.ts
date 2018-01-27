@@ -105,6 +105,22 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
       });
   }
 
+  reset() {
+    if (this.timerSubscription) {
+      this.timerSubscription.unsubscribe();
+    }
+    if (this.shuffleSubscription) {
+      this.shuffleSubscription.unsubscribe();
+    }
+
+    this.teamMembers = this.shuffle(this.teamMembers);
+
+    this.title = this.translateService.instant(
+      'PAGES.STANDUP_PICKER.CLICK_TO_SELECT_TEAM_MEMBER'
+    );
+    this.time = '';
+  }
+
   private onMemberClick(member: TeamMember): void {
     member.disabled = !member.disabled;
   }
@@ -118,7 +134,7 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
     });
 
     this.title = this.translateService.instant(
-      'PAGES.STANDUP_PICKER.CLICK_TO_SELECT_TEAM_MEMBER',
+      'PAGES.STANDUP_PICKER.STARTS_TODAY',
       { name: selectedTeamMember.name }
     );
 

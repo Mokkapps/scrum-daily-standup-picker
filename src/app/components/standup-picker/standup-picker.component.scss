@@ -2,13 +2,22 @@
   width: 80vw;
   height: 50px;
   font-size: 25px;
-  margin-top: 10px;
+}
+
+.remaining-time {
+  color: white;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 
 .member-title {
   text-align: center;
   font-size: 25px;
-  margin-top: 10px;
 }
 
 .mat-card-selected {
@@ -22,8 +31,8 @@
 
 mat-card {
   overflow: hidden;
-  height: 300px;
-  width: 350px;
+  height: 250px;
+  width: 300px;
 }
 
 mat-card-image {
@@ -32,5 +41,5 @@ mat-card-image {
 }
 
 mat-card:hover {
-  box-shadow: 4px 8px 16px 4px rgba(0, 0, 0, 0.4);
+  box-shadow: 10px 10px 5px dimgray;
 }
