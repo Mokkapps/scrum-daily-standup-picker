@@ -8,6 +8,7 @@ import * as path from 'path';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 
+let assetsPath = '';
 let settingsFilePath = '';
 let imagesPath = '';
 let soundsPath = '';
@@ -21,6 +22,9 @@ export class SettingsService {
   constructor(public snackBar: MatSnackBar, private zone: NgZone) {
     const appPath = remote.app.getAppPath();
 
+    assetsPath = path
+      .join(appPath, '/assets/')
+      .replace('app.asar', 'app.asar.unpacked');
     settingsFilePath = path
       .join(appPath, '/assets/settings.json')
       .replace('app.asar', 'app.asar.unpacked');
@@ -54,6 +58,13 @@ export class SettingsService {
 
   get settings(): Observable<AppSettings | undefined> {
     return this.appSettings.asObservable();
+  }
+
+  get assetsPath(): string {
+    const appPath = remote.app.getAppPath();
+    return path
+      .join(appPath, '/assets/')
+      .replace('app.asar', 'app.asar.unpacked');
   }
 
   private storeDefaultSettings() {

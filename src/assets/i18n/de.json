@@ -20,12 +20,26 @@
     "SETTINGS": {
       "TITLE": "Einstellungen",
       "FILE_UPLOAD": {
-        "TITLE": "Datei hochladen",
-        "IMAGE_UPLOAD": "Neues Bild hochladen",
-        "SOUND_UPLOAD": "Neuen Sound hochladen",
-        "UPLOAD_SUCCESS": "Datei erfolgreich gespeichert",
-        "UPLOAD_ERROR": "Fehler beim Speichern:",
-        "FILE_READ_ERROR": "Fehler beim Lesen der Datei:"
+        "TITLE": "Datei Import/Export",
+        "SUPPORTED_IMAGE_FORMATS": "Unterstütze Bild-Formate: jpg, jpeg, png",
+        "SUPPORTED_SOUND_FORMATS":
+          "Unterstütze Sound-Formate: wav, mp3, ogg, m4a",
+        "EXPORT": {
+          "TITLE": "Einstellungen exportieren",
+          "DIALOG_TITLE": "Export-Verzeichnis wählen",
+          "SUCCESS": "Einstellungen erfolgreich exportiert",
+          "ERROR": "Fehler beim Datei-Export:"
+        },
+        "IMPORT": {
+          "TITLE": "Einstellungen importieren",
+          "DIALOG_TITLE": "Datei auswählen",
+          "SUCCESS": "Einstellungen erfolgreich importiert",
+          "ERROR": "Fehler beim Datei-Import:"
+        },
+        "IMAGE_UPLOAD": "Bild-Import",
+        "SOUND_UPLOAD": "Sound-Import",
+        "IMPORT_SUCCESS": "Datei(en) erfolgreich importiert",
+        "IMPORT_ERROR": "Fehler beim Datei-Import:"
       },
       "STANDUP_PICKER": {
         "TITLE": "Standup Picker",

@@ -16,16 +16,20 @@ import * as path from 'path';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
+import { LeavePageDialogComponent } from 'app/components/settings/dialog/leave-dialog.component';
 import { AppSettings } from 'app/models/app-settings';
 import { TeamMember } from 'app/models/team-member';
 import { SettingsService } from 'app/providers/settings.service';
-import { LeavePageDialogComponent } from 'app/components/settings/dialog/leave-dialog.component';
 
 const NUMBER_PATTERN = '[0-9]+';
 const IMAGES_FILTER = { name: 'Images', extensions: ['jpg', 'jpeg', 'png'] };
 const SOUNDS_FILTER = {
   name: 'Sounds',
   extensions: ['wav', 'mp3', 'ogg', 'm4a']
+};
+const BACKUP_FILTER = {
+  name: 'Backup',
+  extensions: ['json']
 };
 
 @Component({
@@ -98,11 +102,14 @@ export class SettingsComponent implements OnDestroy {
         width: '500px'
       });
 
-      dialogRef.afterClosed().first().subscribe(result => {
-        if (result === true) {
-          this.router.navigate(['../']);
-        }
-      });
+      dialogRef
+        .afterClosed()
+        .first()
+        .subscribe(result => {
+          if (result === true) {
+            this.router.navigate(['../']);
+          }
+        });
     } else {
       this.router.navigate(['../']);
     }
@@ -131,12 +138,6 @@ export class SettingsComponent implements OnDestroy {
         );
         this.showSnackbar(`${errorText} ${err}`, 3000);
       });
-  }
-
-  revert(): void {
-    console.log('REVERT');
-    this.settingsForm.reset();
-    // FIXME
   }
 
   addNewTeamMemberRow(name?: string, image?: string): void {
@@ -185,68 +186,144 @@ export class SettingsComponent implements OnDestroy {
     }
   }
 
-  openElectronFilePicker(type: string): void {
-    const filter = type === 'image' ? IMAGES_FILTER : SOUNDS_FILTER;
-    electron.remote.dialog.showOpenDialog(
-      {
-        title: 'Select an image or sound',
-        properties: ['openFile'],
-        filters: [filter]
-      },
-      folderPath => {
-        if (folderPath === undefined) {
-          console.warn(`You did not select a ${type}`);
-          return;
-        }
-        console.log(`Selected ${type} path ${folderPath}`);
-        fs.readFile(folderPath.toString(), (err, data) => {
-          if (err) {
-            console.log(`Error reading file from ${folderPath}: ${err}`);
-            this.showSnackbar(
-              this.translateService.instant(
-                'PAGES.SETTINGS.FILE_UPLOAD.FILE_READ_ERROR'
-              )
-            );
-            return;
-          }
-          const filename = (
-            folderPath.toString().match(/[^\\/]+\.[^\\/]+$/) || []
-          ).pop();
-          fs.writeFile(
-            `${
-              type === 'image' ? this.imagesPath : this.soundsPath
-            }${filename}`,
-            data,
-            err => {
-              if (err) {
-                const errorText = this.translateService.instant(
-                  'PAGES.SETTINGS.FILE_UPLOAD.UPLOAD_SUCCESS'
-                );
-                this.showSnackbar(`${errorText} ${err}`);
-                return;
-              }
-              console.log(`Successfully saved ${type}`);
-              this.showSnackbar(
-                this.translateService.instant(
-                  'PAGES.SETTINGS.FILE_UPLOAD.UPLOAD_SUCCESS'
-                )
-              );
-              this.getImagesAndSounds().then(values => {
-                this.imageFiles = values[0];
-                this.soundFiles = values[1];
-              });
-            }
-          );
+  openElectronFilePicker(type: string) {
+    this.importFiles(type)
+      .then(() => {
+        console.log(`Successfully saved ${type}`);
+        this.showSnackbar(
+          this.translateService.instant(
+            'PAGES.SETTINGS.FILE_UPLOAD.IMPORT_SUCCESS'
+          )
+        );
+        this.getImagesAndSounds().then(values => {
+          this.imageFiles = values[0];
+          this.soundFiles = values[1];
         });
-      }
+      })
+      .catch(err => {
+        const errorMessage = this.translateService.instant(
+          'PAGES.SETTINGS.FILE_UPLOAD.IMPORT_ERROR'
+        );
+        this.showSnackbar(`${errorMessage} ${err}`);
+      });
+  }
+
+  importSettings() {
+    this.importBackup()
+      .then(() => {
+        this.showSnackbar(
+          this.translateService.instant(
+            'PAGES.SETTINGS.FILE_UPLOAD.IMPORT.SUCCESS'
+          )
+        );
+      })
+      .catch(err => {
+        const errorMessage = this.translateService.instant(
+          'PAGES.SETTINGS.FILE_UPLOAD.IMPORT.ERROR'
+        );
+        this.showSnackbar(`${errorMessage} ${err}`);
+      });
+  }
+
+  exportSettings() {
+    this.exportFiles()
+      .then(() => {
+        this.showSnackbar(
+          this.translateService.instant(
+            'PAGES.SETTINGS.FILE_UPLOAD.EXPORT.SUCCESS'
+          )
+        );
+      })
+      .catch(err => {
+        const errorMessage = this.translateService.instant(
+          'PAGES.SETTINGS.FILE_UPLOAD.EXPORT.ERROR'
+        );
+        this.showSnackbar(`${errorMessage} ${err}`);
+      });
+  }
+
+  private async importBackup() {
+    const filePath = await this.openElectronDialog(
+      this.translateService.instant('PAGES.SETTINGS.FILE_UPLOAD.IMPORT.TITLE'),
+      ['openFile'],
+      BACKUP_FILTER
+    );
+    const backupData = await this.readFile(filePath.toString());
+    const filename = this.getFileNameWithExtension(filePath);
+    await this.writeFile(
+      `${this.settingsService.assetsPath}/imported_settings.json`,
+      backupData
+    );
+    const importedData = await this.readFile(
+      `${this.settingsService.assetsPath}/settings.json`
+    );
+    await this.settingsService.updateSettings(JSON.parse(importedData));
+  }
+
+  private async exportFiles() {
+    const directory = await this.openElectronDialog(
+      this.translateService.instant(
+        'PAGES.SETTINGS.FILE_UPLOAD.EXPORT.DIALOG_TITLE'
+      ),
+      ['openDirectory']
+    );
+
+    console.log(directory);
+
+    await this.writeFile(
+      `${directory}/asdasas.json`,
+      JSON.stringify(this.appSettings)
     );
   }
 
-  playSound(filePath: string): void {
-    const audio = new Audio();
-    audio.src = filePath;
-    audio.load();
-    audio.play();
+  private async importFiles(type: string) {
+    const filter = type === 'image' ? IMAGES_FILTER : SOUNDS_FILTER;
+    // Dialog
+    const paths = await this.openElectronDialog(
+      this.translateService.instant('PAGES.SETTINGS.FILE_UPLOAD.TITLE'),
+      ['openFile', 'multiSelections'],
+      filter
+    );
+
+    for (let i = 0; i < paths.length; i++) {
+      // Read file
+      const data = await this.readFile(paths[i]);
+      // Write file
+      const filename = this.getFileNameWithExtension(paths[i]);
+      const writeFilePath = `${
+        type === 'image' ? this.imagesPath : this.soundsPath
+      }${filename}`;
+      await this.writeFile(writeFilePath, data);
+    }
+  }
+
+  private getFileNameWithExtension(path: string): string {
+    return (path.toString().match(/[^\\/]+\.[^\\/]+$/) || []).pop();
+  }
+
+  private openElectronDialog(
+    title: string,
+    properties: any, // No Electron type available
+    filter?: {
+      name: string;
+      extensions: string[];
+    }
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      electron.remote.dialog.showOpenDialog(
+        {
+          title: title,
+          properties: properties,
+          filters: [filter]
+        },
+        folderPaths => {
+          if (!folderPaths) {
+            reject('Could not find folder');
+          }
+          resolve(folderPaths);
+        }
+      );
+    });
   }
 
   private validateAllFormFields(formGroup: FormGroup | FormArray) {
@@ -262,10 +339,13 @@ export class SettingsComponent implements OnDestroy {
   }
 
   private getImagesAndSounds(): Promise<any> {
-    return Promise.all([this.readFiles('image'), this.readFiles('sound')]);
+    return Promise.all([
+      this.readFilesFromDirectory('image'),
+      this.readFilesFromDirectory('sound')
+    ]);
   }
 
-  private readFiles(type: FileType): Promise<string[]> {
+  private readFilesFromDirectory(type: FileType): Promise<string[]> {
     return new Promise((resolve, reject) => {
       fs.readdir(
         `${type === 'image' ? this.imagesPath : this.soundsPath}`,
@@ -276,6 +356,28 @@ export class SettingsComponent implements OnDestroy {
           resolve(files);
         }
       );
+    });
+  }
+
+  private async readFile(path: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      fs.readFile(path, (err, data) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(data);
+      });
+    });
+  }
+
+  private async writeFile(path: string, data: any): Promise<any> {
+    return new Promise((resolve, reject) => {
+      fs.writeFile(path, data, err => {
+        if (err) {
+          reject(err);
+        }
+        resolve();
+      });
     });
   }
 
