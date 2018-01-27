@@ -1,4 +1,5 @@
 import { Injectable, NgZone } from '@angular/core';
+import { MatSnackBar } from '@angular/material';
 import { AppSettings } from 'app/models/app-settings';
 import { TeamMember } from 'app/models/team-member';
 import { remote } from 'electron';
@@ -17,7 +18,7 @@ export class SettingsService {
     AppSettings | undefined
   > = new BehaviorSubject(undefined);
 
-  constructor(private zone: NgZone) {
+  constructor(public snackBar: MatSnackBar, private zone: NgZone) {
     const appPath = remote.app.getAppPath();
 
     settingsFilePath = path
@@ -63,7 +64,10 @@ export class SettingsService {
         });
       })
       .catch(err => {
-        console.error(err);
+        console.log(err);
+        this.snackBar.open(err, undefined, {
+          duration: 2000
+        });
       });
   }
 

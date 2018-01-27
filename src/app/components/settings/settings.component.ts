@@ -1,7 +1,14 @@
 import { Component, OnDestroy } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators
+} from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import * as electron from 'electron';
 import * as fs from 'fs';
 import { readFile } from 'jsonfile';
@@ -13,6 +20,7 @@ import { AppSettings } from 'app/models/app-settings';
 import { TeamMember } from 'app/models/team-member';
 import { SettingsService } from 'app/providers/settings.service';
 
+const NUMBER_PATTERN = '[0-9]+';
 const IMAGES_FILTER = { name: 'Images', extensions: ['jpg', 'jpeg', 'png'] };
 const SOUNDS_FILTER = {
   name: 'Sounds',
@@ -41,10 +49,11 @@ export class SettingsComponent implements OnDestroy {
   private settingsSubscription: Subscription;
 
   constructor(
+    public snackBar: MatSnackBar,
     private settingsService: SettingsService,
     private formBuilder: FormBuilder,
-    public snackBar: MatSnackBar,
-    private router: Router
+    private router: Router,
+    private translateService: TranslateService
   ) {
     const appPath = electron.remote.app.getAppPath();
     this.imagesPath = path
@@ -86,29 +95,34 @@ export class SettingsComponent implements OnDestroy {
   }
 
   onSubmit(): void {
-    console.log(this.settingsForm);
+    if (!this.settingsForm.valid) {
+      this.validateAllFormFields(this.settingsForm);
+      this.showSnackbar(
+        this.translateService.instant('PAGES.SETTINGS.INVALID_FORM')
+      );
+      return;
+    }
     this.settingsService
       .updateSettings({
         standupPicker: this.settingsForm.value.standupPicker
       })
       .then(() => {
-        this.snackBar.open('Einstellungen wurden gespeichert', undefined, {
-          duration: 2000
-        });
+        this.showSnackbar(
+          this.translateService.instant('PAGES.SETTINGS.SAVE_SUCCESS')
+        );
       })
       .catch(err => {
-        this.snackBar.open(
-          `Fehler beim Speichern der Einstellungen: ${err}`,
-          undefined,
-          {
-            duration: 3000
-          }
+        const errorText = this.translateService.instant(
+          'PAGES.SETTINGS.SAVE_ERROR'
         );
+        this.showSnackbar(`${errorText} ${err}`, 3000);
       });
   }
 
   revert(): void {
     console.log('REVERT');
+    this.settingsForm.reset();
+    // FIXME
   }
 
   addNewTeamMemberRow(name?: string, image?: string): void {
@@ -135,6 +149,22 @@ export class SettingsComponent implements OnDestroy {
     control.removeAt(index);
   }
 
+  getNumberErrorMessage(formControlName: string): string | undefined {
+    const formControl = this.settingsForm.get(formControlName);
+    if (!formControl) {
+      return;
+    }
+    return formControl.hasError('required')
+      ? this.translateService.instant(
+          'PAGES.STANDUP_PICKER.VALIDATORS.REQUIRED'
+        )
+      : formControl.hasError('pattern')
+        ? this.translateService.instant(
+            'PAGES.STANDUP_PICKER.VALIDATORS.NUMBER_PATTERN'
+          )
+        : '';
+  }
+
   ngOnDestroy(): void {
     if (this.settingsSubscription) {
       this.settingsSubscription.unsubscribe();
@@ -157,10 +187,12 @@ export class SettingsComponent implements OnDestroy {
         console.log(`Selected ${type} path ${folderPath}`);
         fs.readFile(folderPath.toString(), (err, data) => {
           if (err) {
-            console.error(`Error reading file from ${folderPath}: ${err}`);
-            this.snackBar.open(`Fehler beim Lesen: ${err}`, undefined, {
-              duration: 2000
-            });
+            console.log(`Error reading file from ${folderPath}: ${err}`);
+            this.showSnackbar(
+              this.translateService.instant(
+                'PAGES.SETTINGS.FILE_UPLOAD.FILE_READ_ERROR'
+              )
+            );
             return;
           }
           const filename = (
@@ -173,16 +205,18 @@ export class SettingsComponent implements OnDestroy {
             data,
             err => {
               if (err) {
-                console.error(err);
-                this.snackBar.open(`Fehler beim Speichern: ${err}`, undefined, {
-                  duration: 2000
-                });
+                const errorText = this.translateService.instant(
+                  'PAGES.SETTINGS.FILE_UPLOAD.UPLOAD_SUCCESS'
+                );
+                this.showSnackbar(`${errorText} ${err}`);
                 return;
               }
               console.log(`Successfully saved ${type}`);
-              this.snackBar.open('Datei erfolgreich gespeichert', undefined, {
-                duration: 2000
-              });
+              this.showSnackbar(
+                this.translateService.instant(
+                  'PAGES.SETTINGS.FILE_UPLOAD.UPLOAD_SUCCESS'
+                )
+              );
               this.getImagesAndSounds().then(values => {
                 this.imageFiles = values[0];
                 this.soundFiles = values[1];
@@ -201,6 +235,18 @@ export class SettingsComponent implements OnDestroy {
     audio.play();
   }
 
+  private validateAllFormFields(formGroup: FormGroup | FormArray) {
+    Object.keys(formGroup.controls).forEach(field => {
+      console.log(field);
+      const control = formGroup.get(field);
+      if (control instanceof FormControl) {
+        control.markAsTouched({ onlySelf: true });
+      } else if (control instanceof FormGroup || control instanceof FormArray) {
+        this.validateAllFormFields(control);
+      }
+    });
+  }
+
   private getImagesAndSounds(): Promise<any> {
     return Promise.all([this.readFiles('image'), this.readFiles('sound')]);
   }
@@ -216,6 +262,12 @@ export class SettingsComponent implements OnDestroy {
           resolve(files);
         }
       );
+    });
+  }
+
+  private showSnackbar(message: string, duration: number = 2000) {
+    this.snackBar.open(message, undefined, {
+      duration
     });
   }
 
@@ -252,20 +304,32 @@ export class SettingsComponent implements OnDestroy {
       standupPicker: this.formBuilder.group({
         teamMembers: this.formBuilder.array([]),
         standupMusic: this.formBuilder.array([]),
-        standupHour: undefined,
-        standupMinute: undefined,
-        standupTimeInMin: undefined,
-        standupEndReminderAfterMin: undefined,
-        successSound: undefined,
-        standupEndReminderSound: undefined
+        standupHour: [
+          undefined,
+          [Validators.required, Validators.pattern(NUMBER_PATTERN)]
+        ],
+        standupMinute: [
+          undefined,
+          [Validators.required, Validators.pattern(NUMBER_PATTERN)]
+        ],
+        standupTimeInMin: [
+          undefined,
+          [Validators.required, Validators.pattern(NUMBER_PATTERN)]
+        ],
+        standupEndReminderAfterMin: [
+          undefined,
+          [Validators.required, Validators.pattern(NUMBER_PATTERN)]
+        ],
+        successSound: [undefined, Validators.required],
+        standupEndReminderSound: [undefined, Validators.required]
       })
     });
   }
 
   private createTeamMember(name?: string, image?: string): FormGroup {
     return this.formBuilder.group({
-      name: name ? name : '',
-      image: image ? image : ''
+      name: [name ? name : '', Validators.required],
+      image: [image ? image : '', Validators.required]
     });
   }
 }

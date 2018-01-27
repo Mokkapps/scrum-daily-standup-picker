@@ -7,28 +7,39 @@
       "STARTS_TODAY": "{{name}} beginnt heute",
       "REMAINING_STANDUP_TIME":
         "Restliche Standup Zeit: {{remainingMinutes}} Minuten",
-      "PLEASE_WAIT": "Bitte warten..."
+      "PLEASE_WAIT": "Bitte warten...",
+      "VALIDATORS": {
+        "REQUIRED": "Dieses Feld ist erforderlich",
+        "NUMBER_PATTERN": "Bitte eine gültige Zahl eingeben"
+      }
     },
     "SETTINGS": {
-        "TITLE": "Einstellungen",
-        "FILE_UPLOAD": {
-            "TITLE": "Datei hochladen",
-            "IMAGE_UPLOAD": "Neues Bild hochladen",
-            "SOUND_UPLOAD": "Neuen Sound hochladen"
-        },
-        "STANDUP_PICKER": {
-            "TITLE": "Standup Picker",
-            "TEAM_MEMBERS": "Team Mitglieder",
-            "TEAM_MEMBER": "Team Mitglied {{count}}",
-            "ADD_NEW_TEAM_MEMBER": "Neues Teammitglied hinzufügen",
-            "STANDUP_MUSIC": {
-                "TITLE": "Standup Musik",
-                "SOUND": "Sound {{count}}",
-                "ADD": "Neue Standup Musik hinzufügen"
-            }
-        },
-        "SAVE": "Speichern",
-        "RESET": "Zurücksetzen"
+      "TITLE": "Einstellungen",
+      "FILE_UPLOAD": {
+        "TITLE": "Datei hochladen",
+        "IMAGE_UPLOAD": "Neues Bild hochladen",
+        "SOUND_UPLOAD": "Neuen Sound hochladen",
+        "UPLOAD_SUCCESS": "Datei erfolgreich gespeichert",
+        "UPLOAD_ERROR": "Fehler beim Speichern:",
+        "FILE_READ_ERROR": "Fehler beim Lesen der Datei:"
+      },
+      "STANDUP_PICKER": {
+        "TITLE": "Standup Picker",
+        "TEAM_MEMBERS": "Team Mitglieder",
+        "TEAM_MEMBER": "Team Mitglied {{count}}",
+        "ADD_NEW_TEAM_MEMBER": "Neues Teammitglied hinzufügen",
+        "STANDUP_MUSIC": {
+          "TITLE": "Standup Musik",
+          "SOUND": "Sound {{count}}",
+          "ADD": "Neue Standup Musik hinzufügen"
+        }
+      },
+      "SAVE": "Speichern",
+      "RESET": "Zurücksetzen",
+      "SAVE_ERROR": "Fehler beim Speichern der Einstellungen:",
+      "SAVE_SUCCESS": "Einstellungen wurden gespeichert",
+      "INVALID_FORM":
+        "Bitte erst alle erforderlichen Felder vor dem Speichern ausfüllen."
     }
   }
 }

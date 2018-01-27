@@ -54,11 +54,6 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
     this.standupSoundTimerSubscription = Observable.interval(60 * 1000)
       .map(() => new Date())
       .subscribe(date => {
-        console.log(
-          date,
-          this.settings.standupPicker.standupHour,
-          this.settings.standupPicker.standupMinute
-        );
         if (
           date.getHours() === this.settings.standupPicker.standupHour &&
           date.getMinutes() === this.settings.standupPicker.standupMinute

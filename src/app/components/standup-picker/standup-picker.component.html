@@ -10,9 +10,9 @@
     </section>
 
     <div class="container-fluid mb-4">
-        <div class="row">
-            <div class="col" *ngFor="let member of teamMembers">
-                <mat-card class="mt-4" [ngClass]="{'mat-card-selected': member.selected, 'mat-card-disabled': member.disabled}" (click)="onMemberClick(member)">
+        <div class="row justify-content-center">
+            <div class="col mt-4" *ngFor="let member of teamMembers">
+                <mat-card class="mx-auto" [ngClass]="{'mat-card-selected': member.selected, 'mat-card-disabled': member.disabled}" (click)="onMemberClick(member)">
                     <mat-card-header>
                         <mat-card-title class="member-title">{{member.name}}</mat-card-title>
                     </mat-card-header>
