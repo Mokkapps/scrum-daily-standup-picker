@@ -1,7 +1,8 @@
 {
   "GENERAL": {
     "YES": "Ja",
-    "NO": "Nein"
+    "NO": "Nein",
+    "CLOSE": "Schließen"
   },
   "PAGES": {
     "STANDUP_PICKER": {
@@ -56,6 +57,10 @@
         "TITLE": "Seite verlassen",
         "MESSAGE":
           "Wollen Sie die Seite wirklich verlassen? Nicht gespeicherte Einstellungen gehen dabei verloren."
+      },
+      "ABOUT_DIALOG": {
+        "TITLE": "Standup Picker",
+        "CONTACT_ME": "Schick mir eine E-Mail"
       },
       "SAVE": "Speichern",
       "RESET": "Zurücksetzen",

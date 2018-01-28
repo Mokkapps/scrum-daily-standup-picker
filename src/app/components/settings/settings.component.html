@@ -1,6 +1,17 @@
-<button mat-raised-button color="primary" (click)="navigateBack()">
-    <mat-icon aria-label="Navigate back">navigate_before</mat-icon>
-</button>
+<mat-toolbar color="primary">
+    <mat-toolbar-row>
+        <button mat-icon-button (click)="navigateBack()">
+            <mat-icon aria-label="Navigate back">navigate_before</mat-icon>
+        </button>
+        <span class="example-spacer"></span>
+        <button mat-icon-button (click)="showAboutDialog()">
+            <mat-icon aria-label="About">help_outline</mat-icon>
+        </button>
+        <button mat-icon-button (click)="onSubmit()">
+            <mat-icon aria-label="Save">save</mat-icon>
+        </button>
+    </mat-toolbar-row>
+</mat-toolbar>
 
 <h1 class="m-5">{{'PAGES.SETTINGS.TITLE' | translate}}</h1>
 

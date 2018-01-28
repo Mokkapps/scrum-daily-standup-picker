@@ -16,6 +16,7 @@ import * as path from 'path';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
+import { AboutDialogComponent } from 'app/components/settings/dialog/about-dialog.component';
 import { LeavePageDialogComponent } from 'app/components/settings/dialog/leave-dialog.component';
 import { AppSettings } from 'app/models/app-settings';
 import { TeamMember } from 'app/models/team-member';
@@ -206,6 +207,12 @@ export class SettingsComponent implements OnDestroy {
         );
         this.showSnackbar(`${errorMessage} ${err}`);
       });
+  }
+
+  showAboutDialog() {
+    const dialogRef = this.dialog.open(AboutDialogComponent, {
+      width: '500px'
+    });
   }
 
   importSettings() {

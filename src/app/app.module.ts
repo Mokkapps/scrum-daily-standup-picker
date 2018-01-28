@@ -11,7 +11,8 @@ import {
   MatIconModule,
   MatInputModule,
   MatSelectModule,
-  MatSnackBarModule
+  MatSnackBarModule,
+  MatToolbarModule
 } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -28,6 +29,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LeavePageDialogComponent } from './components/settings/dialog/leave-dialog.component';
 import { ElectronService } from './providers/electron.service';
+import { AboutDialogComponent } from 'app/components/settings/dialog/about-dialog.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -39,7 +41,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     AppComponent,
     StandupPickerComponent,
     SettingsComponent,
-    LeavePageDialogComponent
+    LeavePageDialogComponent,
+    AboutDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -64,9 +67,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatSnackBarModule,
     MatSelectModule,
     MatDividerModule,
-    MatDialogModule
+    MatDialogModule,
+    MatToolbarModule
   ],
-  entryComponents: [LeavePageDialogComponent],
+  entryComponents: [LeavePageDialogComponent, AboutDialogComponent],
   providers: [
     ElectronService,
     SettingsService,

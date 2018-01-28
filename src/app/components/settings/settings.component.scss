@@ -21,6 +21,10 @@
   height: 25px;
 }
 
+.example-spacer {
+  flex: 1 1 auto;
+}
+
 .form-group-container {
   display: flex;
   flex-direction: column;
