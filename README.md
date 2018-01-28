@@ -8,7 +8,7 @@ This project was bootstrapped with [angular-electron](https://github.com/maximeg
 
 Design by [Angular Material](https://material.angular.io).
 
-![Scrum Daily Standup Picker](http://www.mokkapps.de/images/standup-picker-0-2-0.png)
+![Scrum Daily Standup Picker](http://www.mokkapps.de/images/standup-picker-0-2-0-beta-3.png)
 
 # Features
 
