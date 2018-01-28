@@ -47,17 +47,23 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
       .subscribe(text => {
         this.title = text;
       });
+
     // Shuffle array initially
     this.teamMembers = this.shuffle(this.teamMembers);
 
     // Play standup sound at certain time of day
+    if (this.standupSoundTimerSubscription) {
+      this.standupSoundTimerSubscription.unsubscribe();
+    }
     this.standupSoundTimerSubscription = Observable.interval(60 * 1000)
       .map(() => new Date())
       .subscribe(date => {
         if (
-          date.getHours() === this.settings.standupPicker.standupHour &&
-          date.getMinutes() === this.settings.standupPicker.standupMinute
+          date.getHours() === Number(this.settings.standupPicker.standupHour) &&
+          date.getMinutes() ===
+            Number(this.settings.standupPicker.standupMinute)
         ) {
+          console.log('STANDUP');
           const standupMusic = this.settings.standupPicker.standupMusic;
           this.playAudio(
             standupMusic[this.getRandomInt(0, standupMusic.length - 1)]

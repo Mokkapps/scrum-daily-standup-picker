@@ -99,6 +99,7 @@ export class SettingsComponent implements OnDestroy {
 
   navigateBack() {
     if (this.settingsForm.dirty) {
+      console.log(this.settingsForm.dirty);
       const dialogRef = this.dialog.open(LeavePageDialogComponent, {
         width: '500px'
       });
@@ -132,6 +133,7 @@ export class SettingsComponent implements OnDestroy {
         this.showSnackbar(
           this.translateService.instant('PAGES.SETTINGS.SAVE_SUCCESS')
         );
+        this.settingsForm.markAsPristine();
       })
       .catch(err => {
         const errorText = this.translateService.instant(
