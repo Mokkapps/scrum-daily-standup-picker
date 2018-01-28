@@ -16,6 +16,6 @@
   "linux": {
     "icon": "dist",
     "category": "Utility",
-    "target": ["AppImage"]
+    "target": ["deb"]
   }
 }
