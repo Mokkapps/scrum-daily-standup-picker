@@ -29,7 +29,8 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
 
   constructor(
     settingsService: SettingsService,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private router: Router
   ) {
     settingsService.settings.subscribe(settings => {
       if (!settings) {
@@ -104,6 +105,10 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
       .subscribe((member: TeamMember) => {
         this.teamMembers = this.shuffle(this.teamMembers);
       });
+  }
+
+  goToSettings() {
+    this.router.navigate(['settings']);
   }
 
   reset() {

@@ -1,24 +1,32 @@
-<div>
-    <section style="text-align:center">
-        <div class="flex-container">
-            <button mat-raised-button mat-primary class="trigger-button my-4 mr-2" (click)="triggerPicker()">{{title}}</button>
-            <button mat-mini-fab color="primary" (click)="reset()">
-                <mat-icon aria-label="Reset">refresh</mat-icon>
-            </button>
-        </div>
-        <h2 class="remaining-time">{{time}}</h2>
-    </section>
+<mat-toolbar color="primary">
+    <mat-toolbar-row>
+        {{title}}
+        <span class="spacer"></span>
+        <button mat-icon-button (click)="triggerPicker()">
+            <mat-icon aria-label="Start">play_arrow</mat-icon>
+        </button>
+        <button mat-icon-button (click)="reset()">
+            <mat-icon aria-label="Reset">refresh</mat-icon>
+        </button>
+        <button mat-icon-button (click)="goToSettings()">
+            <mat-icon aria-label="Settings">settings</mat-icon>
+        </button>
+    </mat-toolbar-row>
+</mat-toolbar>
 
-    <div class="container-fluid mb-4">
-        <div class="row justify-content-center">
-            <div class="col mt-4" *ngFor="let member of teamMembers">
-                <mat-card class="mx-auto" [ngClass]="{'mat-card-selected': member.selected, 'mat-card-disabled': member.disabled}" (click)="onMemberClick(member)">
-                    <mat-card-header>
-                        <mat-card-title class="member-title">{{member.name}}</mat-card-title>
-                    </mat-card-header>
-                    <img mat-card-image src="{{member.image}}" alt="{{member.name}}">
-                </mat-card>
-            </div>
+<section style="text-align:center">
+    <h2 class="remaining-time mt-4">{{time}}</h2>
+</section>
+
+<div class="container-fluid mb-4">
+    <div class="row justify-content-center">
+        <div class="col mt-4" *ngFor="let member of teamMembers">
+            <mat-card class="mx-auto" [ngClass]="{'mat-card-selected': member.selected, 'mat-card-disabled': member.disabled}" (click)="onMemberClick(member)">
+                <mat-card-header>
+                    <mat-card-title class="member-title">{{member.name}}</mat-card-title>
+                </mat-card-header>
+                <img mat-card-image src="{{member.image}}" alt="{{member.name}}">
+            </mat-card>
         </div>
     </div>
 </div>

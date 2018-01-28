@@ -4,7 +4,9 @@
 
 A desktop application which can be used in Scrum teams to initiate the daily Scrum meeting.
 
-This project was bootstrapped with [angular-electron](https://github.com/maximegris/angular-electron)
+This project was bootstrapped with [angular-electron](https://github.com/maximegris/angular-electron).
+
+Design by [Angular Material](https://material.angular.io).
 
 ![Scrum Daily Standup Picker](http://www.mokkapps.de/images/standup-picker-0-2-0.png)
 

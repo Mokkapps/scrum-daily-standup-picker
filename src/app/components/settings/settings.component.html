@@ -1,9 +1,10 @@
 <mat-toolbar color="primary">
     <mat-toolbar-row>
-        <button mat-icon-button (click)="navigateBack()">
+        <button mat-icon-button class="mr-4" (click)="navigateBack()">
             <mat-icon aria-label="Navigate back">navigate_before</mat-icon>
         </button>
-        <span class="example-spacer"></span>
+        {{'PAGES.SETTINGS.TITLE' | translate}}
+        <span class="spacer"></span>
         <button mat-icon-button (click)="showAboutDialog()">
             <mat-icon aria-label="About">help_outline</mat-icon>
         </button>
@@ -13,9 +14,7 @@
     </mat-toolbar-row>
 </mat-toolbar>
 
-<h1 class="m-5">{{'PAGES.SETTINGS.TITLE' | translate}}</h1>
-
-<div class="container m-5 p-3">
+<div class="container mx-auto m-5 p-3">
     <h2 class="mb-4">{{'PAGES.SETTINGS.FILE_UPLOAD.TITLE' | translate}}</h2>
     <div class="file-import-flex-container">
         <button mat-raised-button color="primary" (click)="openElectronFilePicker('image')">{{'PAGES.SETTINGS.FILE_UPLOAD.IMAGE_UPLOAD' | translate}}</button>
@@ -30,7 +29,7 @@
     <button mat-raised-button color="primary" (click)="importSettings()" class="ml-4" disabled>{{'PAGES.SETTINGS.FILE_UPLOAD.IMPORT.TITLE' | translate}}</button>
 </div>
 
-<div class="container m-5 p-3">
+<div class="container mx-auto m-5 p-3">
     <form [formGroup]="settingsForm" (ngSubmit)="onSubmit()" novalidate>
         <div class="form-group-container" formGroupName="standupPicker">
 
@@ -127,6 +126,6 @@
     </form>
 </div>
 
-<div class="m-5">
-    <button mat-raised-button mat-primary (click)="onSubmit()">{{'PAGES.SETTINGS.SAVE' | translate}}</button>
+<div class="container mx-auto m-5 p-3">
+    <button mat-raised-button color="primary" class="submit-button" (click)="onSubmit()">{{'PAGES.SETTINGS.SAVE' | translate}}</button>
 </div>

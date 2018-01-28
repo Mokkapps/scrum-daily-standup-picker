@@ -8,7 +8,7 @@
     "STANDUP_PICKER": {
       "TITLE": "Standup Picker",
       "CLICK_TO_SELECT_TEAM_MEMBER":
-        "Hier klicken um Standup Picker zu starten",
+        "Zum Starten rechts auf Play-Icon klicken",
       "STARTS_TODAY": "{{name}} beginnt heute",
       "REMAINING_STANDUP_TIME":
         "Restliche Standup Zeit: {{remainingMinutes}} Minuten",
