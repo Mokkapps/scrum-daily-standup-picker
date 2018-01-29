@@ -81,6 +81,9 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
     if (this.shuffleSubscription) {
       this.shuffleSubscription.unsubscribe();
     }
+    if (this.standupSoundTimerSubscription) {
+      this.standupSoundTimerSubscription.unsubscribe();
+    }
   }
 
   triggerPicker(): void {
