@@ -9,7 +9,14 @@ describe('SettingsService', () => {
       'runOutsideAngular'
     ]);
     mockNgZone.run.and.callFake(fn => fn());
-    sut = new SettingsService(mockNgZone);
+
+    const mockSnackBar = jasmine.createSpyObj('mockSnackBar', [
+      'open',
+      'runOutsideAngular'
+    ]);
+    mockSnackBar.open.and.callFake(fn => fn());
+
+    sut = new SettingsService(mockSnackBar, mockNgZone);
   });
 
   it('gets initialised correctly', () => {
