@@ -33,15 +33,16 @@
   opacity: 0.5;
 }
 
+.mat-card-image {
+  max-height: 100%;
+  object-position: 50% 50%;
+  object-fit: contain;
+}
+
 mat-card {
   overflow: hidden;
   height: 250px;
   width: 300px;
-}
-
-mat-card-image {
-  width: 100%;
-  height: auto;
 }
 
 mat-card:hover {

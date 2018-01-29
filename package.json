@@ -1,12 +1,12 @@
 {
   "name": "scrum-daily-standup-picker",
-  "version": "0.2.0-beta.3",
+  "version": "0.2.0-beta.4",
   "description": "Tool for scrum teams to initiate the daily standup meeting",
   "homepage": "https://github.com/Mokkapps/scrum-daily-standup-picker",
   "author": {
     "name": "Michael Hoffmann",
     "email": "kontakt@mokkapps.de",
-    "url": "http://www.mokkapps.de"
+    "url": "https://www.mokkapps.de"
   },
   "license": "MIT",
   "keywords": [

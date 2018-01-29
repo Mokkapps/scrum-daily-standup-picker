@@ -19,6 +19,8 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
 
   teamMembers: Member[] = [];
 
+  private audio: HTMLAudioElement;
+
   private settings: AppSettings;
 
   private timerSubscription: Subscription;
@@ -32,6 +34,8 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
     private translateService: TranslateService,
     private router: Router
   ) {
+    this.audio = new Audio();
+
     settingsService.settings.subscribe(settings => {
       if (!settings) {
         return;
@@ -53,9 +57,6 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
     this.teamMembers = this.shuffle(this.teamMembers);
 
     // Play standup sound at certain time of day
-    if (this.standupSoundTimerSubscription) {
-      this.standupSoundTimerSubscription.unsubscribe();
-    }
     this.standupSoundTimerSubscription = Observable.interval(60 * 1000)
       .map(() => new Date())
       .subscribe(date => {
@@ -64,7 +65,7 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
           date.getMinutes() ===
             Number(this.settings.standupPicker.standupMinute)
         ) {
-          console.log('STANDUP');
+          console.log('STANDUP', date);
           const standupMusic = this.settings.standupPicker.standupMusic;
           this.playAudio(
             standupMusic[this.getRandomInt(0, standupMusic.length - 1)]
@@ -184,11 +185,18 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
   }
 
   private playAudio(filePath: string): void {
-    const audio = new Audio();
-    audio.src = filePath;
-    audio.msAudioCategory = 'BackgroundCapableMedia';
-    audio.load();
-    audio.play();
+    if (!this.isAudioPlaying()) {
+      this.audio.src = filePath;
+      this.audio.msAudioCategory = 'BackgroundCapableMedia';
+      this.audio.load();
+      this.audio.play();
+    } else {
+      console.log('Cannot play audio', this.audio);
+    }
+  }
+
+  private isAudioPlaying(): boolean {
+    return !this.audio.paused;
   }
 
   private getRandomInt(min: number, max: number): number {
