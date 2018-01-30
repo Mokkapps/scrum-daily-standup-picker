@@ -19,16 +19,17 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import 'polyfills';
+import 'reflect-metadata';
+import 'zone.js/dist/zone-mix';
+
 import { AboutDialogComponent } from 'app/components/settings/dialog/about-dialog.component';
 import { SettingsComponent } from 'app/components/settings/settings.component';
 import { StandupPickerComponent } from 'app/components/standup-picker/standup-picker.component';
 import { SettingsService } from 'app/providers/settings.service';
-import 'polyfills';
-import 'reflect-metadata';
-import 'zone.js/dist/zone-mix';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { LeavePageDialogComponent } from './components/settings/dialog/leave-dialog.component';
+import { ConfirmDialogComponent } from './components/settings/dialog/confirm-dialog.component';
 import { ElectronService } from './providers/electron.service';
 
 // AoT requires an exported function for factories
@@ -41,7 +42,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     AppComponent,
     StandupPickerComponent,
     SettingsComponent,
-    LeavePageDialogComponent,
+    ConfirmDialogComponent,
     AboutDialogComponent
   ],
   imports: [
@@ -70,7 +71,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatDialogModule,
     MatToolbarModule
   ],
-  entryComponents: [LeavePageDialogComponent, AboutDialogComponent],
+  entryComponents: [ConfirmDialogComponent, AboutDialogComponent],
   providers: [
     ElectronService,
     SettingsService,

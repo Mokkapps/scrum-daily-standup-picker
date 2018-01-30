@@ -2,10 +2,10 @@ import { TeamMember } from './team-member';
 
 export interface AppSettings {
   standupPicker: StandupPicker;
-  background: string;
 }
 
 export interface StandupPicker {
+  background: string;
   standupHour: number;
   standupMinute: number;
   standupTimeInMin: number;

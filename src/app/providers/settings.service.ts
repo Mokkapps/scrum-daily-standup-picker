@@ -96,8 +96,8 @@ export class SettingsService {
 
   private getDefaultSettings(): AppSettings {
     return {
-      background: `${imagesPath}background.jpg`,
       standupPicker: {
+        background: `${imagesPath}background.jpg`,
         standupHour: 9,
         standupMinute: 59,
         standupTimeInMin: 15,

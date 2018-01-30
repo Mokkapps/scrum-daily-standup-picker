@@ -15,13 +15,14 @@ import { readFile } from 'jsonfile';
 import * as path from 'path';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
+import { ConfirmDialogComponent } from './dialog/confirm-dialog.component';
 
 import { AboutDialogComponent } from 'app/components/settings/dialog/about-dialog.component';
-import { LeavePageDialogComponent } from 'app/components/settings/dialog/leave-dialog.component';
 import { AppSettings } from 'app/models/app-settings';
 import { TeamMember } from 'app/models/team-member';
 import { SettingsService } from 'app/providers/settings.service';
 
+const ERROR_DURATION_IN_MS = 5000;
 const NUMBER_PATTERN = '[0-9]+';
 const IMAGES_FILTER = { name: 'Images', extensions: ['jpg', 'jpeg', 'png'] };
 const SOUNDS_FILTER = {
@@ -97,11 +98,62 @@ export class SettingsComponent implements OnDestroy {
     return <FormArray>this.getStandupPickerFormGroup().controls.standupMusic;
   }
 
+  deleteAllFiles(fileType: FileType) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '500px',
+      data: {
+        title: this.translateService.instant(
+          'PAGES.SETTINGS.FORM.FILE_UPLOAD.DELETE_DIALOG.TITLE'
+        ),
+        message: this.translateService.instant(
+          fileType === 'image'
+            ? 'PAGES.SETTINGS.FORM.FILE_UPLOAD.DELETE_DIALOG.MESSAGE_IMAGES'
+            : 'PAGES.SETTINGS.FORM.FILE_UPLOAD.DELETE_DIALOG.MESSAGE_SOUNDS'
+        )
+      }
+    });
+
+    dialogRef
+      .afterClosed()
+      .first()
+      .subscribe(result => {
+        if (result === true) {
+          this.deleteAllFilesInDirectory(fileType)
+            .then(() => {
+              console.log(`Deleted all files of type ${fileType}`);
+              this.showSnackbar(
+                this.translateService.instant(
+                  'PAGES.SETTINGS.FORM.FILE_UPLOAD.DELETE_DIALOG.SUCCESS'
+                )
+              );
+              this.getImagesAndSounds().then(values => {
+                this.imageFiles = values[0];
+                this.soundFiles = values[1];
+              });
+            })
+            .catch(err => {
+              const errorText = this.translateService.instant(
+                'PAGES.SETTINGS.FORM.FILE_UPLOAD.DELETE_DIALOG.ERROR'
+              );
+              this.showSnackbar(`${errorText} ${err}`, ERROR_DURATION_IN_MS);
+            });
+        }
+      });
+  }
+
   navigateBack() {
     if (this.settingsForm.dirty) {
       console.log(this.settingsForm.dirty);
-      const dialogRef = this.dialog.open(LeavePageDialogComponent, {
-        width: '500px'
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        width: '500px',
+        data: {
+          title: this.translateService.instant(
+            'PAGES.SETTINGS.LEAVE_DIALOG.TITLE'
+          ),
+          message: this.translateService.instant(
+            'PAGES.SETTINGS.LEAVE_DIALOG.MESSAGE'
+          )
+        }
       });
 
       dialogRef
@@ -121,7 +173,7 @@ export class SettingsComponent implements OnDestroy {
     if (!this.settingsForm.valid) {
       this.validateAllFormFields(this.settingsForm);
       this.showSnackbar(
-        this.translateService.instant('PAGES.SETTINGS.INVALID_FORM')
+        this.translateService.instant('PAGES.SETTINGS.FORM.INVALID_FORM')
       );
       return;
     }
@@ -131,15 +183,15 @@ export class SettingsComponent implements OnDestroy {
       })
       .then(() => {
         this.showSnackbar(
-          this.translateService.instant('PAGES.SETTINGS.SAVE_SUCCESS')
+          this.translateService.instant('PAGES.SETTINGS.FORM.SAVE_SUCCESS')
         );
         this.settingsForm.markAsPristine();
       })
       .catch(err => {
         const errorText = this.translateService.instant(
-          'PAGES.SETTINGS.SAVE_ERROR'
+          'PAGES.SETTINGS.FORM.SAVE_ERROR'
         );
-        this.showSnackbar(`${errorText} ${err}`, 3000);
+        this.showSnackbar(`${errorText} ${err}`, ERROR_DURATION_IN_MS);
       });
   }
 
@@ -173,12 +225,10 @@ export class SettingsComponent implements OnDestroy {
       return;
     }
     return formControl.hasError('required')
-      ? this.translateService.instant(
-          'PAGES.STANDUP_PICKER.VALIDATORS.REQUIRED'
-        )
+      ? this.translateService.instant('PAGES.SETTINGS.FORM.VALIDATORS.REQUIRED')
       : formControl.hasError('pattern')
         ? this.translateService.instant(
-            'PAGES.STANDUP_PICKER.VALIDATORS.NUMBER_PATTERN'
+            'PAGES.SETTINGS.FORM.VALIDATORS.NUMBER_PATTERN'
           )
         : '';
   }
@@ -195,7 +245,7 @@ export class SettingsComponent implements OnDestroy {
         console.log(`Successfully saved ${type}`);
         this.showSnackbar(
           this.translateService.instant(
-            'PAGES.SETTINGS.FILE_UPLOAD.IMPORT_SUCCESS'
+            'PAGES.SETTINGS.FORM.FILE_UPLOAD.IMPORT_SUCCESS'
           )
         );
         this.getImagesAndSounds().then(values => {
@@ -205,7 +255,7 @@ export class SettingsComponent implements OnDestroy {
       })
       .catch(err => {
         const errorMessage = this.translateService.instant(
-          'PAGES.SETTINGS.FILE_UPLOAD.IMPORT_ERROR'
+          'PAGES.SETTINGS.FORM.FILE_UPLOAD.IMPORT_ERROR'
         );
         this.showSnackbar(`${errorMessage} ${err}`);
       });
@@ -222,13 +272,13 @@ export class SettingsComponent implements OnDestroy {
       .then(() => {
         this.showSnackbar(
           this.translateService.instant(
-            'PAGES.SETTINGS.FILE_UPLOAD.IMPORT.SUCCESS'
+            'PAGES.SETTINGS.FORM.FILE_UPLOAD.IMPORT.SUCCESS'
           )
         );
       })
       .catch(err => {
         const errorMessage = this.translateService.instant(
-          'PAGES.SETTINGS.FILE_UPLOAD.IMPORT.ERROR'
+          'PAGES.SETTINGS.FORM.FILE_UPLOAD.IMPORT.ERROR'
         );
         this.showSnackbar(`${errorMessage} ${err}`);
       });
@@ -239,21 +289,36 @@ export class SettingsComponent implements OnDestroy {
       .then(() => {
         this.showSnackbar(
           this.translateService.instant(
-            'PAGES.SETTINGS.FILE_UPLOAD.EXPORT.SUCCESS'
+            'PAGES.SETTINGS.FORM.FILE_UPLOAD.EXPORT.SUCCESS'
           )
         );
       })
       .catch(err => {
         const errorMessage = this.translateService.instant(
-          'PAGES.SETTINGS.FILE_UPLOAD.EXPORT.ERROR'
+          'PAGES.SETTINGS.FORM.FILE_UPLOAD.EXPORT.ERROR'
         );
         this.showSnackbar(`${errorMessage} ${err}`);
       });
   }
 
+  private async deleteAllFilesInDirectory(fileType: FileType) {
+    const files = await this.readFilesFromDirectory(fileType);
+    const path = fileType === 'image' ? this.imagesPath : this.soundsPath;
+
+    for (const file of files) {
+      fs.unlink(`${path}${file}`, err => {
+        if (err) {
+          throw err;
+        }
+      });
+    }
+  }
+
   private async importBackup() {
     const filePath = await this.openElectronDialog(
-      this.translateService.instant('PAGES.SETTINGS.FILE_UPLOAD.IMPORT.TITLE'),
+      this.translateService.instant(
+        'PAGES.SETTINGS.FORM.FILE_UPLOAD.IMPORT.TITLE'
+      ),
       ['openFile'],
       BACKUP_FILTER
     );
@@ -272,7 +337,7 @@ export class SettingsComponent implements OnDestroy {
   private async exportFiles() {
     const directory = await this.openElectronDialog(
       this.translateService.instant(
-        'PAGES.SETTINGS.FILE_UPLOAD.EXPORT.DIALOG_TITLE'
+        'PAGES.SETTINGS.FORM.FILE_UPLOAD.EXPORT.DIALOG_TITLE'
       ),
       ['openDirectory']
     );
@@ -289,7 +354,7 @@ export class SettingsComponent implements OnDestroy {
     const filter = type === 'image' ? IMAGES_FILTER : SOUNDS_FILTER;
     // Dialog
     const paths = await this.openElectronDialog(
-      this.translateService.instant('PAGES.SETTINGS.FILE_UPLOAD.TITLE'),
+      this.translateService.instant('PAGES.SETTINGS.FORM.FILE_UPLOAD.TITLE'),
       ['openFile', 'multiSelections'],
       filter
     );
@@ -398,6 +463,7 @@ export class SettingsComponent implements OnDestroy {
 
   private initForm(settings: AppSettings): void {
     this.getStandupPickerFormGroup().patchValue({
+      background: settings.standupPicker.background,
       standupHour: settings.standupPicker.standupHour,
       standupMinute: settings.standupPicker.standupMinute,
       standupTimeInMin: settings.standupPicker.standupTimeInMin,
@@ -414,8 +480,6 @@ export class SettingsComponent implements OnDestroy {
     this.appSettings.standupPicker.standupMusic.forEach(path => {
       this.addNewStandupMusicPathRow(path);
     });
-
-    // FIX init this.appSettings.background
   }
 
   private getStandupPickerFormGroup(): FormGroup {
@@ -428,8 +492,8 @@ export class SettingsComponent implements OnDestroy {
 
   private createForm(): void {
     this.settingsForm = this.formBuilder.group({
-      background: [undefined, Validators.required],
       standupPicker: this.formBuilder.group({
+        background: [undefined, Validators.required],
         teamMembers: this.formBuilder.array([]),
         standupMusic: this.formBuilder.array([]),
         standupHour: [

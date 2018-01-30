@@ -2,10 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { Observable, Subscription } from 'rxjs/Rx';
+
 import { AppSettings } from 'app/models/app-settings';
 import { TeamMember } from 'app/models/team-member';
 import { SettingsService } from 'app/providers/settings.service';
-import { Observable, Subscription } from 'rxjs/Rx';
 
 @Component({
   selector: 'app-standup-picker',
@@ -20,6 +21,8 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
   teamMembers: Member[] = [];
 
   backgroundImage: string;
+
+  defaultColor = true;
 
   private audio: HTMLAudioElement;
 
@@ -43,7 +46,7 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
         return;
       }
       this.settings = settings;
-      this.backgroundImage = this.settings.background;
+      this.backgroundImage = this.settings.standupPicker.background;
       this.teamMembers = this.shuffle(this.settings.standupPicker.teamMembers);
     });
   }
@@ -87,6 +90,10 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
     if (this.standupSoundTimerSubscription) {
       this.standupSoundTimerSubscription.unsubscribe();
     }
+  }
+
+  invertTextColor(): void {
+    this.defaultColor = !this.defaultColor;
   }
 
   triggerPicker(): void {
@@ -152,8 +159,10 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
     );
 
     let standupTimeInSec = this.settings.standupPicker.standupTimeInMin * 60;
+    let tickSoundPlayed = false;
 
     this.timerSubscription = Observable.timer(0, 1000)
+
       .take(standupTimeInSec)
       .map(() => --standupTimeInSec)
       .subscribe((secondsPassed: number) => {
@@ -175,11 +184,14 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
           this.time = '';
         }
 
-        // Play tick sound some seconds before standup ends
+        // Play remind sound at given time
         if (
-          secondsPassed ===
-          this.settings.standupPicker.standupEndReminderAfterMin * 1000
+          remainingMinutes ===
+            this.settings.standupPicker.standupTimeInMin -
+              this.settings.standupPicker.standupEndReminderAfterMin &&
+          !tickSoundPlayed
         ) {
+          tickSoundPlayed = true;
           this.playAudio(this.settings.standupPicker.standupEndReminderSound);
         }
       });

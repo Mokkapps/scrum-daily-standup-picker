@@ -1,4 +1,4 @@
-<div class="background" [ngStyle]="{'background-image':'url(' + backgroundImage + ')'}">
+<div class="background" [ngStyle]="backgroundImage && {'background-image':'url(' + backgroundImage + ')'}">
     <mat-toolbar color="primary">
         <mat-toolbar-row>
             {{title}}
@@ -9,6 +9,9 @@
             <button mat-icon-button (click)="reset()">
                 <mat-icon aria-label="Reset">refresh</mat-icon>
             </button>
+            <button mat-icon-button (click)="invertTextColor()">
+                <mat-icon aria-label="Invert text color">invert_colors</mat-icon>
+            </button>
             <button mat-icon-button (click)="goToSettings()">
                 <mat-icon aria-label="Settings">settings</mat-icon>
             </button>
@@ -16,7 +19,12 @@
     </mat-toolbar>
 
     <section style="text-align:center">
-        <h2 class="remaining-time mt-4">{{time}}</h2>
+        <h2 class="mt-4" [ngClass]="{'text-white': defaultColor, 'text-black': !defaultColor}">{{time}}</h2>
+        <ng-container *ngIf="time">
+            <h2 class="hint mt-2" [ngClass]="{'text-white': defaultColor, 'text-black': !defaultColor}">{{'PAGES.STANDUP_PICKER.HINT.1' | translate}}</h2>
+            <h2 class="hint mt-2" [ngClass]="{'text-white': defaultColor, 'text-black': !defaultColor}">{{'PAGES.STANDUP_PICKER.HINT.2' | translate}}</h2>
+            <h2 class="hint mt-2" [ngClass]="{'text-white': defaultColor, 'text-black': !defaultColor}">{{'PAGES.STANDUP_PICKER.HINT.3' | translate}}</h2>
+        </ng-container>
     </section>
 
     <div class="container-fluid mb-4">

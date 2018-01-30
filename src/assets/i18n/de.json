@@ -7,52 +7,83 @@
   "PAGES": {
     "STANDUP_PICKER": {
       "TITLE": "Standup Picker",
-      "CLICK_TO_SELECT_TEAM_MEMBER":
-        "Zum Starten rechts auf Play-Icon klicken",
+      "CLICK_TO_SELECT_TEAM_MEMBER": "Zum Starten rechts auf Play-Icon klicken",
       "STARTS_TODAY": "{{name}} beginnt heute",
       "REMAINING_STANDUP_TIME":
         "Restliche Standup Zeit: {{remainingMinutes}} Minuten",
       "PLEASE_WAIT": "Bitte warten...",
-      "VALIDATORS": {
-        "REQUIRED": "Dieses Feld ist erforderlich",
-        "NUMBER_PATTERN": "Bitte eine gültige Zahl eingeben"
+      "HINT": {
+        "1": "1. Was hast du gestern gemacht",
+        "2": "2. Was nimmst du dir für heute vor",
+        "3": "3. Was blockiert dich, um das Sprint Ziel zu erreichen"
       }
     },
     "SETTINGS": {
-      "TITLE": "Einstellungen",
-      "FILE_UPLOAD": {
-        "TITLE": "Datei Import/Export",
-        "SUPPORTED_IMAGE_FORMATS": "Unterstütze Bild-Formate: jpg, jpeg, png",
-        "SUPPORTED_SOUND_FORMATS":
-          "Unterstütze Sound-Formate: wav, mp3, ogg, m4a",
-        "EXPORT": {
-          "TITLE": "Einstellungen exportieren",
-          "DIALOG_TITLE": "Export-Verzeichnis wählen",
-          "SUCCESS": "Einstellungen erfolgreich exportiert",
-          "ERROR": "Fehler beim Datei-Export:"
+      "FORM": {
+        "BACKGROUND": "Hintergrund-Bild",
+        "STANDUP_HOUR": "Standup Stunde",
+        "STANDUP_MINUTE": "Standup Minute",
+        "STANDUP_DURATION": "Standup Dauer in Minuten",
+        "STANDUP_REMINDER_SOUND_MINUTES": "Erinnerungssound nach x Minuten",
+        "STANDUP_REMINDER_SOUND": "Erinnerungssound",
+        "SUCCESS_SOUND": "Standup Picker Auswahl Sound",
+        "MEMBER_PICTURE": "Bild",
+        "MEMBER_NAME": "Name",
+        "SOUND_TITLE": "Titel",
+        "SAVE": "Speichern",
+        "RESET": "Zurücksetzen",
+        "SAVE_ERROR": "Fehler beim Speichern der Einstellungen:",
+        "SAVE_SUCCESS": "Einstellungen wurden gespeichert",
+        "VALIDATORS": {
+          "REQUIRED": "Dieses Feld ist erforderlich",
+          "NUMBER_PATTERN": "Bitte eine gültige Zahl eingeben"
         },
-        "IMPORT": {
-          "TITLE": "Einstellungen importieren",
-          "DIALOG_TITLE": "Datei auswählen",
-          "SUCCESS": "Einstellungen erfolgreich importiert",
-          "ERROR": "Fehler beim Datei-Import:"
+        "INVALID_FORM":
+          "Bitte erst alle erforderlichen Felder vor dem Speichern ausfüllen.",
+        "FILE_UPLOAD": {
+          "TITLE": "Datei Import/Export",
+          "SUPPORTED_IMAGE_FORMATS": "Unterstütze Bild-Formate: jpg, jpeg, png",
+          "SUPPORTED_SOUND_FORMATS":
+            "Unterstütze Sound-Formate: wav, mp3, ogg, m4a",
+          "EXPORT": {
+            "TITLE": "Einstellungen exportieren",
+            "DIALOG_TITLE": "Export-Verzeichnis wählen",
+            "SUCCESS": "Einstellungen erfolgreich exportiert",
+            "ERROR": "Fehler beim Datei-Export:"
+          },
+          "IMPORT": {
+            "TITLE": "Einstellungen importieren",
+            "DIALOG_TITLE": "Datei auswählen",
+            "SUCCESS": "Einstellungen erfolgreich importiert",
+            "ERROR": "Fehler beim Datei-Import:"
+          },
+          "DELETE_DIALOG": {
+            "TITLE": "Löschen bestätigen",
+            "MESSAGE_IMAGES": "Willst du wirklich alle importierten Bilder löschen?",
+            "MESSAGE_SOUNDS": "Willst du wirklich alle importierten Sounds löschen?",
+            "SUCCESS": "Alle importierten Daten wurden gelöscht",
+            "ERROR": "Fehler beim Löschen der Dateien:"
+          },
+          "DELETE_ALL_IMAGES": "Alle Bilder löschen",
+          "DELETE_ALL_SOUNDS": "Alle Sounds löschen",
+          "IMAGE_UPLOAD": "Bild-Import",
+          "SOUND_UPLOAD": "Sound-Import",
+          "IMPORT_SUCCESS": "Datei(en) erfolgreich importiert",
+          "IMPORT_ERROR": "Fehler beim Datei-Import:"
         },
-        "IMAGE_UPLOAD": "Bild-Import",
-        "SOUND_UPLOAD": "Sound-Import",
-        "IMPORT_SUCCESS": "Datei(en) erfolgreich importiert",
-        "IMPORT_ERROR": "Fehler beim Datei-Import:"
-      },
-      "STANDUP_PICKER": {
-        "TITLE": "Standup Picker",
-        "TEAM_MEMBERS": "Team Mitglieder",
-        "TEAM_MEMBER": "Team Mitglied {{count}}",
-        "ADD_NEW_TEAM_MEMBER": "Neues Teammitglied hinzufügen",
-        "STANDUP_MUSIC": {
-          "TITLE": "Standup Musik",
-          "SOUND": "Sound {{count}}",
-          "ADD": "Neue Standup Musik hinzufügen"
+        "STANDUP_PICKER": {
+          "TITLE": "Standup Picker",
+          "TEAM_MEMBERS": "Team Mitglieder",
+          "TEAM_MEMBER": "Team Mitglied {{count}}",
+          "ADD_NEW_TEAM_MEMBER": "Neues Teammitglied hinzufügen",
+          "STANDUP_MUSIC": {
+            "TITLE": "Standup Musik",
+            "SOUND": "Sound {{count}}",
+            "ADD": "Neue Standup Musik hinzufügen"
+          }
         }
       },
+      "TITLE": "Einstellungen",
       "LEAVE_DIALOG": {
         "TITLE": "Seite verlassen",
         "MESSAGE":
@@ -61,13 +92,7 @@
       "ABOUT_DIALOG": {
         "TITLE": "Standup Picker",
         "CONTACT_ME": "Schick mir eine E-Mail"
-      },
-      "SAVE": "Speichern",
-      "RESET": "Zurücksetzen",
-      "SAVE_ERROR": "Fehler beim Speichern der Einstellungen:",
-      "SAVE_SUCCESS": "Einstellungen wurden gespeichert",
-      "INVALID_FORM":
-        "Bitte erst alle erforderlichen Felder vor dem Speichern ausfüllen."
+      }
     }
   }
 }
