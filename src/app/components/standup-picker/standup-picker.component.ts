@@ -19,6 +19,8 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
 
   teamMembers: Member[] = [];
 
+  backgroundImage: string;
+
   private audio: HTMLAudioElement;
 
   private settings: AppSettings;
@@ -41,6 +43,7 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
         return;
       }
       this.settings = settings;
+      this.backgroundImage = this.settings.background;
       this.teamMembers = this.shuffle(this.settings.standupPicker.teamMembers);
     });
   }

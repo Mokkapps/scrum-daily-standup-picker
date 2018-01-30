@@ -1,131 +1,144 @@
-<mat-toolbar color="primary">
-    <mat-toolbar-row>
-        <button mat-icon-button class="mr-4" (click)="navigateBack()">
-            <mat-icon aria-label="Navigate back">navigate_before</mat-icon>
-        </button>
-        {{'PAGES.SETTINGS.TITLE' | translate}}
-        <span class="spacer"></span>
-        <button mat-icon-button (click)="showAboutDialog()">
-            <mat-icon aria-label="About">help_outline</mat-icon>
-        </button>
-        <button mat-icon-button (click)="onSubmit()">
-            <mat-icon aria-label="Save">save</mat-icon>
-        </button>
-    </mat-toolbar-row>
-</mat-toolbar>
+<div class="background">
+    <mat-toolbar color="primary">
+        <mat-toolbar-row>
+            <button mat-icon-button class="mr-4" (click)="navigateBack()">
+                <mat-icon aria-label="Navigate back">navigate_before</mat-icon>
+            </button>
+            {{'PAGES.SETTINGS.TITLE' | translate}}
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="showAboutDialog()">
+                <mat-icon aria-label="About">help_outline</mat-icon>
+            </button>
+            <button mat-icon-button (click)="onSubmit()">
+                <mat-icon aria-label="Save">save</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
 
-<div class="container mx-auto m-5 p-3">
-    <h2 class="mb-4">{{'PAGES.SETTINGS.FILE_UPLOAD.TITLE' | translate}}</h2>
-    <div class="file-import-flex-container">
-        <button mat-raised-button color="primary" (click)="openElectronFilePicker('image')">{{'PAGES.SETTINGS.FILE_UPLOAD.IMAGE_UPLOAD' | translate}}</button>
-        {{'PAGES.SETTINGS.FILE_UPLOAD.SUPPORTED_IMAGE_FORMATS' | translate}}
-    </div>
-    <div class="file-import-flex-container mt-4">
-        <button mat-raised-button color="primary" (click)="openElectronFilePicker('sound')">{{'PAGES.SETTINGS.FILE_UPLOAD.SOUND_UPLOAD' | translate}}</button>
-        {{'PAGES.SETTINGS.FILE_UPLOAD.SUPPORTED_SOUND_FORMATS' | translate}}
-    </div>
-    <mat-divider class="my-3"></mat-divider>
-    <button mat-raised-button color="primary" (click)="exportSettings()">{{'PAGES.SETTINGS.FILE_UPLOAD.EXPORT.TITLE' | translate}}</button>
-    <button mat-raised-button color="primary" (click)="importSettings()" class="ml-4" disabled>{{'PAGES.SETTINGS.FILE_UPLOAD.IMPORT.TITLE' | translate}}</button>
-</div>
-
-<div class="container mx-auto m-5 p-3">
-    <form [formGroup]="settingsForm" (ngSubmit)="onSubmit()" novalidate>
-        <div class="form-group-container" formGroupName="standupPicker">
-
-            <h2 class="mb-4">{{'PAGES.SETTINGS.STANDUP_PICKER.TITLE' | translate}}</h2>
-
-            <div class="container">
-                <div class="row">
-                    <mat-form-field class="col-6 mb-1">
-                        <input matInput formControlName="standupHour" placeholder="Standup Stunde" required>
-                        <mat-error>{{getNumberErrorMessage('standupPicker.standupHour')}}</mat-error>
-                    </mat-form-field>
-                    <mat-form-field class="col-6 mb-1">
-                        <input matInput formControlName="standupMinute" placeholder="Standup Minute" required>
-                        <mat-error>{{getNumberErrorMessage('standupPicker.standupMinute')}}</mat-error>
-                    </mat-form-field>
-                </div>
-                <div class="row">
-                    <mat-form-field class="col-6 mb-1">
-                        <input matInput formControlName="standupTimeInMin" placeholder="Standup Dauer in Minuten" required>
-                        <mat-error>{{getNumberErrorMessage('standupPicker.standupTimeInMin')}}</mat-error>
-                    </mat-form-field>
-                    <mat-form-field class="col-6 mb-1">
-                        <input matInput formControlName="standupEndReminderAfterMin" placeholder="Erinnerungssound nach x Minuten" required>
-                    </mat-form-field>
-                </div>
-                <div class="row">
-                    <mat-form-field class="col-6 mb-1">
-                        <mat-select placeholder="Erinnerungssound" formControlName="standupEndReminderSound" required>
-                            <mat-option *ngFor="let file of soundFiles" value="{{soundsPath + file}}">
-                                {{file}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                    <mat-form-field class="col-6 mb-1">
-                        <mat-select placeholder="Standup Picker Auswahl Sound" formControlName="successSound" required>
-                            <mat-option *ngFor="let file of soundFiles" value="{{soundsPath + file}}">
-                                {{file}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-            </div>
-
-            <h3 class="mb-4">{{'PAGES.SETTINGS.STANDUP_PICKER.TEAM_MEMBERS' | translate}}</h3>
-
-            <div class="container team-members-container p-3" formArrayName="teamMembers">
-                <div class="row justify-content-center">
-                    <div class="col" *ngFor="let teamMember of teamMembers.controls; let i=index" [formGroupName]="i">
-                        <h4 class="mb-4">{{'PAGES.SETTINGS.STANDUP_PICKER.TEAM_MEMBER' | translate : { count: (i + 1)} }}</h4>
-                        <div class="form-group-container">
-                            <mat-form-field>
-                                <input matInput formControlName="name" placeholder="Name" required>
-                                <mat-error>{{getNumberErrorMessage('standupPicker.teamMembers.name')}}</mat-error>
-                            </mat-form-field>
-                            <mat-form-field>
-                                <mat-select placeholder="Bild" formControlName="image" required>
-                                    <mat-option *ngFor="let file of imageFiles" value="{{imagesPath + file}}">
-                                        <div class="mat-option-flex-container">
-                                            <img class="select-image" src="{{imagesPath + file}}"> {{file}}
-                                        </div>
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-                        <button mat-raised-button color="warn" type="button" *ngIf="teamMembers.controls.length > 1" (click)="deleteTeamMemberRow(i)">Teammitglied entfernen</button>
-                        <mat-divider class="mx-2 my-4"></mat-divider>
-                    </div>
-                    <button mat-raised-button mat-primary type="button" (click)="addNewTeamMemberRow()">{{'PAGES.SETTINGS.STANDUP_PICKER.ADD_NEW_TEAM_MEMBER' | translate}}</button>
-                </div>
-            </div>
-
-            <h3 class="mb-4 mt-4">{{'PAGES.SETTINGS.STANDUP_PICKER.STANDUP_MUSIC.TITLE' | translate}}</h3>
-
-            <div class="container team-members-container p-3" formArrayName="standupMusic">
-                <div class="row justify-content-center">
-                    <div class="col" *ngFor="let url of standupMusic.controls; let i=index">
-                        <h4 class="mb-4 mt-4">{{'PAGES.SETTINGS.STANDUP_PICKER.STANDUP_MUSIC.SOUND' | translate : { count: (i + 1)} }}</h4>
-                        <div class="form-group-container">
-                            <mat-form-field>
-                                <mat-select placeholder="Titel" [formControlName]="i" required>
-                                    <mat-option *ngFor="let file of soundFiles" value="{{soundsPath + file}}">
-                                        {{file}}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-                        <button mat-raised-button color="warn" type="button" *ngIf="standupMusic.controls.length > 1" (click)="deleteStandupMusicPathRow(i)">Standup Musik entfernen</button>
-                        <mat-divider class="mx-2 my-4"></mat-divider>
-                    </div>
-                    <button mat-raised-button mat-primary type="button" (click)="addNewStandupMusicPathRow()">{{'PAGES.SETTINGS.STANDUP_PICKER.STANDUP_MUSIC.ADD' | translate}}</button>
-                </div>
-            </div>
+    <div class="container mx-auto m-5 p-3">
+        <h2 class="mb-4">{{'PAGES.SETTINGS.FILE_UPLOAD.TITLE' | translate}}</h2>
+        <div class="file-import-flex-container">
+            <button mat-raised-button color="primary" (click)="openElectronFilePicker('image')">{{'PAGES.SETTINGS.FILE_UPLOAD.IMAGE_UPLOAD' | translate}}</button>
+            {{'PAGES.SETTINGS.FILE_UPLOAD.SUPPORTED_IMAGE_FORMATS' | translate}}
         </div>
-    </form>
-</div>
+        <div class="file-import-flex-container mt-4">
+            <button mat-raised-button color="primary" (click)="openElectronFilePicker('sound')">{{'PAGES.SETTINGS.FILE_UPLOAD.SOUND_UPLOAD' | translate}}</button>
+            {{'PAGES.SETTINGS.FILE_UPLOAD.SUPPORTED_SOUND_FORMATS' | translate}}
+        </div>
+        <mat-divider class="my-3"></mat-divider>
+        <button mat-raised-button color="primary" (click)="exportSettings()">{{'PAGES.SETTINGS.FILE_UPLOAD.EXPORT.TITLE' | translate}}</button>
+        <button mat-raised-button color="primary" (click)="importSettings()" class="ml-4" disabled>{{'PAGES.SETTINGS.FILE_UPLOAD.IMPORT.TITLE' | translate}}</button>
+    </div>
 
-<div class="container mx-auto m-5 p-3">
-    <button mat-raised-button color="primary" class="submit-button" (click)="onSubmit()">{{'PAGES.SETTINGS.SAVE' | translate}}</button>
+    <div class="container mx-auto m-5 p-3">
+        <form [formGroup]="settingsForm" (ngSubmit)="onSubmit()" novalidate>
+            <div class="form-group-container" formGroupName="standupPicker">
+
+                <h2 class="mb-4">{{'PAGES.SETTINGS.STANDUP_PICKER.TITLE' | translate}}</h2>
+
+                <div class="container">
+                    <div class="row">
+                        <mat-form-field>
+                            <mat-select placeholder="Background" formControlName="background" required>
+                                <mat-option *ngFor="let file of imageFiles" value="{{imagesPath + file}}">
+                                    <div class="mat-option-flex-container">
+                                        <img class="select-image" src="{{imagesPath + file}}"> {{file}}
+                                    </div>
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="row">
+                        <mat-form-field class="col-6 mb-1">
+                            <input matInput formControlName="standupHour" placeholder="Standup Stunde" required>
+                            <mat-error>{{getNumberErrorMessage('standupPicker.standupHour')}}</mat-error>
+                        </mat-form-field>
+                        <mat-form-field class="col-6 mb-1">
+                            <input matInput formControlName="standupMinute" placeholder="Standup Minute" required>
+                            <mat-error>{{getNumberErrorMessage('standupPicker.standupMinute')}}</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="row">
+                        <mat-form-field class="col-6 mb-1">
+                            <input matInput formControlName="standupTimeInMin" placeholder="Standup Dauer in Minuten" required>
+                            <mat-error>{{getNumberErrorMessage('standupPicker.standupTimeInMin')}}</mat-error>
+                        </mat-form-field>
+                        <mat-form-field class="col-6 mb-1">
+                            <input matInput formControlName="standupEndReminderAfterMin" placeholder="Erinnerungssound nach x Minuten" required>
+                        </mat-form-field>
+                    </div>
+                    <div class="row">
+                        <mat-form-field class="col-6 mb-1">
+                            <mat-select placeholder="Erinnerungssound" formControlName="standupEndReminderSound" required>
+                                <mat-option *ngFor="let file of soundFiles" value="{{soundsPath + file}}">
+                                    {{file}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field class="col-6 mb-1">
+                            <mat-select placeholder="Standup Picker Auswahl Sound" formControlName="successSound" required>
+                                <mat-option *ngFor="let file of soundFiles" value="{{soundsPath + file}}">
+                                    {{file}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <h3 class="mb-4">{{'PAGES.SETTINGS.STANDUP_PICKER.TEAM_MEMBERS' | translate}}</h3>
+
+                <div class="container team-members-container p-3" formArrayName="teamMembers">
+                    <div class="row justify-content-center">
+                        <div class="col" *ngFor="let teamMember of teamMembers.controls; let i=index" [formGroupName]="i">
+                            <h4 class="mb-4">{{'PAGES.SETTINGS.STANDUP_PICKER.TEAM_MEMBER' | translate : { count: (i + 1)} }}</h4>
+                            <div class="form-group-container">
+                                <mat-form-field>
+                                    <input matInput formControlName="name" placeholder="Name" required>
+                                    <mat-error>{{getNumberErrorMessage('standupPicker.teamMembers.name')}}</mat-error>
+                                </mat-form-field>
+                                <mat-form-field>
+                                    <mat-select placeholder="Bild" formControlName="image" required>
+                                        <mat-option *ngFor="let file of imageFiles" value="{{imagesPath + file}}">
+                                            <div class="mat-option-flex-container">
+                                                <img class="select-image" src="{{imagesPath + file}}"> {{file}}
+                                            </div>
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <button mat-raised-button color="warn" type="button" *ngIf="teamMembers.controls.length > 1" (click)="deleteTeamMemberRow(i)">Teammitglied entfernen</button>
+                            <mat-divider class="mx-2 my-4"></mat-divider>
+                        </div>
+                        <button mat-raised-button mat-primary type="button" (click)="addNewTeamMemberRow()">{{'PAGES.SETTINGS.STANDUP_PICKER.ADD_NEW_TEAM_MEMBER' | translate}}</button>
+                    </div>
+                </div>
+
+                <h3 class="mb-4 mt-4">{{'PAGES.SETTINGS.STANDUP_PICKER.STANDUP_MUSIC.TITLE' | translate}}</h3>
+
+                <div class="container team-members-container p-3" formArrayName="standupMusic">
+                    <div class="row justify-content-center">
+                        <div class="col" *ngFor="let url of standupMusic.controls; let i=index">
+                            <h4 class="mb-4 mt-4">{{'PAGES.SETTINGS.STANDUP_PICKER.STANDUP_MUSIC.SOUND' | translate : { count: (i + 1)} }}</h4>
+                            <div class="form-group-container">
+                                <mat-form-field>
+                                    <mat-select placeholder="Titel" [formControlName]="i" required>
+                                        <mat-option *ngFor="let file of soundFiles" value="{{soundsPath + file}}">
+                                            {{file}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <button mat-raised-button color="warn" type="button" *ngIf="standupMusic.controls.length > 1" (click)="deleteStandupMusicPathRow(i)">Standup Musik entfernen</button>
+                            <mat-divider class="mx-2 my-4"></mat-divider>
+                        </div>
+                        <button mat-raised-button mat-primary type="button" (click)="addNewStandupMusicPathRow()">{{'PAGES.SETTINGS.STANDUP_PICKER.STANDUP_MUSIC.ADD' | translate}}</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="container mx-auto m-5 p-3">
+        <button mat-raised-button color="primary" class="submit-button" (click)="onSubmit()">{{'PAGES.SETTINGS.SAVE' | translate}}</button>
+    </div>
 </div>

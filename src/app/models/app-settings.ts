@@ -2,6 +2,7 @@ import { TeamMember } from './team-member';
 
 export interface AppSettings {
   standupPicker: StandupPicker;
+  background: string;
 }
 
 export interface StandupPicker {

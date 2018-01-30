@@ -414,6 +414,8 @@ export class SettingsComponent implements OnDestroy {
     this.appSettings.standupPicker.standupMusic.forEach(path => {
       this.addNewStandupMusicPathRow(path);
     });
+
+    // FIX init this.appSettings.background
   }
 
   private getStandupPickerFormGroup(): FormGroup {
@@ -426,6 +428,7 @@ export class SettingsComponent implements OnDestroy {
 
   private createForm(): void {
     this.settingsForm = this.formBuilder.group({
+      background: [undefined, Validators.required],
       standupPicker: this.formBuilder.group({
         teamMembers: this.formBuilder.array([]),
         standupMusic: this.formBuilder.array([]),
