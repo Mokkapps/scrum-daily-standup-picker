@@ -5,6 +5,7 @@ import {
   MAT_LABEL_GLOBAL_OPTIONS,
   MatButtonModule,
   MatCardModule,
+  MatCheckboxModule,
   MatDialogModule,
   MatDividerModule,
   MatFormFieldModule,
@@ -69,7 +70,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatSelectModule,
     MatDividerModule,
     MatDialogModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatCheckboxModule
   ],
   entryComponents: [ConfirmDialogComponent, AboutDialogComponent],
   providers: [

@@ -105,7 +105,11 @@ export class SettingsService {
         successSound: `${soundsPath}success.wav`,
         standupEndReminderSound: `${soundsPath}tickTock.wav`,
         standupMusic: [
-          { path: `${soundsPath}cheerful-song.wav`, selected: true }
+          {
+            path: `${soundsPath}cheerful-song.wav`,
+            name: 'cheerful-song.wav',
+            selected: true
+          }
         ],
         teamMembers: [
           {

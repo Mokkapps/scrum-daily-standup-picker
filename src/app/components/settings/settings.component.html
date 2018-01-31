@@ -18,17 +18,11 @@
     <div class="container mx-auto m-5 p-3">
         <h2 class="mb-4">{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.TITLE' | translate}}</h2>
         <div class="file-import-flex-container">
-            <div>
-                <button mat-raised-button color="primary" (click)="openElectronFilePicker('image')">{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.IMAGE_UPLOAD' | translate}}</button>
-                <button mat-raised-button class="ml-4" color="primary" (click)="deleteAllFiles('image')">{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.DELETE_ALL_IMAGES' | translate}}</button>
-            </div>
+            <button mat-raised-button color="primary" (click)="openElectronFilePicker('image')">{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.IMAGE_UPLOAD' | translate}}</button>
             {{'PAGES.SETTINGS.FORM.FILE_UPLOAD.SUPPORTED_IMAGE_FORMATS' | translate}}
         </div>
         <div class="file-import-flex-container mt-4">
-            <div>
-                <button mat-raised-button color="primary" (click)="openElectronFilePicker('sound')">{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.SOUND_UPLOAD' | translate}}</button>
-                <button mat-raised-button class="ml-4" color="primary" (click)="deleteAllFiles('sound')">{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.DELETE_ALL_SOUNDS' | translate}}</button>
-            </div>
+            <button mat-raised-button color="primary" (click)="openElectronFilePicker('sound')">{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.SOUND_UPLOAD' | translate}}</button>
             {{'PAGES.SETTINGS.FORM.FILE_UPLOAD.SUPPORTED_SOUND_FORMATS' | translate}}
         </div>
         <mat-divider class="my-3"></mat-divider>
@@ -125,22 +119,10 @@
                 <h3 class="mb-4 mt-4">{{'PAGES.SETTINGS.FORM.STANDUP_PICKER.STANDUP_MUSIC.TITLE' | translate}}</h3>
 
                 <div class="container team-members-container p-3" formArrayName="standupMusic">
-                    <div class="row justify-content-center">
-                        <div class="col" *ngFor="let url of standupMusic.controls; let i=index">
-                            <h4 class="mb-4 mt-4">{{'PAGES.SETTINGS.FORM.STANDUP_PICKER.STANDUP_MUSIC.SOUND' | translate : { count: (i + 1)} }}</h4>
-                            <div class="form-group-container">
-                                <mat-form-field>
-                                    <mat-select [formControlName]="i" placeholder="{{ 'PAGES.SETTINGS.FORM.SOUND_TITLE' | translate}}" required>
-                                        <mat-option *ngFor="let file of soundFiles" value="{{soundsPath + file}}">
-                                            {{file}}
-                                        </mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                            </div>
-                            <button mat-raised-button color="warn" type="button" *ngIf="standupMusic.controls.length > 1" (click)="deleteStandupMusicPathRow(i)">Standup Musik entfernen</button>
-                            <mat-divider class="mx-2 my-4"></mat-divider>
+                    <div class="row">
+                        <div class="col" *ngFor="let sound of standupMusic.controls; let i=index" [formGroupName]="i">
+                            <mat-checkbox color="primary" formControlName="selected">{{sound.controls.name.value}}</mat-checkbox>
                         </div>
-                        <button mat-raised-button mat-primary type="button" (click)="addNewStandupMusicPathRow()">{{'PAGES.SETTINGS.FORM.STANDUP_PICKER.STANDUP_MUSIC.ADD' | translate}}</button>
                     </div>
                 </div>
             </div>

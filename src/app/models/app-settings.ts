@@ -18,5 +18,6 @@ export interface StandupPicker {
 
 export interface StandupSound {
   path: string;
+  name: string;
   selected: boolean;
 }

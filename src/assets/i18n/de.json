@@ -21,12 +21,12 @@
     "SETTINGS": {
       "FORM": {
         "BACKGROUND": "Hintergrund-Bild",
-        "STANDUP_HOUR": "Standup Stunde",
-        "STANDUP_MINUTE": "Standup Minute",
+        "STANDUP_HOUR": "Standup-Musik-Abspielzeit (Stunde)",
+        "STANDUP_MINUTE": "Standup-Musik-Abspielzeit (Minute)",
         "STANDUP_DURATION": "Standup Dauer in Minuten",
         "STANDUP_REMINDER_SOUND_MINUTES": "Erinnerungssound nach x Minuten",
         "STANDUP_REMINDER_SOUND": "Erinnerungssound",
-        "SUCCESS_SOUND": "Standup Picker Auswahl Sound",
+        "SUCCESS_SOUND": "Teammitglied Auswahlsound",
         "MEMBER_PICTURE": "Bild",
         "MEMBER_NAME": "Name",
         "SOUND_TITLE": "Titel",

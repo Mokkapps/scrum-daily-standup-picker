@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -14,7 +14,6 @@ import * as fs from 'fs';
 import { readFile } from 'jsonfile';
 import * as path from 'path';
 import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
 
 import { AboutDialogComponent } from 'app/components/settings/dialog/about-dialog.component';
 import { AppSettings } from 'app/models/app-settings';
@@ -22,6 +21,8 @@ import { TeamMember } from 'app/models/team-member';
 import { SettingsService } from 'app/providers/settings.service';
 import { StandupSound } from '../../models/app-settings';
 import { ConfirmDialogComponent } from './dialog/confirm-dialog.component';
+
+const random_name = require('node-random-name');
 
 const DIALOG_WIDTH = '500px';
 const ERROR_DURATION_IN_MS = 5000;
@@ -41,7 +42,7 @@ const BACKUP_FILTER = {
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss']
 })
-export class SettingsComponent implements OnDestroy {
+export class SettingsComponent {
   settingsForm: FormGroup;
 
   imageFiles: string[];
@@ -52,10 +53,7 @@ export class SettingsComponent implements OnDestroy {
 
   soundsPath = '';
 
-  standupSounds: StandupSound[];
-
   private appSettings: AppSettings;
-  private settingsSubscription: Subscription;
 
   constructor(
     public dialog: MatDialog,
@@ -75,34 +73,13 @@ export class SettingsComponent implements OnDestroy {
 
     this.createForm();
 
-    this.settingsSubscription = settingsService.settings.subscribe(settings => {
-      if (this.appSettings) {
+    settingsService.settings
+      .filter(settings => settings !== undefined)
+      .first()
+      .subscribe(settings => {
         this.appSettings = settings;
-        return;
-      }
-
-      this.appSettings = settings;
-
-      // Get images and files from file system
-      this.getImagesAndSounds().then(values => {
-        this.imageFiles = values[0];
-        this.soundFiles = values[1];
+        this.updateForm(settings);
       });
-
-      // Build standup sounds
-      this.soundFiles.map(soundFile => {
-        return {};
-      });
-
-      // Fill form with settings values
-      this.initForm(settings);
-    });
-  }
-
-  ngOnDestroy(): void {
-    if (this.settingsSubscription) {
-      this.settingsSubscription.unsubscribe();
-    }
   }
 
   get teamMembers(): FormArray {
@@ -141,10 +118,7 @@ export class SettingsComponent implements OnDestroy {
                   'PAGES.SETTINGS.FORM.FILE_UPLOAD.DELETE_DIALOG.SUCCESS'
                 )
               );
-              this.getImagesAndSounds().then(values => {
-                this.imageFiles = values[0];
-                this.soundFiles = values[1];
-              });
+              this.updateForm(this.appSettings);
             })
             .catch(err => {
               const errorText = this.translateService.instant(
@@ -158,7 +132,6 @@ export class SettingsComponent implements OnDestroy {
 
   navigateBack() {
     if (this.settingsForm.dirty) {
-      console.log(this.settingsForm.dirty);
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
         width: DIALOG_WIDTH,
         data: {
@@ -192,15 +165,18 @@ export class SettingsComponent implements OnDestroy {
       );
       return;
     }
+    console.log('Submit', this.settingsForm.value.standupPicker);
     this.settingsService
       .updateSettings({
         standupPicker: this.settingsForm.value.standupPicker
       })
       .then(() => {
         this.showSnackbar(
-          this.translateService.instant('PAGES.SETTINGS.FORM.SAVE_SUCCESS')
+          this.translateService.instant('PAGES.SETTINGS.FORM.SAVE_SUCCESS'),
+          3000
         );
         this.settingsForm.markAsPristine();
+        this.router.navigate(['../']);
       })
       .catch(err => {
         const errorText = this.translateService.instant(
@@ -210,27 +186,21 @@ export class SettingsComponent implements OnDestroy {
       });
   }
 
+  addNewStandupSound(sound: StandupSound): void {
+    const control = <FormArray>this.getStandupPickerFormGroup().controls
+      .standupMusic;
+    control.push(this.createStandupSoundGroup(sound));
+  }
+
   addNewTeamMemberRow(name?: string, image?: string): void {
     const control = <FormArray>this.getStandupPickerFormGroup().controls
       .teamMembers;
-    control.push(this.createTeamMember(name, image));
+    control.push(this.createTeamMemberGroup(name, image));
   }
 
   deleteTeamMemberRow(index: number): void {
     const control = <FormArray>this.getStandupPickerFormGroup().controls
       .teamMembers;
-    control.removeAt(index);
-  }
-
-  addNewStandupMusicPathRow(path?: string): void {
-    const control = <FormArray>this.getStandupPickerFormGroup().controls
-      .standupMusic;
-    control.push(new FormControl(path));
-  }
-
-  deleteStandupMusicPathRow(index: number): void {
-    const control = <FormArray>this.getStandupPickerFormGroup().controls
-      .standupMusic;
     control.removeAt(index);
   }
 
@@ -257,10 +227,7 @@ export class SettingsComponent implements OnDestroy {
             'PAGES.SETTINGS.FORM.FILE_UPLOAD.IMPORT_SUCCESS'
           )
         );
-        this.getImagesAndSounds().then(values => {
-          this.imageFiles = values[0];
-          this.soundFiles = values[1];
-        });
+        this.updateForm(this.appSettings);
       })
       .catch(err => {
         const errorMessage = this.translateService.instant(
@@ -310,6 +277,24 @@ export class SettingsComponent implements OnDestroy {
       });
   }
 
+  private getStandupSounds(): StandupSound[] {
+    return this.soundFiles.map(soundFile => {
+      let selected = true;
+      const filtered = this.appSettings.standupPicker.standupMusic.filter(
+        sound => sound.path === `${this.soundsPath}${soundFile}`
+      );
+      if (filtered.length > 0) {
+        selected = filtered[0].selected;
+      }
+
+      return {
+        path: `${this.soundsPath}${soundFile}`,
+        name: soundFile,
+        selected
+      };
+    });
+  }
+
   private async deleteAllFilesInDirectory(fileType: FileType) {
     const files = await this.readFilesFromDirectory(fileType);
     const path = fileType === 'image' ? this.imagesPath : this.soundsPath;
@@ -343,6 +328,7 @@ export class SettingsComponent implements OnDestroy {
     await this.settingsService.updateSettings(JSON.parse(importedData));
   }
 
+  // FIXME currently not working
   private async exportFiles() {
     const directory = await this.openElectronDialog(
       this.translateService.instant(
@@ -411,7 +397,6 @@ export class SettingsComponent implements OnDestroy {
 
   private validateAllFormFields(formGroup: FormGroup | FormArray) {
     Object.keys(formGroup.controls).forEach(field => {
-      console.log(field);
       const control = formGroup.get(field);
       if (control instanceof FormControl) {
         control.markAsTouched({ onlySelf: true });
@@ -421,7 +406,15 @@ export class SettingsComponent implements OnDestroy {
     });
   }
 
-  private getImagesAndSounds(): Promise<any> {
+  private updateForm(settings: AppSettings) {
+    this.readFilesFromFileSystem().then(values => {
+      this.imageFiles = values[0];
+      this.soundFiles = values[1];
+      this.patchFormValues(settings);
+    });
+  }
+
+  private async readFilesFromFileSystem(): Promise<any> {
     return Promise.all([
       this.readFilesFromDirectory('image'),
       this.readFilesFromDirectory('sound')
@@ -470,7 +463,7 @@ export class SettingsComponent implements OnDestroy {
     });
   }
 
-  private initForm(settings: AppSettings): void {
+  private patchFormValues(settings: AppSettings): void {
     this.getStandupPickerFormGroup().patchValue({
       background: settings.standupPicker.background,
       standupHour: settings.standupPicker.standupHour,
@@ -482,12 +475,21 @@ export class SettingsComponent implements OnDestroy {
       standupEndReminderSound: settings.standupPicker.standupEndReminderSound
     });
 
-    this.appSettings.standupPicker.teamMembers.forEach(teamMember => {
-      this.addNewTeamMemberRow(teamMember.name, teamMember.image);
+    // First clear existing FormArray
+    while (this.standupMusic.length) {
+      this.standupMusic.removeAt(this.standupMusic.length - 1);
+    }
+    // Fill again
+    this.getStandupSounds().forEach(sound => {
+      this.addNewStandupSound(sound);
     });
 
-    this.appSettings.standupPicker.standupMusic.forEach(standupSound => {
-      this.addNewStandupMusicPathRow(standupSound.path);
+    // First clear existing FormArray anf then fill again
+    while (this.teamMembers.length) {
+      this.teamMembers.removeAt(this.teamMembers.length - 1);
+    }
+    this.appSettings.standupPicker.teamMembers.forEach(teamMember => {
+      this.addNewTeamMemberRow(teamMember.name, teamMember.image);
     });
   }
 
@@ -527,10 +529,25 @@ export class SettingsComponent implements OnDestroy {
     });
   }
 
-  private createTeamMember(name?: string, image?: string): FormGroup {
+  private createTeamMemberGroup(name?: string, image?: string): FormGroup {
     return this.formBuilder.group({
-      name: [name ? name : '', Validators.required],
-      image: [image ? image : '', Validators.required]
+      name: [name ? name : random_name(), Validators.required],
+      image: [
+        image
+          ? image
+          : this.appSettings
+            ? this.appSettings.standupPicker.teamMembers[0].image
+            : '',
+        Validators.required
+      ]
+    });
+  }
+
+  private createStandupSoundGroup(sound: StandupSound): FormGroup {
+    return this.formBuilder.group({
+      path: sound.path,
+      name: sound.name,
+      selected: sound.selected
     });
   }
 }

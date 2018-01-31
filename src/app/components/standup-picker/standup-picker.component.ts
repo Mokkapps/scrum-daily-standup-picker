@@ -25,13 +25,9 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
   defaultColor = true;
 
   private audio: HTMLAudioElement;
-
   private settings: AppSettings;
-
   private timerSubscription: Subscription;
-
   private standupSoundTimerSubscription: Subscription;
-
   private shuffleSubscription: Subscription;
 
   constructor(
@@ -46,7 +42,10 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
         return;
       }
       this.settings = settings;
-      this.backgroundImage = this.settings.standupPicker.background;
+      // CSS style need a relative path
+      this.backgroundImage = `./assets/images/${this.getFileNameWithExtension(
+        this.settings.standupPicker.background
+      )}`;
       this.teamMembers = this.shuffle(this.settings.standupPicker.teamMembers);
     });
   }
@@ -72,7 +71,9 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
             Number(this.settings.standupPicker.standupMinute)
         ) {
           console.log('STANDUP', date);
-          const standupMusic = this.settings.standupPicker.standupMusic;
+          const standupMusic = this.settings.standupPicker.standupMusic.filter(
+            sound => sound.selected
+          );
           this.playAudio(
             standupMusic[this.getRandomInt(0, standupMusic.length - 1)].path
           );
@@ -139,6 +140,10 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
       'PAGES.STANDUP_PICKER.CLICK_TO_SELECT_TEAM_MEMBER'
     );
     this.time = '';
+  }
+
+  private getFileNameWithExtension(path: string): string {
+    return (path.toString().match(/[^\\/]+\.[^\\/]+$/) || []).pop();
   }
 
   private onMemberClick(member: TeamMember): void {

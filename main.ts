@@ -1,4 +1,4 @@
-import { app, screen, BrowserWindow } from 'electron';
+import { app, BrowserWindow, screen } from 'electron';
 import * as path from 'path';
 
 let win, serve;
