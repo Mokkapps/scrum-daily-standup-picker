@@ -12,6 +12,11 @@ export interface StandupPicker {
   standupEndReminderAfterMin: number;
   successSound: string;
   standupEndReminderSound: string;
-  standupMusic: string[];
+  standupMusic: StandupSound[];
   teamMembers: TeamMember[];
+}
+
+export interface StandupSound {
+  path: string;
+  selected: boolean;
 }

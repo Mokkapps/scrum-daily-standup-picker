@@ -15,13 +15,15 @@ import { readFile } from 'jsonfile';
 import * as path from 'path';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { ConfirmDialogComponent } from './dialog/confirm-dialog.component';
 
 import { AboutDialogComponent } from 'app/components/settings/dialog/about-dialog.component';
 import { AppSettings } from 'app/models/app-settings';
 import { TeamMember } from 'app/models/team-member';
 import { SettingsService } from 'app/providers/settings.service';
+import { StandupSound } from '../../models/app-settings';
+import { ConfirmDialogComponent } from './dialog/confirm-dialog.component';
 
+const DIALOG_WIDTH = '500px';
 const ERROR_DURATION_IN_MS = 5000;
 const NUMBER_PATTERN = '[0-9]+';
 const IMAGES_FILTER = { name: 'Images', extensions: ['jpg', 'jpeg', 'png'] };
@@ -40,8 +42,6 @@ const BACKUP_FILTER = {
   styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnDestroy {
-  settings: Observable<AppSettings>;
-
   settingsForm: FormGroup;
 
   imageFiles: string[];
@@ -51,6 +51,8 @@ export class SettingsComponent implements OnDestroy {
   imagesPath = '';
 
   soundsPath = '';
+
+  standupSounds: StandupSound[];
 
   private appSettings: AppSettings;
   private settingsSubscription: Subscription;
@@ -71,23 +73,36 @@ export class SettingsComponent implements OnDestroy {
       .join(appPath, '/assets/sounds/')
       .replace('app.asar', 'app.asar.unpacked');
 
-    this.getImagesAndSounds().then(values => {
-      this.imageFiles = values[0];
-      this.soundFiles = values[1];
-    });
-
     this.createForm();
 
-    this.settings = settingsService.settings;
-    settingsService.settings.subscribe(settings => {
+    this.settingsSubscription = settingsService.settings.subscribe(settings => {
       if (this.appSettings) {
         this.appSettings = settings;
         return;
       }
 
       this.appSettings = settings;
+
+      // Get images and files from file system
+      this.getImagesAndSounds().then(values => {
+        this.imageFiles = values[0];
+        this.soundFiles = values[1];
+      });
+
+      // Build standup sounds
+      this.soundFiles.map(soundFile => {
+        return {};
+      });
+
+      // Fill form with settings values
       this.initForm(settings);
     });
+  }
+
+  ngOnDestroy(): void {
+    if (this.settingsSubscription) {
+      this.settingsSubscription.unsubscribe();
+    }
   }
 
   get teamMembers(): FormArray {
@@ -100,7 +115,7 @@ export class SettingsComponent implements OnDestroy {
 
   deleteAllFiles(fileType: FileType) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '500px',
+      width: DIALOG_WIDTH,
       data: {
         title: this.translateService.instant(
           'PAGES.SETTINGS.FORM.FILE_UPLOAD.DELETE_DIALOG.TITLE'
@@ -145,7 +160,7 @@ export class SettingsComponent implements OnDestroy {
     if (this.settingsForm.dirty) {
       console.log(this.settingsForm.dirty);
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-        width: '500px',
+        width: DIALOG_WIDTH,
         data: {
           title: this.translateService.instant(
             'PAGES.SETTINGS.LEAVE_DIALOG.TITLE'
@@ -233,12 +248,6 @@ export class SettingsComponent implements OnDestroy {
         : '';
   }
 
-  ngOnDestroy(): void {
-    if (this.settingsSubscription) {
-      this.settingsSubscription.unsubscribe();
-    }
-  }
-
   openElectronFilePicker(type: string) {
     this.importFiles(type)
       .then(() => {
@@ -263,7 +272,7 @@ export class SettingsComponent implements OnDestroy {
 
   showAboutDialog() {
     const dialogRef = this.dialog.open(AboutDialogComponent, {
-      width: '500px'
+      width: DIALOG_WIDTH
     });
   }
 
@@ -477,8 +486,8 @@ export class SettingsComponent implements OnDestroy {
       this.addNewTeamMemberRow(teamMember.name, teamMember.image);
     });
 
-    this.appSettings.standupPicker.standupMusic.forEach(path => {
-      this.addNewStandupMusicPathRow(path);
+    this.appSettings.standupPicker.standupMusic.forEach(standupSound => {
+      this.addNewStandupMusicPathRow(standupSound.path);
     });
   }
 

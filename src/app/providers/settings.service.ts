@@ -104,7 +104,9 @@ export class SettingsService {
         standupEndReminderAfterMin: 10,
         successSound: `${soundsPath}success.wav`,
         standupEndReminderSound: `${soundsPath}tickTock.wav`,
-        standupMusic: [`${soundsPath}cheerful-song.wav`],
+        standupMusic: [
+          { path: `${soundsPath}cheerful-song.wav`, selected: true }
+        ],
         teamMembers: [
           {
             name: 'Max Mustermann',

@@ -74,7 +74,7 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
           console.log('STANDUP', date);
           const standupMusic = this.settings.standupPicker.standupMusic;
           this.playAudio(
-            standupMusic[this.getRandomInt(0, standupMusic.length - 1)]
+            standupMusic[this.getRandomInt(0, standupMusic.length - 1)].path
           );
         }
       });
