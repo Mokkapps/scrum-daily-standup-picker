@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import * as path from 'path';
 import { Observable, Subscription } from 'rxjs/Rx';
 
 import { AppSettings } from 'app/models/app-settings';
@@ -20,7 +21,8 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
 
   teamMembers: Member[] = [];
 
-  backgroundImage: string;
+  // CSS style need a relative path, we also set a default background
+  backgroundImage = './assets/images/background.jpg';
 
   defaultColor = true;
 
@@ -187,6 +189,7 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
             'PAGES.STANDUP_PICKER.CLICK_TO_SELECT_TEAM_MEMBER'
           );
           this.time = '';
+          this.teamMembers.map(member => (member.selected = false));
         }
 
         // Play remind sound at given time

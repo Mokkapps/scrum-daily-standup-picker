@@ -68,7 +68,7 @@
           "DELETE_ALL_SOUNDS": "Alle Sounds löschen",
           "IMAGE_UPLOAD": "Bild-Import",
           "SOUND_UPLOAD": "Sound-Import",
-          "IMPORT_SUCCESS": "Datei(en) erfolgreich importiert",
+          "IMPORT_SUCCESS": "Datei(en) erfolgreich importiert und können jetzt ausgewählt werden",
           "IMPORT_ERROR": "Fehler beim Datei-Import:"
         },
         "STANDUP_PICKER": {

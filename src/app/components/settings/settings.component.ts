@@ -64,12 +64,8 @@ export class SettingsComponent {
     private translateService: TranslateService
   ) {
     const appPath = electron.remote.app.getAppPath();
-    this.imagesPath = path
-      .join(appPath, '/assets/images/')
-      .replace('app.asar', 'app.asar.unpacked');
-    this.soundsPath = path
-      .join(appPath, '/assets/sounds/')
-      .replace('app.asar', 'app.asar.unpacked');
+    this.imagesPath = path.join(appPath, '/assets/images/');
+    this.soundsPath = path.join(appPath, '/assets/sounds/');
 
     this.createForm();
 

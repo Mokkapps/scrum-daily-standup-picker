@@ -22,18 +22,10 @@ export class SettingsService {
   constructor(public snackBar: MatSnackBar, private zone: NgZone) {
     const appPath = remote.app.getAppPath();
 
-    assetsPath = path
-      .join(appPath, '/assets/')
-      .replace('app.asar', 'app.asar.unpacked');
-    settingsFilePath = path
-      .join(appPath, '/assets/settings.json')
-      .replace('app.asar', 'app.asar.unpacked');
-    imagesPath = path
-      .join(appPath, '/assets/images/')
-      .replace('app.asar', 'app.asar.unpacked');
-    soundsPath = path
-      .join(appPath, '/assets/sounds/')
-      .replace('app.asar', 'app.asar.unpacked');
+    assetsPath = path.join(appPath, '/assets/');
+    settingsFilePath = path.join(appPath, '/assets/settings.json');
+    imagesPath = path.join(appPath, '/assets/images/');
+    soundsPath = path.join(appPath, '/assets/sounds/');
 
     fs.readFile(settingsFilePath, 'utf8', (err, data) => {
       if (err) {
@@ -62,9 +54,7 @@ export class SettingsService {
 
   get assetsPath(): string {
     const appPath = remote.app.getAppPath();
-    return path
-      .join(appPath, '/assets/')
-      .replace('app.asar', 'app.asar.unpacked');
+    return path.join(appPath, '/assets/');
   }
 
   private storeDefaultSettings() {

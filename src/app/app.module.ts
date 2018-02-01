@@ -24,6 +24,7 @@ import 'polyfills';
 import 'reflect-metadata';
 import 'zone.js/dist/zone-mix';
 
+import { BackgroundImageDirective } from 'app/background-image.directive';
 import { AboutDialogComponent } from 'app/components/settings/dialog/about-dialog.component';
 import { SettingsComponent } from 'app/components/settings/settings.component';
 import { StandupPickerComponent } from 'app/components/standup-picker/standup-picker.component';
@@ -44,7 +45,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     StandupPickerComponent,
     SettingsComponent,
     ConfirmDialogComponent,
-    AboutDialogComponent
+    AboutDialogComponent,
+    BackgroundImageDirective
   ],
   imports: [
     BrowserModule,

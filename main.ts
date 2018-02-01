@@ -1,4 +1,4 @@
-import { app, BrowserWindow, screen } from 'electron';
+import { app, BrowserWindow, globalShortcut, screen } from 'electron';
 import * as path from 'path';
 
 let win, serve;
@@ -7,17 +7,16 @@ serve = args.some(val => val === '--serve');
 import * as url from 'url';
 
 if (serve) {
-  require('electron-reload')(__dirname, {
-  });
+  require('electron-reload')(__dirname, {});
 }
 
 function createWindow() {
-
   const electronScreen = screen;
   const size = electronScreen.getPrimaryDisplay().workAreaSize;
 
   // Create the browser window.
   win = new BrowserWindow({
+    icon: __dirname + '/favicon.png',
     x: 0,
     y: 0,
     width: size.width,
@@ -25,11 +24,13 @@ function createWindow() {
   });
 
   // and load the index.html of the app.
-  win.loadURL(url.format({
-    protocol: 'file:',
-    pathname: path.join(__dirname, '/index.html'),
-    slashes:  true
-  }));
+  win.loadURL(
+    url.format({
+      protocol: 'file:',
+      pathname: path.join(__dirname, '/index.html'),
+      slashes: true
+    })
+  );
 
   // Open the DevTools.
   if (serve) {
@@ -46,11 +47,17 @@ function createWindow() {
 }
 
 try {
-
   // This method will be called when Electron has finished
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
   app.on('ready', createWindow);
+
+  app.on('ready', () => {
+    // Define global shortcut to open developer tools even in production builds
+    globalShortcut.register('CommandOrControl+Shift+Z', () => {
+      win.webContents.openDevTools();
+    });
+  });
 
   // Quit when all windows are closed.
   app.on('window-all-closed', () => {
@@ -68,7 +75,6 @@ try {
       createWindow();
     }
   });
-
 } catch (e) {
   // Catch Error
   // throw e;
