@@ -1,10 +1,20 @@
 .background {
-  background-color: #E8EAF6;
+  background-color: #e8eaf6;
   height: 100%;
 }
 
 .container {
   background-color: white;
+}
+
+.import-button {
+  width: 45%;
+}
+
+.flex-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .flex-container {
@@ -13,7 +23,6 @@
   justify-content: flex-start;
 }
 
-.file-import-flex-container,
 .mat-option-flex-container {
   display: flex;
   flex-direction: row;
@@ -41,10 +50,6 @@
 
 .form-group-container > * {
   width: 100%;
-}
-
-.team-members-container {
-  background-color: whitesmoke;
 }
 
 h1 {

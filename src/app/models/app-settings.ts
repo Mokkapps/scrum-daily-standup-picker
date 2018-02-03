@@ -1,6 +1,7 @@
 import { TeamMember } from './team-member';
 
 export interface AppSettings {
+  version: number;
   standupPicker: StandupPicker;
 }
 

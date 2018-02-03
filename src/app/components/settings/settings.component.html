@@ -17,17 +17,11 @@
 
     <div class="container mx-auto m-5 p-3">
         <h2 class="mb-4">{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.TITLE' | translate}}</h2>
-        <div class="file-import-flex-container">
-            <button mat-raised-button color="primary" (click)="openElectronFilePicker('image')">{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.IMAGE_UPLOAD' | translate}}</button>
-            {{'PAGES.SETTINGS.FORM.FILE_UPLOAD.SUPPORTED_IMAGE_FORMATS' | translate}}
+        <p>{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.DESCRIPTION' | translate}}</p>
+        <div class="flex-buttons">
+            <button mat-raised-button color="primary" (click)="openElectronFilePicker('image')" matTooltip="{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.SUPPORTED_IMAGE_FORMATS' | translate}}" class="import-button">{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.IMAGE_UPLOAD' | translate}}</button>
+            <button mat-raised-button color="primary" (click)="openElectronFilePicker('sound')" matTooltip="{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.SUPPORTED_SOUND_FORMATS' | translate}}" class="import-button">{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.SOUND_UPLOAD' | translate}}</button>
         </div>
-        <div class="file-import-flex-container mt-4">
-            <button mat-raised-button color="primary" (click)="openElectronFilePicker('sound')">{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.SOUND_UPLOAD' | translate}}</button>
-            {{'PAGES.SETTINGS.FORM.FILE_UPLOAD.SUPPORTED_SOUND_FORMATS' | translate}}
-        </div>
-        <mat-divider class="my-3"></mat-divider>
-        <button mat-raised-button color="primary" (click)="exportSettings()">{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.EXPORT.TITLE' | translate}}</button>
-        <button mat-raised-button color="primary" (click)="importSettings()" class="ml-4" disabled>{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.IMPORT.TITLE' | translate}}</button>
     </div>
 
     <div class="container mx-auto m-5 p-3">
@@ -90,7 +84,7 @@
 
                 <h3 class="mb-4">{{'PAGES.SETTINGS.FORM.STANDUP_PICKER.TEAM_MEMBERS' | translate}}</h3>
 
-                <div class="container team-members-container p-3" formArrayName="teamMembers">
+                <div class="container p-3" formArrayName="teamMembers">
                     <div class="row justify-content-center">
                         <div class="col" *ngFor="let teamMember of teamMembers.controls; let i=index" [formGroupName]="i">
                             <h4 class="mb-4">{{'PAGES.SETTINGS.FORM.STANDUP_PICKER.TEAM_MEMBER' | translate : { count: (i + 1)} }}</h4>
@@ -118,7 +112,7 @@
 
                 <h3 class="mb-4 mt-4">{{'PAGES.SETTINGS.FORM.STANDUP_PICKER.STANDUP_MUSIC.TITLE' | translate}}</h3>
 
-                <div class="container team-members-container p-3" formArrayName="standupMusic">
+                <div class="container p-3" formArrayName="standupMusic">
                     <div class="row">
                         <div class="col" *ngFor="let sound of standupMusic.controls; let i=index" [formGroupName]="i">
                             <mat-checkbox color="primary" formControlName="selected">{{sound.controls.name.value}}</mat-checkbox>

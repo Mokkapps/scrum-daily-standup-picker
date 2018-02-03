@@ -86,6 +86,7 @@ export class SettingsService {
 
   private getDefaultSettings(): AppSettings {
     return {
+      version: 1,
       standupPicker: {
         background: `${imagesPath}background.jpg`,
         standupHour: 9,
@@ -96,25 +97,20 @@ export class SettingsService {
         standupEndReminderSound: `${soundsPath}tickTock.wav`,
         standupMusic: [
           {
-            path: `${soundsPath}cheerful-song.wav`,
-            name: 'cheerful-song.wav',
+            path: `${soundsPath}success.wav`,
+            name: 'success.wav',
             selected: true
           }
         ],
         teamMembers: [
           {
             name: 'Max Mustermann',
-            image: `${imagesPath}user1.jpeg`,
+            image: `${imagesPath}placeholder.png`,
             disabled: false
           },
           {
-            name: 'Rainer Zufall',
-            image: `${imagesPath}user2.jpeg`,
-            disabled: false
-          },
-          {
-            name: 'Anna Bolika',
-            image: `${imagesPath}user3.jpeg`,
+            name: 'Erika Mustermann',
+            image: `${imagesPath}placeholder.png`,
             disabled: false
           }
         ]

@@ -41,7 +41,8 @@
         "INVALID_FORM":
           "Bitte erst alle erforderlichen Felder vor dem Speichern ausfüllen.",
         "FILE_UPLOAD": {
-          "TITLE": "Datei Import/Export",
+          "TITLE": "Datei Import",
+          "DESCRIPTION": "Empfohlenes Bildformat: 640 x 480",
           "SUPPORTED_IMAGE_FORMATS": "Unterstütze Bild-Formate: jpg, jpeg, png",
           "SUPPORTED_SOUND_FORMATS":
             "Unterstütze Sound-Formate: wav, mp3, ogg, m4a",
@@ -51,21 +52,7 @@
             "SUCCESS": "Einstellungen erfolgreich exportiert",
             "ERROR": "Fehler beim Datei-Export:"
           },
-          "IMPORT": {
-            "TITLE": "Einstellungen importieren",
-            "DIALOG_TITLE": "Datei auswählen",
-            "SUCCESS": "Einstellungen erfolgreich importiert",
-            "ERROR": "Fehler beim Datei-Import:"
-          },
-          "DELETE_DIALOG": {
-            "TITLE": "Löschen bestätigen",
-            "MESSAGE_IMAGES": "Willst du wirklich alle importierten Bilder löschen?",
-            "MESSAGE_SOUNDS": "Willst du wirklich alle importierten Sounds löschen?",
-            "SUCCESS": "Alle importierten Daten wurden gelöscht",
-            "ERROR": "Fehler beim Löschen der Dateien:"
-          },
-          "DELETE_ALL_IMAGES": "Alle Bilder löschen",
-          "DELETE_ALL_SOUNDS": "Alle Sounds löschen",
+          "NO_FOLDER_SELECTED": "Es wurde(n) keine Datei(en) ausgewählt",
           "IMAGE_UPLOAD": "Bild-Import",
           "SOUND_UPLOAD": "Sound-Import",
           "IMPORT_SUCCESS": "Datei(en) erfolgreich importiert und können jetzt ausgewählt werden",

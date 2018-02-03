@@ -13,7 +13,8 @@ import {
   MatInputModule,
   MatSelectModule,
   MatSnackBarModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatTooltipModule
 } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -73,7 +74,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatDividerModule,
     MatDialogModule,
     MatToolbarModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatTooltipModule
   ],
   entryComponents: [ConfirmDialogComponent, AboutDialogComponent],
   providers: [

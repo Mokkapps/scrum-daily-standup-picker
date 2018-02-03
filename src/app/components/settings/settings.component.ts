@@ -164,6 +164,7 @@ export class SettingsComponent {
     console.log('Submit', this.settingsForm.value.standupPicker);
     this.settingsService
       .updateSettings({
+        version: this.appSettings.version,
         standupPicker: this.settingsForm.value.standupPicker
       })
       .then(() => {
@@ -239,40 +240,6 @@ export class SettingsComponent {
     });
   }
 
-  importSettings() {
-    this.importBackup()
-      .then(() => {
-        this.showSnackbar(
-          this.translateService.instant(
-            'PAGES.SETTINGS.FORM.FILE_UPLOAD.IMPORT.SUCCESS'
-          )
-        );
-      })
-      .catch(err => {
-        const errorMessage = this.translateService.instant(
-          'PAGES.SETTINGS.FORM.FILE_UPLOAD.IMPORT.ERROR'
-        );
-        this.showSnackbar(`${errorMessage} ${err}`);
-      });
-  }
-
-  exportSettings() {
-    this.exportFiles()
-      .then(() => {
-        this.showSnackbar(
-          this.translateService.instant(
-            'PAGES.SETTINGS.FORM.FILE_UPLOAD.EXPORT.SUCCESS'
-          )
-        );
-      })
-      .catch(err => {
-        const errorMessage = this.translateService.instant(
-          'PAGES.SETTINGS.FORM.FILE_UPLOAD.EXPORT.ERROR'
-        );
-        this.showSnackbar(`${errorMessage} ${err}`);
-      });
-  }
-
   private getStandupSounds(): StandupSound[] {
     return this.soundFiles.map(soundFile => {
       let selected = true;
@@ -324,7 +291,6 @@ export class SettingsComponent {
     await this.settingsService.updateSettings(JSON.parse(importedData));
   }
 
-  // FIXME currently not working
   private async exportFiles() {
     const directory = await this.openElectronDialog(
       this.translateService.instant(
@@ -336,7 +302,7 @@ export class SettingsComponent {
     console.log(directory);
 
     await this.writeFile(
-      `${directory}/asdasas.json`,
+      `${directory}/settings_backup_v${this.appSettings.version}.json`,
       JSON.stringify(this.appSettings)
     );
   }
@@ -383,7 +349,11 @@ export class SettingsComponent {
         },
         folderPaths => {
           if (!folderPaths) {
-            reject('Could not find folder');
+            reject(
+              this.translateService.instant(
+                'PAGES.SETTINGS.FORM.FILE_UPLOAD.NO_FOLDER_SELECTED'
+              )
+            );
           }
           resolve(folderPaths);
         }
@@ -526,16 +496,14 @@ export class SettingsComponent {
   }
 
   private createTeamMemberGroup(name?: string, image?: string): FormGroup {
+    const memberWithPlaceHolderImage = this.imageFiles.find(file =>
+      file.includes('placeholder.png')
+    );
+    const placeholderImage = `${this.imagesPath}${memberWithPlaceHolderImage}`;
+
     return this.formBuilder.group({
       name: [name ? name : random_name(), Validators.required],
-      image: [
-        image
-          ? image
-          : this.appSettings
-            ? this.appSettings.standupPicker.teamMembers[0].image
-            : '',
-        Validators.required
-      ]
+      image: [image ? image : placeholderImage, Validators.required]
     });
   }
 
