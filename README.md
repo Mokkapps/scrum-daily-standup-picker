@@ -60,8 +60,6 @@ Your built files are in the /dist folder.
 
 # Used assets
 
-* User images: https://www.pexels.com/
 * Wallpaper: http://www.wallpapersbrowse.com/wallpaper/17862
-* Standup music: http://freesound.org/people/Mativve/sounds/391538/
 * Success sound: http://freesound.org/people/grunz/sounds/109662/
 * Tick tock sound: http://freesound.org/people/FoolBoyMedia/sounds/264498/
