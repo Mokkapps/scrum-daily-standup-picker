@@ -2,7 +2,9 @@
   "GENERAL": {
     "YES": "Ja",
     "NO": "Nein",
-    "CLOSE": "Schließen"
+    "CLOSE": "Schließen",
+    "ABORT": "Abbrechen",
+    "CONFIRM": "Bestätigen"
   },
   "PAGES": {
     "STANDUP_PICKER": {
@@ -46,16 +48,21 @@
           "SUPPORTED_IMAGE_FORMATS": "Unterstütze Bild-Formate: jpg, jpeg, png",
           "SUPPORTED_SOUND_FORMATS":
             "Unterstütze Sound-Formate: wav, mp3, ogg, m4a",
-          "EXPORT": {
-            "TITLE": "Einstellungen exportieren",
-            "DIALOG_TITLE": "Export-Verzeichnis wählen",
-            "SUCCESS": "Einstellungen erfolgreich exportiert",
-            "ERROR": "Fehler beim Datei-Export:"
+          "DELETE": {
+            "IMAGES": "Bilder löschen",
+            "SOUNDS": "Sounds löschen",
+            "DIALOG_IMAGES_TITLE": "Bilder löschen",
+            "DIALOG_IMAGES_MESSAGE": "Bitte Bilder auswählen, die gelöscht werden sollen. Diese Aktion kann nicht rückgängig gemacht werden.",
+            "DIALOG_SOUNDS_TITLE": "Sounds löschen",
+            "DIALOG_SOUNDS_MESSAGE": "Bitte Sounds auswählen, die gelöscht werden sollen. Diese Aktion kann nicht rückgängig gemacht werden.",
+            "SUCCESS": "Dateien erfolgreich gelöscht",
+            "ERROR": "Fehler beim Löschen der Dateien:"
           },
           "NO_FOLDER_SELECTED": "Es wurde(n) keine Datei(en) ausgewählt",
           "IMAGE_UPLOAD": "Bild-Import",
           "SOUND_UPLOAD": "Sound-Import",
-          "IMPORT_SUCCESS": "Datei(en) erfolgreich importiert und können jetzt ausgewählt werden",
+          "IMPORT_SUCCESS":
+            "Datei(en) erfolgreich importiert und können jetzt ausgewählt werden",
           "IMPORT_ERROR": "Fehler beim Datei-Import:"
         },
         "STANDUP_PICKER": {

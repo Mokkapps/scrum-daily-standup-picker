@@ -16,6 +16,7 @@ import * as path from 'path';
 import { Observable } from 'rxjs/Observable';
 
 import { AboutDialogComponent } from 'app/components/settings/dialog/about-dialog.component';
+import { DeleteFilesDialogComponent } from 'app/components/settings/dialog/delete-files-dialog.component';
 import { AppSettings } from 'app/models/app-settings';
 import { TeamMember } from 'app/models/team-member';
 import { SettingsService } from 'app/providers/settings.service';
@@ -123,6 +124,57 @@ export class SettingsComponent {
               this.showSnackbar(`${errorText} ${err}`, ERROR_DURATION_IN_MS);
             });
         }
+      });
+  }
+
+  deleteFiles(type: FileType) {
+    this.readFilesFromDirectory(type)
+      .then(files => {
+        const dialogRef = this.dialog.open(DeleteFilesDialogComponent, {
+          width: DIALOG_WIDTH,
+          data: {
+            title: this.translateService.instant(
+              `PAGES.SETTINGS.FORM.FILE_UPLOAD.DELETE.DIALOG_${
+                type === 'image' ? 'IMAGES' : 'SOUNDS'
+              }_TITLE`
+            ),
+            message: this.translateService.instant(
+              `PAGES.SETTINGS.FORM.FILE_UPLOAD.DELETE.DIALOG_${
+                type === 'image' ? 'IMAGES' : 'SOUNDS'
+              }_MESSAGE`
+            ),
+            files: files.map(file => {
+              return {
+                name: file,
+                path: `${
+                  type === 'image' ? this.imagesPath : this.soundsPath
+                }${file}`
+              };
+            })
+          }
+        });
+
+        dialogRef
+          .afterClosed()
+          .first()
+          .subscribe(result => {
+            if (result === true) {
+              this.showSnackbar(
+                this.translateService.instant(
+                  'PAGES.SETTINGS.FORM.FILE_UPLOAD.DELETE.SUCCESS'
+                )
+              );
+              this.updateForm(this.appSettings);
+            } else if (result) {
+              const errorText = this.translateService.instant(
+                'PAGES.SETTINGS.FORM.FILE_UPLOAD.DELETE.ERROR'
+              );
+              this.showSnackbar(`${errorText} ${result}`, ERROR_DURATION_IN_MS);
+            }
+          });
+      })
+      .catch(err => {
+        this.showSnackbar(err, ERROR_DURATION_IN_MS);
       });
   }
 

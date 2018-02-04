@@ -27,6 +27,7 @@ import 'zone.js/dist/zone-mix';
 
 import { BackgroundImageDirective } from 'app/background-image.directive';
 import { AboutDialogComponent } from 'app/components/settings/dialog/about-dialog.component';
+import { DeleteFilesDialogComponent } from 'app/components/settings/dialog/delete-files-dialog.component';
 import { SettingsComponent } from 'app/components/settings/settings.component';
 import { StandupPickerComponent } from 'app/components/standup-picker/standup-picker.component';
 import { SettingsService } from 'app/providers/settings.service';
@@ -47,6 +48,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     SettingsComponent,
     ConfirmDialogComponent,
     AboutDialogComponent,
+    DeleteFilesDialogComponent,
     BackgroundImageDirective
   ],
   imports: [
@@ -77,7 +79,11 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatCheckboxModule,
     MatTooltipModule
   ],
-  entryComponents: [ConfirmDialogComponent, AboutDialogComponent],
+  entryComponents: [
+    ConfirmDialogComponent,
+    AboutDialogComponent,
+    DeleteFilesDialogComponent
+  ],
   providers: [
     ElectronService,
     SettingsService,

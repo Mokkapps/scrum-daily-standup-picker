@@ -22,6 +22,10 @@
             <button mat-raised-button color="primary" (click)="openElectronFilePicker('image')" matTooltip="{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.SUPPORTED_IMAGE_FORMATS' | translate}}" class="import-button">{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.IMAGE_UPLOAD' | translate}}</button>
             <button mat-raised-button color="primary" (click)="openElectronFilePicker('sound')" matTooltip="{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.SUPPORTED_SOUND_FORMATS' | translate}}" class="import-button">{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.SOUND_UPLOAD' | translate}}</button>
         </div>
+        <div class="mt-4 flex-buttons">
+            <button mat-raised-button color="warn" (click)="deleteFiles('image')" class="import-button">{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.DELETE.IMAGES' | translate}}</button>
+            <button mat-raised-button color="warn" (click)="deleteFiles('sound')" class="import-button">{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.DELETE.SOUNDS' | translate}}</button>
+        </div>
     </div>
 
     <div class="container mx-auto m-5 p-3">
