@@ -1,5 +1,5 @@
 <div class="background" background-image="{{ backgroundImage }}">
-    <mat-toolbar color="primary">
+    <mat-toolbar color="primary" class="mat-elevation-z4">
         <mat-toolbar-row>
             {{title}}
             <span class="spacer"></span>
@@ -30,7 +30,7 @@
     <div class="container-fluid mb-4">
         <div class="row justify-content-center">
             <div class="col mt-4" *ngFor="let member of teamMembers">
-                <mat-card class="mx-auto" [ngClass]="{'mat-card-selected': member.selected, 'mat-card-disabled': member.disabled}" (click)="onMemberClick(member)">
+                <mat-card class="mx-auto member-card mat-elevation-z0" [ngClass]="{'member-card-selected': member.selected, 'member-card-disabled': member.disabled}" (click)="onMemberClick(member)">
                     <mat-card-header>
                         <mat-card-title class="member-title">{{member.name}}</mat-card-title>
                     </mat-card-header>

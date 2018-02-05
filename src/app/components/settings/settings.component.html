@@ -1,5 +1,5 @@
 <div class="background">
-    <mat-toolbar color="primary">
+    <mat-toolbar color="primary" class="mat-elevation-z4">
         <mat-toolbar-row>
             <button mat-icon-button class="mr-4" (click)="navigateBack()">
                 <mat-icon aria-label="Navigate back">navigate_before</mat-icon>
@@ -15,7 +15,7 @@
         </mat-toolbar-row>
     </mat-toolbar>
 
-    <div class="container mx-auto m-5 p-3">
+    <div class="container mx-auto m-5 p-3 mat-elevation-z1">
         <h2 class="mb-4">{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.TITLE' | translate}}</h2>
         <p>{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.DESCRIPTION' | translate}}</p>
         <div class="flex-buttons">
@@ -28,7 +28,7 @@
         </div>
     </div>
 
-    <div class="container mx-auto m-5 p-3">
+    <div class="container mx-auto m-5 p-3 mat-elevation-z1">
         <form [formGroup]="settingsForm" (ngSubmit)="onSubmit()" novalidate>
             <div class="form-group-container" formGroupName="standupPicker">
 
@@ -127,7 +127,7 @@
         </form>
     </div>
 
-    <div class="container mx-auto m-5 p-3">
+    <div class="container mx-auto m-5 p-3 mat-elevation-z1">
         <button mat-raised-button color="primary" class="submit-button" (click)="onSubmit()">{{'PAGES.SETTINGS.FORM.SAVE' | translate}}</button>
     </div>
 </div>

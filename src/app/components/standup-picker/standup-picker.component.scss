@@ -37,12 +37,11 @@
   font-size: 25px;
 }
 
-.mat-card-selected {
+.member-card-selected {
   background-color: yellow;
 }
 
-.mat-card-disabled {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+.member-card-disabled {
   opacity: 0.5;
 }
 
@@ -52,12 +51,17 @@
   object-fit: contain;
 }
 
-mat-card {
+.member-card {
   overflow: hidden;
   height: 250px;
   width: 300px;
+  transform: translate(0);
 }
 
-mat-card:hover {
-  box-shadow: 10px 10px 5px dimgray;
+.member-card:hover {
+  box-shadow: 0 8px 8px 8px rgba(0, 0, 0, 0.2), 0 8px 8px 0 rgba(0, 0, 0, 0.14),
+    0 8px 8px 0 rgba(0, 0, 0, 0.12) !important;
+  transform: translate3d(0, 0, 0);
+  transition: background 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
+    box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
 }
