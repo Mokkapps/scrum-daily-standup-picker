@@ -271,6 +271,7 @@ function getPlugins() {
 
 module.exports = {
   devtool: 'source-map',
+  target: 'node-webkit',
   externals: {
     electron: "require('electron')",
     buffer: "require('buffer')",

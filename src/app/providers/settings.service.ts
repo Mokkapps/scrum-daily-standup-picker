@@ -1,12 +1,12 @@
 import { Injectable, NgZone } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
-import { AppSettings } from 'app/models/app-settings';
-import { TeamMember } from 'app/models/team-member';
-import { remote } from 'electron';
-import * as fs from 'fs';
-import * as path from 'path';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
+
+import { AppSettings } from 'app/models/app-settings';
+import { TeamMember } from 'app/models/team-member';
+import { FileService } from 'app/providers/file.service';
+import { ElectronService } from './electron.service';
 
 let assetsPath = '';
 let settingsFilePath = '';
@@ -19,26 +19,30 @@ export class SettingsService {
     AppSettings | undefined
   > = new BehaviorSubject(undefined);
 
-  constructor(public snackBar: MatSnackBar, private zone: NgZone) {
-    const appPath = remote.app.getAppPath();
+  constructor(
+    public snackBar: MatSnackBar,
+    private zone: NgZone,
+    private electronService: ElectronService,
+    private fileService: FileService
+  ) {
+    assetsPath = electronService.assetsPath;
+    settingsFilePath = electronService.settingsFilePath;
+    imagesPath = electronService.imagesPath;
+    soundsPath = electronService.soundsPath;
 
-    assetsPath = path.join(appPath, '/assets/');
-    settingsFilePath = path.join(appPath, '/assets/settings.json');
-    imagesPath = path.join(appPath, '/assets/images/');
-    soundsPath = path.join(appPath, '/assets/sounds/');
-
-    fs.readFile(settingsFilePath, 'utf8', (err, data) => {
-      if (err) {
+    fileService
+      .readFile(settingsFilePath)
+      .then(data => {
+        this.zone.run(() => {
+          this.appSettings.next(JSON.parse(data));
+        });
+      })
+      .catch(err => {
         console.log(err);
         // Store default settings if no settings are available
         this.storeDefaultSettings();
         return;
-      }
-
-      this.zone.run(() => {
-        this.appSettings.next(JSON.parse(data));
       });
-    });
   }
 
   updateSettings(settings: AppSettings): Promise<any> {
@@ -50,11 +54,6 @@ export class SettingsService {
 
   get settings(): Observable<AppSettings | undefined> {
     return this.appSettings.asObservable();
-  }
-
-  get assetsPath(): string {
-    const appPath = remote.app.getAppPath();
-    return path.join(appPath, '/assets/');
   }
 
   private storeDefaultSettings() {
@@ -73,15 +72,7 @@ export class SettingsService {
   }
 
   private storeSettings(settings: AppSettings): Promise<any> {
-    return new Promise((resolve, reject) => {
-      fs.writeFile(settingsFilePath, JSON.stringify(settings), err => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve();
-        }
-      });
-    });
+    return this.fileService.writeFile(settingsFilePath, settings);
   }
 
   private getDefaultSettings(): AppSettings {

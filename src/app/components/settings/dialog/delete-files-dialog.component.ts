@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import * as fs from 'fs';
+
+import { FileService } from 'app/providers/file.service';
 
 @Component({
   selector: 'app-delete-files-dialog',
@@ -16,6 +17,7 @@ export class DeleteFilesDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<DeleteFilesDialogComponent>,
+    private fileService: FileService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.title = data.title;
@@ -27,14 +29,19 @@ export class DeleteFilesDialogComponent {
         checked: false
       };
     });
+
+    console.log(data);
   }
 
   onYesClick(): void {
     const filesToDelete = this.files.filter(file => file.checked);
 
+    console.log(this.files);
+    console.log(filesToDelete);
+
     if (filesToDelete.length > 0) {
       const deletePromises = filesToDelete.map(file =>
-        this.deleteFiles(file.path)
+        this.fileService.deleteFile(file.path)
       );
       Promise.all(deletePromises)
         .then(() => {
@@ -46,26 +53,6 @@ export class DeleteFilesDialogComponent {
     } else {
       this.dialogRef.close();
     }
-  }
-
-  private async deleteFiles(filePath: string) {
-    return new Promise((resolve, reject) => {
-      fs.access(filePath, error => {
-        if (!error) {
-          fs.unlink(filePath, function(error) {
-            if (!error) {
-              resolve();
-            } else {
-              console.log(error);
-              reject(error);
-            }
-          });
-        } else {
-          console.log(error);
-          reject(error);
-        }
-      });
-    });
   }
 }
 

@@ -65,6 +65,7 @@
     "@types/jasmine": "^2.8.6",
     "@types/jasminewd2": "2.0.3",
     "@types/node": "9.4.0",
+    "adm-zip": "^0.4.7",
     "autoprefixer": "7.2.5",
     "circular-dependency-plugin": "4.4.0",
     "codelyzer": "4.1.0",

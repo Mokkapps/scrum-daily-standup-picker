@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import * as path from 'path';
 import { Observable, Subscription } from 'rxjs/Rx';
 
 import { AppSettings } from 'app/models/app-settings';

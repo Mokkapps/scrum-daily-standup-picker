@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import * as electron from 'electron';
+import { ElectronService } from 'app/providers/electron.service';
 
 const GITHUB_URL = 'https://github.com/Mokkapps/scrum-daily-standup-picker';
 const MOKKAPPS_URL = 'https://www.mokkapps.de';
@@ -16,18 +16,19 @@ export class AboutDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<AboutDialogComponent>,
+    private electronService: ElectronService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    this.appVersion = electron.remote.app.getVersion();
+    this.appVersion = electronService.appVersion;
     this.year = new Date().getFullYear();
   }
 
   openGitHubUrl() {
-    electron.shell.openExternal(GITHUB_URL);
+    this.electronService.openExternal(GITHUB_URL);
   }
 
   openMokkappsUrl() {
-    electron.shell.openExternal(MOKKAPPS_URL);
+    this.electronService.openExternal(MOKKAPPS_URL);
   }
 
   onNoClick(): void {

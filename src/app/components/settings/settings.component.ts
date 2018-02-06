@@ -9,21 +9,19 @@ import {
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import * as electron from 'electron';
-import * as fs from 'fs';
 import { readFile } from 'jsonfile';
-import * as path from 'path';
+import * as random_name from 'node-random-name';
 import { Observable } from 'rxjs/Observable';
+import { ElectronService } from './../../providers/electron.service';
 
 import { AboutDialogComponent } from 'app/components/settings/dialog/about-dialog.component';
 import { DeleteFilesDialogComponent } from 'app/components/settings/dialog/delete-files-dialog.component';
 import { AppSettings } from 'app/models/app-settings';
 import { TeamMember } from 'app/models/team-member';
+import { FileService } from 'app/providers/file.service';
 import { SettingsService } from 'app/providers/settings.service';
 import { StandupSound } from '../../models/app-settings';
 import { ConfirmDialogComponent } from './dialog/confirm-dialog.component';
-
-const random_name = require('node-random-name');
 
 const DIALOG_WIDTH = '500px';
 const ERROR_DURATION_IN_MS = 5000;
@@ -62,11 +60,12 @@ export class SettingsComponent {
     private settingsService: SettingsService,
     private formBuilder: FormBuilder,
     private router: Router,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private electronService: ElectronService,
+    private fileService: FileService
   ) {
-    const appPath = electron.remote.app.getAppPath();
-    this.imagesPath = path.join(appPath, '/assets/images/');
-    this.soundsPath = path.join(appPath, '/assets/sounds/');
+    this.imagesPath = electronService.imagesPath;
+    this.soundsPath = electronService.soundsPath;
 
     this.createForm();
 
@@ -87,49 +86,10 @@ export class SettingsComponent {
     return <FormArray>this.getStandupPickerFormGroup().controls.standupMusic;
   }
 
-  deleteAllFiles(fileType: FileType) {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: DIALOG_WIDTH,
-      data: {
-        title: this.translateService.instant(
-          'PAGES.SETTINGS.FORM.FILE_UPLOAD.DELETE_DIALOG.TITLE'
-        ),
-        message: this.translateService.instant(
-          fileType === 'image'
-            ? 'PAGES.SETTINGS.FORM.FILE_UPLOAD.DELETE_DIALOG.MESSAGE_IMAGES'
-            : 'PAGES.SETTINGS.FORM.FILE_UPLOAD.DELETE_DIALOG.MESSAGE_SOUNDS'
-        )
-      }
-    });
-
-    dialogRef
-      .afterClosed()
-      .first()
-      .subscribe(result => {
-        if (result === true) {
-          this.deleteAllFilesInDirectory(fileType)
-            .then(() => {
-              console.log(`Deleted all files of type ${fileType}`);
-              this.showSnackbar(
-                this.translateService.instant(
-                  'PAGES.SETTINGS.FORM.FILE_UPLOAD.DELETE_DIALOG.SUCCESS'
-                )
-              );
-              this.updateForm(this.appSettings);
-            })
-            .catch(err => {
-              const errorText = this.translateService.instant(
-                'PAGES.SETTINGS.FORM.FILE_UPLOAD.DELETE_DIALOG.ERROR'
-              );
-              this.showSnackbar(`${errorText} ${err}`, ERROR_DURATION_IN_MS);
-            });
-        }
-      });
-  }
-
   deleteFiles(type: FileType) {
-    this.readFilesFromDirectory(type)
-      .then(files => {
+    this.fileService
+      .readDirectory(this.getPathForFileType(type))
+      .then((files: string[]) => {
         const dialogRef = this.dialog.open(DeleteFilesDialogComponent, {
           width: DIALOG_WIDTH,
           data: {
@@ -178,7 +138,7 @@ export class SettingsComponent {
       });
   }
 
-  navigateBack() {
+  navigateBack(): void {
     if (this.settingsForm.dirty) {
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
         width: DIALOG_WIDTH,
@@ -267,7 +227,7 @@ export class SettingsComponent {
         : '';
   }
 
-  openElectronFilePicker(type: string) {
+  openElectronFilePicker(type: string): void {
     this.importFiles(type)
       .then(() => {
         console.log(`Successfully saved ${type}`);
@@ -286,10 +246,14 @@ export class SettingsComponent {
       });
   }
 
-  showAboutDialog() {
+  showAboutDialog(): void {
     const dialogRef = this.dialog.open(AboutDialogComponent, {
       width: DIALOG_WIDTH
     });
+  }
+
+  private getPathForFileType(fileType: FileType): string {
+    return fileType === 'image' ? this.imagesPath : this.soundsPath;
   }
 
   private getStandupSounds(): StandupSound[] {
@@ -310,59 +274,10 @@ export class SettingsComponent {
     });
   }
 
-  private async deleteAllFilesInDirectory(fileType: FileType) {
-    const files = await this.readFilesFromDirectory(fileType);
-    const path = fileType === 'image' ? this.imagesPath : this.soundsPath;
-
-    for (const file of files) {
-      fs.unlink(`${path}${file}`, err => {
-        if (err) {
-          throw err;
-        }
-      });
-    }
-  }
-
-  private async importBackup() {
-    const filePath = await this.openElectronDialog(
-      this.translateService.instant(
-        'PAGES.SETTINGS.FORM.FILE_UPLOAD.IMPORT.TITLE'
-      ),
-      ['openFile'],
-      BACKUP_FILTER
-    );
-    const backupData = await this.readFile(filePath.toString());
-    const filename = this.getFileNameWithExtension(filePath);
-    await this.writeFile(
-      `${this.settingsService.assetsPath}/imported_settings.json`,
-      backupData
-    );
-    const importedData = await this.readFile(
-      `${this.settingsService.assetsPath}/settings.json`
-    );
-    await this.settingsService.updateSettings(JSON.parse(importedData));
-  }
-
-  private async exportFiles() {
-    const directory = await this.openElectronDialog(
-      this.translateService.instant(
-        'PAGES.SETTINGS.FORM.FILE_UPLOAD.EXPORT.DIALOG_TITLE'
-      ),
-      ['openDirectory']
-    );
-
-    console.log(directory);
-
-    await this.writeFile(
-      `${directory}/settings_backup_v${this.appSettings.version}.json`,
-      JSON.stringify(this.appSettings)
-    );
-  }
-
   private async importFiles(type: string) {
     const filter = type === 'image' ? IMAGES_FILTER : SOUNDS_FILTER;
     // Dialog
-    const paths = await this.openElectronDialog(
+    const paths = await this.electronService.openElectronDialog(
       this.translateService.instant('PAGES.SETTINGS.FORM.FILE_UPLOAD.TITLE'),
       ['openFile', 'multiSelections'],
       filter
@@ -370,47 +285,18 @@ export class SettingsComponent {
 
     for (let i = 0; i < paths.length; i++) {
       // Read file
-      const data = await this.readFile(paths[i]);
+      const data = await this.fileService.readFile(paths[i]);
       // Write file
       const filename = this.getFileNameWithExtension(paths[i]);
       const writeFilePath = `${
         type === 'image' ? this.imagesPath : this.soundsPath
       }${filename}`;
-      await this.writeFile(writeFilePath, data);
+      await this.fileService.writeFile(writeFilePath, data);
     }
   }
 
   private getFileNameWithExtension(path: string): string {
     return (path.toString().match(/[^\\/]+\.[^\\/]+$/) || []).pop();
-  }
-
-  private openElectronDialog(
-    title: string,
-    properties: any, // No Electron type available
-    filter?: {
-      name: string;
-      extensions: string[];
-    }
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      electron.remote.dialog.showOpenDialog(
-        {
-          title: title,
-          properties: properties,
-          filters: [filter]
-        },
-        folderPaths => {
-          if (!folderPaths) {
-            reject(
-              this.translateService.instant(
-                'PAGES.SETTINGS.FORM.FILE_UPLOAD.NO_FOLDER_SELECTED'
-              )
-            );
-          }
-          resolve(folderPaths);
-        }
-      );
-    });
   }
 
   private validateAllFormFields(formGroup: FormGroup | FormArray) {
@@ -434,45 +320,9 @@ export class SettingsComponent {
 
   private async readFilesFromFileSystem(): Promise<any> {
     return Promise.all([
-      this.readFilesFromDirectory('image'),
-      this.readFilesFromDirectory('sound')
+      this.fileService.readDirectory(this.getPathForFileType('image')),
+      this.fileService.readDirectory(this.getPathForFileType('sound'))
     ]);
-  }
-
-  private readFilesFromDirectory(type: FileType): Promise<string[]> {
-    return new Promise((resolve, reject) => {
-      fs.readdir(
-        `${type === 'image' ? this.imagesPath : this.soundsPath}`,
-        (err, files) => {
-          if (err) {
-            reject(err);
-          }
-          resolve(files);
-        }
-      );
-    });
-  }
-
-  private async readFile(path: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-      fs.readFile(path, (err, data) => {
-        if (err) {
-          reject(err);
-        }
-        resolve(data);
-      });
-    });
-  }
-
-  private async writeFile(path: string, data: any): Promise<any> {
-    return new Promise((resolve, reject) => {
-      fs.writeFile(path, data, err => {
-        if (err) {
-          reject(err);
-        }
-        resolve();
-      });
-    });
   }
 
   private showSnackbar(message: string, duration: number = 2000) {
