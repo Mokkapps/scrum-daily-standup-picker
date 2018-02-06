@@ -1,9 +1,11 @@
 <h2 mat-dialog-title>{{title}}</h2>
 <mat-dialog-content class="mb-4">{{message}}</mat-dialog-content>
-<div class="flex-container">
-    <ng-container *ngFor="let file of files; let i=index">
-        <mat-checkbox color="primary" [(ngModel)]="files[i].checked">{{file.name}}</mat-checkbox>
-    </ng-container>
+<div class="container">
+    <div class="row">
+        <div class="col-3" *ngFor="let file of files; let i=index">
+            <mat-checkbox color="primary" [(ngModel)]="files[i].checked">{{file.name}}</mat-checkbox>
+        </div>
+    </div>
 </div>
 <mat-dialog-actions>
     <button mat-button mat-dialog-close>{{'GENERAL.ABORT' | translate}}</button>

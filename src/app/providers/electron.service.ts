@@ -60,7 +60,23 @@ export class ElectronService {
     return window && window.process && window.process.type;
   }
 
-  openElectronDialog(
+  showSaveDialog(title: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      remote.dialog.showSaveDialog(
+        {
+          title
+        },
+        folderPath => {
+          if (!folderPath) {
+            reject('No folder selected');
+          }
+          resolve(folderPath);
+        }
+      );
+    });
+  }
+
+  showOpenDialog(
     title: string,
     properties: any, // No Electron type available
     filter?: {

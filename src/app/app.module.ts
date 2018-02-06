@@ -30,8 +30,8 @@ import { DeleteFilesDialogComponent } from 'app/components/settings/dialog/delet
 import { SettingsComponent } from 'app/components/settings/settings.component';
 import { StandupPickerComponent } from 'app/components/standup-picker/standup-picker.component';
 import { BackgroundImageDirective } from 'app/directives/background-image.directive';
+import { ArchiverService } from 'app/providers/archiver.service';
 import { SettingsService } from 'app/providers/settings.service';
-import { ZipService } from 'app/providers/zip.service';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ConfirmDialogComponent } from './components/settings/dialog/confirm-dialog.component';
@@ -89,7 +89,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   providers: [
     ElectronService,
     SettingsService,
-    ZipService,
+    ArchiverService,
     FileService,
     { provide: MAT_LABEL_GLOBAL_OPTIONS, useValue: { float: 'always' } }
   ],

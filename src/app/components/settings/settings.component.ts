@@ -21,12 +21,18 @@ import { TeamMember } from 'app/models/team-member';
 import { FileService } from 'app/providers/file.service';
 import { SettingsService } from 'app/providers/settings.service';
 import { StandupSound } from '../../models/app-settings';
+import { ArchiverService } from './../../providers/archiver.service';
 import { ConfirmDialogComponent } from './dialog/confirm-dialog.component';
 
 const DIALOG_WIDTH = '500px';
+const WIDE_DIALOG_WIDTH = '80vw';
 const ERROR_DURATION_IN_MS = 5000;
 const NUMBER_PATTERN = '[0-9]+';
 const IMAGES_FILTER = { name: 'Images', extensions: ['jpg', 'jpeg', 'png'] };
+const ZIP_FILTER = {
+  name: 'Backup',
+  extensions: ['zip']
+};
 const SOUNDS_FILTER = {
   name: 'Sounds',
   extensions: ['wav', 'mp3', 'ogg', 'm4a']
@@ -62,7 +68,8 @@ export class SettingsComponent {
     private router: Router,
     private translateService: TranslateService,
     private electronService: ElectronService,
-    private fileService: FileService
+    private fileService: FileService,
+    private archiverService: ArchiverService
   ) {
     this.imagesPath = electronService.imagesPath;
     this.soundsPath = electronService.soundsPath;
@@ -86,12 +93,75 @@ export class SettingsComponent {
     return <FormArray>this.getStandupPickerFormGroup().controls.standupMusic;
   }
 
+  exportSettings() {
+    const errText = this.translateService.instant(
+      'PAGES.SETTINGS.FORM.FILE_UPLOAD.EXPORT_BACKUP.ERROR'
+    );
+
+    this.electronService
+      .showSaveDialog(
+        this.translateService.instant(
+          'PAGES.SETTINGS.FORM.FILE_UPLOAD.EXPORT_BACKUP.TITLE'
+        )
+      )
+      .then(folderPath => {
+        this.archiverService
+          .createArchive(folderPath)
+          .then(() => {
+            this.showSnackbar(
+              this.translateService.instant(
+                'PAGES.SETTINGS.FORM.FILE_UPLOAD.EXPORT_BACKUP.SUCCESS',
+                { path: folderPath }
+              )
+            );
+          })
+          .catch(err => {
+            this.showSnackbar(`${errText} ${err}`, ERROR_DURATION_IN_MS);
+          });
+      })
+      .catch(err => {
+        this.showSnackbar(`${errText} ${err}`, ERROR_DURATION_IN_MS);
+      });
+  }
+
+  importSettings() {
+    const errText = this.translateService.instant(
+      'PAGES.SETTINGS.FORM.FILE_UPLOAD.IMPORT_BACKUP.ERROR'
+    );
+
+    this.electronService
+      .showOpenDialog(
+        this.translateService.instant(
+          'PAGES.SETTINGS.FORM.FILE_UPLOAD.IMPORT_BACKUP.TITLE'
+        ),
+        ['openFile'],
+        ZIP_FILTER
+      )
+      .then(folderPaths => {
+        this.importBackup(folderPaths[0])
+          .then(() => {
+            this.showSnackbar(
+              this.translateService.instant(
+                'PAGES.SETTINGS.FORM.FILE_UPLOAD.IMPORT_BACKUP.SUCCESS'
+              )
+            );
+            this.router.navigate(['../']);
+          })
+          .catch(err => {
+            this.showSnackbar(`${errText} ${err}`, ERROR_DURATION_IN_MS);
+          });
+      })
+      .catch(err => {
+        this.showSnackbar(`${errText} ${err}`, ERROR_DURATION_IN_MS);
+      });
+  }
+
   deleteFiles(type: FileType) {
     this.fileService
       .readDirectory(this.getPathForFileType(type))
       .then((files: string[]) => {
         const dialogRef = this.dialog.open(DeleteFilesDialogComponent, {
-          width: DIALOG_WIDTH,
+          width: WIDE_DIALOG_WIDTH,
           data: {
             title: this.translateService.instant(
               `PAGES.SETTINGS.FORM.FILE_UPLOAD.DELETE.DIALOG_${
@@ -252,6 +322,14 @@ export class SettingsComponent {
     });
   }
 
+  private async importBackup(zipPath: string) {
+    await this.fileService.deleteFile(this.electronService.settingsFilePath);
+    await this.fileService.deleteDirFiles(this.electronService.imagesPath);
+    await this.fileService.deleteDirFiles(this.electronService.soundsPath);
+    await this.archiverService.readArchive(zipPath);
+    this.settingsService.readStoredSettings();
+  }
+
   private getPathForFileType(fileType: FileType): string {
     return fileType === 'image' ? this.imagesPath : this.soundsPath;
   }
@@ -277,7 +355,7 @@ export class SettingsComponent {
   private async importFiles(type: string) {
     const filter = type === 'image' ? IMAGES_FILTER : SOUNDS_FILTER;
     // Dialog
-    const paths = await this.electronService.openElectronDialog(
+    const paths = await this.electronService.showOpenDialog(
       this.translateService.instant('PAGES.SETTINGS.FORM.FILE_UPLOAD.TITLE'),
       ['openFile', 'multiSelections'],
       filter

@@ -19,12 +19,23 @@
         <h2 class="mb-4">{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.TITLE' | translate}}</h2>
         <p>{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.DESCRIPTION' | translate}}</p>
         <div class="flex-buttons">
-            <button mat-raised-button color="primary" (click)="openElectronFilePicker('image')" matTooltip="{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.SUPPORTED_IMAGE_FORMATS' | translate}}" class="import-button">{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.IMAGE_UPLOAD' | translate}}</button>
-            <button mat-raised-button color="primary" (click)="openElectronFilePicker('sound')" matTooltip="{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.SUPPORTED_SOUND_FORMATS' | translate}}" class="import-button">{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.SOUND_UPLOAD' | translate}}</button>
+            <button mat-raised-button color="primary" (click)="openElectronFilePicker('image')" matTooltip="{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.SUPPORTED_IMAGE_FORMATS' | translate}}"
+                class="import-button">{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.IMAGE_UPLOAD' | translate}}</button>
+            <button mat-raised-button color="primary" (click)="openElectronFilePicker('sound')" matTooltip="{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.SUPPORTED_SOUND_FORMATS' | translate}}"
+                class="import-button">{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.SOUND_UPLOAD' | translate}}</button>
         </div>
+        <mat-divider class="my-4"></mat-divider>
+        <p>{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.DELETE.DESCRIPTION' | translate}}</p>
         <div class="mt-4 flex-buttons">
             <button mat-raised-button color="warn" (click)="deleteFiles('image')" class="import-button">{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.DELETE.IMAGES' | translate}}</button>
             <button mat-raised-button color="warn" (click)="deleteFiles('sound')" class="import-button">{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.DELETE.SOUNDS' | translate}}</button>
+        </div>
+        <mat-divider class="my-4"></mat-divider>
+        <p>{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.BACKUP_DESCRIPTION' | translate}}</p>
+        <p class="bold-text">{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.BACKUP_WARNING' | translate}}</p>
+        <div class="mt-4 flex-buttons">
+            <button mat-raised-button color="primary" (click)="exportSettings()" class="import-button">{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.EXPORT_BACKUP.BUTTON' | translate}}</button>
+            <button mat-raised-button color="primary" (click)="importSettings()" class="import-button">{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.IMPORT_BACKUP.BUTTON' | translate}}</button>
         </div>
     </div>
 
@@ -118,7 +129,7 @@
 
                 <div class="container p-3" formArrayName="standupMusic">
                     <div class="row">
-                        <div class="col" *ngFor="let sound of standupMusic.controls; let i=index" [formGroupName]="i">
+                        <div class="col-4" *ngFor="let sound of standupMusic.controls; let i=index" [formGroupName]="i">
                             <mat-checkbox color="primary" formControlName="selected">{{sound.controls.name.value}}</mat-checkbox>
                         </div>
                     </div>

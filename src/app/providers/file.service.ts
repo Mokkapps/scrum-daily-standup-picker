@@ -58,7 +58,7 @@ export class FileService {
     });
   }
 
-  async deleteDirFiles(dirPath: string) {
+  async deleteDirFiles(dirPath: string): Promise<any> {
     return new Promise((resolve, reject) => {
       // get all file names in directory
       fs.readdir(dirPath, (err, fileNames) => {
@@ -77,6 +77,8 @@ export class FileService {
             console.log(`Deleted ${name}`);
           });
         }
+
+        resolve();
       });
     });
   }

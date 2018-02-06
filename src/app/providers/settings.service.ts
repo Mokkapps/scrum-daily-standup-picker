@@ -8,6 +8,8 @@ import { TeamMember } from 'app/models/team-member';
 import { FileService } from 'app/providers/file.service';
 import { ElectronService } from './electron.service';
 
+const SETTINGS_VERSION = 1;
+
 let assetsPath = '';
 let settingsFilePath = '';
 let imagesPath = '';
@@ -30,7 +32,19 @@ export class SettingsService {
     imagesPath = electronService.imagesPath;
     soundsPath = electronService.soundsPath;
 
-    fileService
+    this.readStoredSettings();
+  }
+
+  get settingsVersion(): number {
+    return SETTINGS_VERSION;
+  }
+
+  get settings(): Observable<AppSettings | undefined> {
+    return this.appSettings.asObservable();
+  }
+
+  readStoredSettings() {
+    this.fileService
       .readFile(settingsFilePath)
       .then(data => {
         this.zone.run(() => {
@@ -41,7 +55,6 @@ export class SettingsService {
         console.log(err);
         // Store default settings if no settings are available
         this.storeDefaultSettings();
-        return;
       });
   }
 
@@ -50,10 +63,6 @@ export class SettingsService {
       this.appSettings.next(settings);
     });
     return this.storeSettings(settings);
-  }
-
-  get settings(): Observable<AppSettings | undefined> {
-    return this.appSettings.asObservable();
   }
 
   private storeDefaultSettings() {
@@ -72,12 +81,12 @@ export class SettingsService {
   }
 
   private storeSettings(settings: AppSettings): Promise<any> {
-    return this.fileService.writeFile(settingsFilePath, settings);
+    return this.fileService.writeFile(settingsFilePath, JSON.stringify(settings));
   }
 
   private getDefaultSettings(): AppSettings {
     return {
-      version: 1,
+      version: SETTINGS_VERSION,
       standupPicker: {
         background: `${imagesPath}background.jpg`,
         standupHour: 9,

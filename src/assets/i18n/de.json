@@ -48,13 +48,32 @@
           "SUPPORTED_IMAGE_FORMATS": "Unterstütze Bild-Formate: jpg, jpeg, png",
           "SUPPORTED_SOUND_FORMATS":
             "Unterstütze Sound-Formate: wav, mp3, ogg, m4a",
+          "BACKUP_DESCRIPTION":
+            "Es können die aktuellen Einstellungen exportiert oder bestehende importiert werden.",
+          "BACKUP_WARNING":
+            "ACHTUNG: Backup-Import funktioniert nur auf dem gleichen Rechner und dem gleichen Benutzer.",
+          "EXPORT_BACKUP": {
+            "BUTTON": "Backup erstellen",
+            "TITLE": "Ordner zum Speichern des Backups auswählen",
+            "ERROR": "Fehler beim Exportieren des Backups:",
+            "SUCCESS": "Backup erfolgreich nach {{path}} exportiert"
+          },
+          "IMPORT_BACKUP": {
+            "BUTTON": "Backup importieren",
+            "TITLE": "Ordner zum Speichern des Backups auswählen",
+            "ERROR": "Fehler beim Importieren des Backups:",
+            "SUCCESS": "Backup erfolgreich importiert"
+          },
           "DELETE": {
+            "DESCRIPTION": "Folgende Button ermöglichen das Löschen einzelner oder mehrerer Bilder bzw. Sounds.",
             "IMAGES": "Bilder löschen",
             "SOUNDS": "Sounds löschen",
             "DIALOG_IMAGES_TITLE": "Bilder löschen",
-            "DIALOG_IMAGES_MESSAGE": "Bitte Bilder auswählen, die gelöscht werden sollen. Diese Aktion kann nicht rückgängig gemacht werden.",
+            "DIALOG_IMAGES_MESSAGE":
+              "Bitte Bilder auswählen, die gelöscht werden sollen. Diese Aktion kann nicht rückgängig gemacht werden.",
             "DIALOG_SOUNDS_TITLE": "Sounds löschen",
-            "DIALOG_SOUNDS_MESSAGE": "Bitte Sounds auswählen, die gelöscht werden sollen. Diese Aktion kann nicht rückgängig gemacht werden.",
+            "DIALOG_SOUNDS_MESSAGE":
+              "Bitte Sounds auswählen, die gelöscht werden sollen. Diese Aktion kann nicht rückgängig gemacht werden.",
             "SUCCESS": "Dateien erfolgreich gelöscht",
             "ERROR": "Fehler beim Löschen der Dateien:"
           },
