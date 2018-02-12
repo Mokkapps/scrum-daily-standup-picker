@@ -3,18 +3,23 @@ import { MatIconModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
+
 import { ElectronService } from 'app/providers/electron.service';
+import { createElectronServiceMock } from 'tests/mocks';
 import { AppComponent } from './app.component';
 
 let component: AppComponent;
 let fixture: ComponentFixture<AppComponent>;
 
 describe('AppComponent', () => {
+  let electronService: any;
   beforeEach(
     async(() => {
+      electronService = createElectronServiceMock();
+
       TestBed.configureTestingModule({
         declarations: [AppComponent],
-        providers: [ElectronService],
+        providers: [{ provide: ElectronService, useValue: electronService }],
         imports: [RouterTestingModule, MatIconModule, TranslateModule.forRoot()]
       }).compileComponents();
     })
@@ -30,14 +35,6 @@ describe('AppComponent', () => {
     'should create the app',
     async(() => {
       expect(component).toBeTruthy();
-    })
-  );
-
-  it(
-    'should show settings button',
-    async(() => {
-      const compiled = fixture.debugElement.nativeElement;
-      expect(compiled.querySelector('a')).toBeDefined();
     })
   );
 });

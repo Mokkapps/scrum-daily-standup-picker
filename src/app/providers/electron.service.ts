@@ -4,13 +4,14 @@ import { TranslateService } from '@ngx-translate/core';
 // If you import a module but never use any of the imported values other than as TypeScript types,
 // the resulting javascript file will look as if you never imported the module at all.
 import * as childProcess from 'child_process';
-import { ipcRenderer, remote, shell } from 'electron';
+import { ipcRenderer } from 'electron';
 import * as path from 'path';
 
 @Injectable()
 export class ElectronService {
   ipcRenderer: typeof ipcRenderer;
   childProcess: typeof childProcess;
+  electron: any;
 
   private _imagesPath: string;
   private _soundsPath: string;
@@ -20,12 +21,13 @@ export class ElectronService {
   constructor(private translateService: TranslateService) {
     // Conditional imports
     if (this.isElectron()) {
-      this.ipcRenderer = window.require('electron').ipcRenderer;
+      this.electron = window.require('electron');
+      this.ipcRenderer = this.electron.ipcRenderer;
       this.childProcess = window.require('child_process');
     }
 
     // App paths
-    const appPath = remote.app.getAppPath();
+    const appPath = this.electron.remote.app.getAppPath();
     this._imagesPath = path.join(appPath, '/assets/images/');
     this._soundsPath = path.join(appPath, '/assets/sounds/');
     this._assetsPath = path.join(appPath, '/assets/');
@@ -49,11 +51,11 @@ export class ElectronService {
   }
 
   get appVersion(): string {
-    return remote.app.getVersion();
+    return this.electron.remote.app.getVersion();
   }
 
   openExternal(url: string) {
-    shell.openExternal(url);
+    this.electron.shell.openExternal(url);
   }
 
   isElectron() {
@@ -62,7 +64,7 @@ export class ElectronService {
 
   showSaveDialog(title: string): Promise<string> {
     return new Promise((resolve, reject) => {
-      remote.dialog.showSaveDialog(
+      this.electron.remote.dialog.showSaveDialog(
         {
           title
         },
@@ -85,7 +87,7 @@ export class ElectronService {
     }
   ): Promise<string[]> {
     return new Promise((resolve, reject) => {
-      remote.dialog.showOpenDialog(
+      this.electron.remote.dialog.showOpenDialog(
         {
           title: title,
           properties: properties,

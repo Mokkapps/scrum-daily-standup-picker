@@ -43,7 +43,7 @@ export class SettingsService {
     return this.appSettings.asObservable();
   }
 
-  readStoredSettings() {
+  readStoredSettings(): void {
     this.fileService
       .readFile(settingsFilePath)
       .then(data => {
@@ -81,7 +81,10 @@ export class SettingsService {
   }
 
   private storeSettings(settings: AppSettings): Promise<any> {
-    return this.fileService.writeFile(settingsFilePath, JSON.stringify(settings));
+    return this.fileService.writeFile(
+      settingsFilePath,
+      JSON.stringify(settings)
+    );
   }
 
   private getDefaultSettings(): AppSettings {
