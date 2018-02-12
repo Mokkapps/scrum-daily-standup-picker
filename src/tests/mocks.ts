@@ -1,4 +1,45 @@
-import { readFile } from 'jsonfile';
+import { Observable } from 'rxjs/Observable';
+
+export const TEST_SETTINGS = {
+  version: 1,
+  standupPicker: {
+    background: 'imagesPath/background.jpg',
+    standupHour: 9,
+    standupMinute: 59,
+    standupTimeInMin: 15,
+    standupEndReminderAfterMin: 10,
+    successSound: 'soundsPath/success.wav',
+    standupEndReminderSound: 'soundsPath/tickTock.wav',
+    standupMusic: [
+      {
+        path: 'soundsPath/success.wav',
+        name: 'success.wav',
+        selected: true
+      }
+    ],
+    teamMembers: [
+      {
+        name: 'Max Mustermann',
+        image: 'imagesPath/placeholder.png',
+        disabled: false
+      },
+      {
+        name: 'Erika Mustermann',
+        image: 'imagesPath/placeholder.png',
+        disabled: false
+      }
+    ]
+  }
+};
+
+export function createSettingsServiceMock() {
+  const settingsServiceMock = jasmine.createSpyObj('SettingsService', [
+    'settings'
+  ]);
+  settingsServiceMock.settings = Observable.of(TEST_SETTINGS);
+  return settingsServiceMock;
+}
+
 export function createElectronServiceMock() {
   const electronServiceMock = jasmine.createSpyObj('ElectronService', [
     'isElectron'
@@ -10,7 +51,10 @@ export function createElectronServiceMock() {
 }
 
 export function createFileServiceMock() {
-  const fileServiceMock = jasmine.createSpyObj('FileService', ['readFile', 'writeFile']);
+  const fileServiceMock = jasmine.createSpyObj('FileService', [
+    'readFile',
+    'writeFile'
+  ]);
   fileServiceMock.readFile.and.returnValue(Promise.resolve('path'));
   fileServiceMock.writeFile.and.returnValue(Promise.resolve());
   return fileServiceMock;
