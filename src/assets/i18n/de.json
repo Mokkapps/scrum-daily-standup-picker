@@ -11,6 +11,7 @@
       "TITLE": "Standup Picker",
       "CLICK_TO_SELECT_TEAM_MEMBER": "Zum Starten rechts auf Play-Icon klicken",
       "STARTS_TODAY": "{{name}} beginnt heute",
+      "STARTS": "beginnt heute",
       "REMAINING_STANDUP_TIME":
         "Restliche Standup Zeit: {{remainingMinutes}} Minuten",
       "PLEASE_WAIT": "Bitte warten...",
@@ -18,7 +19,8 @@
         "1": "1. Was hast du gestern gemacht",
         "2": "2. Was nimmst du dir für heute vor",
         "3": "3. Was blockiert dich, um das Sprint Ziel zu erreichen"
-      }
+      },
+      "OUT_OF_OFFICE": "ist heute nicht da"
     },
     "SETTINGS": {
       "FORM": {
@@ -65,7 +67,8 @@
             "SUCCESS": "Backup erfolgreich importiert"
           },
           "DELETE": {
-            "DESCRIPTION": "Folgende Button ermöglichen das Löschen einzelner oder mehrerer Bilder bzw. Sounds.",
+            "DESCRIPTION":
+              "Folgende Button ermöglichen das Löschen einzelner oder mehrerer Bilder bzw. Sounds.",
             "IMAGES": "Bilder löschen",
             "SOUNDS": "Sounds löschen",
             "DIALOG_IMAGES_TITLE": "Bilder löschen",

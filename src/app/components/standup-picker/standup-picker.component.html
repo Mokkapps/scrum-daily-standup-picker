@@ -2,7 +2,7 @@
     <mat-toolbar color="primary" class="mat-elevation-z4">
         <mat-toolbar-row>
             {{title}}
-            <span class="mat-toolbar-row__spacer"></span>
+            <span class="mat-toolbar-row mat-toolbar-row__spacer"></span>
             <button mat-icon-button (click)="triggerPicker()">
                 <mat-icon aria-label="Start" class="mat-toolbar-row__icon--scale">play_arrow</mat-icon>
             </button>
@@ -34,6 +34,8 @@
                     (click)="onMemberClick(member)">
                     <mat-card-header>
                         <mat-card-title class="member-card__title">{{member.name}}</mat-card-title>
+                        <mat-card-subtitle *ngIf="member.disabled">{{'PAGES.STANDUP_PICKER.OUT_OF_OFFICE' | translate}}</mat-card-subtitle>
+                        <mat-card-subtitle *ngIf="member.selected">{{'PAGES.STANDUP_PICKER.STARTS' | translate}}</mat-card-subtitle>
                     </mat-card-header>
                     <img mat-card-image src="{{member.image}}" alt="{{member.name}}">
                 </mat-card>

@@ -48,14 +48,14 @@
     rxjs "^5.5.6"
 
 "@angular/animations@^5.2.2":
-  version "5.2.4"
-  resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-5.2.4.tgz#c5ec749d84a0434733a28a82c6cb6a4e15246201"
+  version "5.2.5"
+  resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-5.2.5.tgz#3e72184321c4979305619c74902b8be92d76db70"
   dependencies:
     tslib "^1.7.1"
 
 "@angular/cdk@^5.1.1":
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-5.2.0.tgz#4368f6749e915cdcc75d325ae33fdb3f85a88108"
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-5.2.1.tgz#11500502deeaf42f88f92ca7d78d9a7642b07761"
   dependencies:
     tslib "^1.7.1"
 
@@ -167,8 +167,8 @@
   resolved "https://registry.yarnpkg.com/@angular/language-service/-/language-service-5.2.2.tgz#2829214885096c4168566a9f74364a8fed641a49"
 
 "@angular/material@^5.1.1":
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/@angular/material/-/material-5.2.0.tgz#8599e3149d48487e3e92e941fa9dc55176e3a0cf"
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/@angular/material/-/material-5.2.1.tgz#c0433edf98904dc35ae15dfa93ede755418843dd"
   dependencies:
     tslib "^1.7.1"
 

@@ -7,6 +7,7 @@ import 'zone.js/dist/proxy.js';
 import 'zone.js/dist/sync-test';
 // tslint:disable-next-line:ordered-imports
 import 'zone.js/dist/jasmine-patch';
+// tslint:disable-next-line:ordered-imports
 import 'zone.js/dist/async-test';
 import 'zone.js/dist/fake-async-test';
 // tslint:disable-next-line:ordered-imports

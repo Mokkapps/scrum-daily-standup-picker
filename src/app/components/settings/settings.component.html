@@ -48,11 +48,11 @@
 
                     <div class="container">
                         <div class="row">
-                            <mat-form-field class="col-12 mb-1">
+                            <mat-form-field class="col-6 mb-1">
                                 <mat-select formControlName="background" placeholder="{{ 'PAGES.SETTINGS.FORM.BACKGROUND' | translate}}" required>
                                     <mat-option *ngFor="let file of imageFiles" value="{{imagesPath + file}}">
-                                        <div class="mat-option__flex-container">
-                                            <img class="mat-option__image" src="{{imagesPath + file}}" alt={{file}}> {{file}}
+                                        <div class="option__flex-container">
+                                            <img class="option__image" src="{{imagesPath + file}}" alt={{file}}> {{file}}
                                         </div>
                                     </mat-option>
                                 </mat-select>
@@ -112,8 +112,8 @@
                                     <mat-form-field>
                                         <mat-select formControlName="image" placeholder="{{ 'PAGES.SETTINGS.FORM.MEMBER_PICTURE' | translate}}" required>
                                             <mat-option *ngFor="let file of imageFiles" value="{{imagesPath + file}}">
-                                                <div class="mat-option-flex-container">
-                                                    <img class="mat-option__image" src="{{imagesPath + file}}"> {{file}}
+                                                <div class="option-flex-container">
+                                                    <img class="option__image" src="{{imagesPath + file}}"> {{file}}
                                                 </div>
                                             </mat-option>
                                         </mat-select>

@@ -1,41 +1,47 @@
+@import '../../../scss/variables.scss';
+
 .background {
-  background-color: #e8eaf6;
+  background-color: $color-settings-background;
   height: 100%;
+
+  &--white {
+    background-color: $color-white;
+  }
 }
 
-.background--white {
-  background-color: white;
-}
+.mat-toolbar-row__icon {
+  &--scale {
+    transform: scale(1);
+    transition: all 0.5s;
 
-.mat-toolbar-row__icon--scale {
-  transform: scale(1);
-  transition: all 0.5s;
-}
-
-.mat-toolbar-row__icon--scale:hover, {
-  transform: scale(1.25);
+    &:hover {
+      transform: scale(1.25);
+    }
+  }
 }
 
 .flex-buttons {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+
+  &__import {
+    width: 45%;
+  }
 }
 
-.flex-buttons__import {
-  width: 45%;
-}
+.option {
+  &__flex-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
 
-.mat-option__flex-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.mat-option__image {
-  width: 50px;
-  height: 25px;
+  &__image {
+    width: 25%;
+    height: 100%;
+  }
 }
 
 .bold-text {
@@ -53,8 +59,8 @@
 .form-group-container {
   display: flex;
   flex-direction: column;
-}
 
-.form-group-container > * {
-  width: 100%;
+  & > * {
+    width: 100%;
+  }
 }

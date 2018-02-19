@@ -1,44 +1,50 @@
+@import '../../../scss/variables.scss';
+
 .background {
   background-size: cover;
   height: 100vh;
 }
 
-.mat-toolbar-row__spacer {
-  flex: 1 1 auto;
-}
+.mat_toolbar-row {
+  &__spacer {
+    flex: 1 1 auto;
+  }
 
-.mat-toolbar-row__icon--scale {
-  transform: scale(1);
-  transition: all 0.5s;
-}
+  &__icon {
+    &--scale {
+      transform: scale(1);
+      transition: all 0.5s;
 
-.mat-toolbar-row__icon--scale:hover, {
-  transform: scale(1.25);
-}
+      &:hover {
+        transform: scale(1.25);
+      }
+    }
 
-.mat-toolbar-row__icon--rotate {
-  transform: rotate(0deg);
-  transition: all 0.5s;
-}
+    &--rotate {
+      transform: rotate(0deg);
+      transition: all 0.5s;
 
-.mat-toolbar-row__icon--rotate:hover, {
-  transform: rotate(45deg);
+      &:hover {
+        transform: rotate(45deg);
+      }
+    }
+  }
 }
 
 .text-section {
   text-align: center;
-}
 
-.text-section__hint {
-  font-size: 0.6rem;
-}
+  &__hint {
+    font-size: 0.6rem;
+  }
 
-.text-section--white {
-  color: white;
-}
+  &--white {
+    color: $color-white;
+  }
 
-.text-section--black {
-  color: black;
+  &--black {
+    color: $color-black;
+  }
 }
 
 .flex-container {
@@ -53,27 +59,33 @@
   height: 250px;
   width: 300px;
   transform: translate(0);
-}
 
-.member-card:hover {
-  box-shadow: 0 0.5rem 0.5rem 0.5rem rgba(0, 0, 0, 0.2),
-    0 0.5rem 0.5rem 0 rgba(0, 0, 0, 0.14), 0 0.5rem 0.5rem 0 rgba(0, 0, 0, 0.12) !important;
-  transform: translate3d(0, 0, 0);
-  transition: background 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
-    box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
-}
+  &__title {
+    text-align: center;
+    font-size: 1.5rem;
+  }
 
-.member-card--selected {
-  background-color: yellow;
-}
+  &:hover {
+    box-shadow: 0 0.5rem 0.5rem 0.5rem rgba($color-black, 0.2),
+      0 0.5rem 0.5rem 0 rgba($color-black, 0.14),
+      0 0.5rem 0.5rem 0 rgba($color-black, 0.12) !important;
+    transform: translateY(-.2rem);
+    transition: background 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
+      box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
 
-.member-card--disabled {
-  opacity: 0.5;
-}
+  &--selected {
+    background-image: linear-gradient(
+      to bottom right,
+      $color-selected-light,
+      $color-selected-dark
+    );
+  }
 
-.member-card__title {
-  text-align: center;
-  font-size: 1.5rem;
+  &--disabled {
+    opacity: 0.5;
+    
+  }
 }
 
 .mat-card-image {
