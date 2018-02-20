@@ -65,6 +65,7 @@
     "@types/jasmine": "^2.8.6",
     "@types/jasminewd2": "2.0.3",
     "@types/node": "9.4.0",
+    "angular-2-local-storage": "^1.0.1",
     "archiver": "^2.1.1",
     "autoprefixer": "7.2.5",
     "circular-dependency-plugin": "4.4.0",

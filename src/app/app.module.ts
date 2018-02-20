@@ -21,6 +21,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { LocalStorageModule } from 'angular-2-local-storage';
 import 'polyfills';
 import 'reflect-metadata';
 import 'zone.js/dist/zone-mix';
@@ -65,6 +66,10 @@ export function HttpLoaderFactory(http: HttpClient) {
         useFactory: HttpLoaderFactory,
         deps: [HttpClient]
       }
+    }),
+    LocalStorageModule.withConfig({
+      prefix: 'StandupPicker',
+      storageType: 'localStorage'
     }),
     // Angular Material Design
     BrowserAnimationsModule,

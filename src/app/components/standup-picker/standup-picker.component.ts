@@ -2,11 +2,14 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { LocalStorageService } from 'angular-2-local-storage';
 import { Observable, Subscription } from 'rxjs/Rx';
 
 import { AppSettings } from 'app/models/app-settings';
 import { TeamMember } from 'app/models/team-member';
 import { SettingsService } from 'app/providers/settings.service';
+
+const DEFAULT_COLOR_LOCAL_STORAGE_KEY = 'DEFAULT_COLOR';
 
 @Component({
   selector: 'app-standup-picker',
@@ -34,7 +37,8 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
   constructor(
     settingsService: SettingsService,
     private translateService: TranslateService,
-    private router: Router
+    private router: Router,
+    private localStorageService: LocalStorageService
   ) {
     this.audio = new Audio();
 
@@ -58,6 +62,13 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
       .subscribe(text => {
         this.title = text;
       });
+
+    const storedDefaultColor: boolean = this.localStorageService.get(
+      DEFAULT_COLOR_LOCAL_STORAGE_KEY
+    );
+    if (storedDefaultColor !== undefined && storedDefaultColor !== null) {
+      this.defaultColor = storedDefaultColor;
+    }
 
     // Shuffle array initially
     this.teamMembers = this.shuffle(this.teamMembers);
@@ -96,6 +107,7 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
 
   invertTextColor(): void {
     this.defaultColor = !this.defaultColor;
+    this.localStorageService.set(DEFAULT_COLOR_LOCAL_STORAGE_KEY, this.defaultColor);
   }
 
   triggerPicker(): void {

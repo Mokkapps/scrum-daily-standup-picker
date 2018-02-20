@@ -40,6 +40,15 @@ export function createSettingsServiceMock() {
   return settingsServiceMock;
 }
 
+export function createLocalStorageServiceMock() {
+  const localStorageServiceMock = jasmine.createSpyObj('LocalStorageServiceMock', [
+    'get', 'set'
+  ]);
+  localStorageServiceMock.get.and.returnValue(false);
+  localStorageServiceMock.set.and.returnValue(true);
+  return localStorageServiceMock;
+}
+
 export function createElectronServiceMock() {
   const electronServiceMock = jasmine.createSpyObj('ElectronService', [
     'isElectron'
