@@ -11,9 +11,10 @@
   }
 
   &__icon {
+    transition: all 0.5s;
+
     &--scale {
       transform: scale(1);
-      transition: all 0.5s;
 
       &:hover {
         transform: scale(1.25);
@@ -22,7 +23,6 @@
 
     &--rotate {
       transform: rotate(0deg);
-      transition: all 0.5s;
 
       &:hover {
         transform: rotate(45deg);
@@ -55,10 +55,11 @@
 }
 
 .member-card {
-  overflow: hidden;
   height: 250px;
   width: 300px;
   transform: translate(0);
+  transition: all 0.5s;
+  overflow: hidden;
 
   &__title {
     text-align: center;
@@ -69,9 +70,7 @@
     box-shadow: 0 0.5rem 0.5rem 0.5rem rgba($color-black, 0.2),
       0 0.5rem 0.5rem 0 rgba($color-black, 0.14),
       0 0.5rem 0.5rem 0 rgba($color-black, 0.12) !important;
-    transform: translateY(-.2rem);
-    transition: background 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
-      box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateY(-0.2rem);
   }
 
   &--selected {
@@ -84,12 +83,11 @@
 
   &--disabled {
     opacity: 0.5;
-    
   }
 }
 
 .mat-card-image {
-  max-height: 100%;
-  object-position: 50% 50%;
+  height: 100%;
   object-fit: contain;
+  overflow: hidden;
 }
