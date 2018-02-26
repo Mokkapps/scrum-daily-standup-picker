@@ -8,7 +8,7 @@ This project was bootstrapped with [angular-electron](https://github.com/maximeg
 
 Design by [Angular Material](https://material.angular.io).
 
-<img src="./standup-picker-0-2-0-720p.gif?raw=true" width="100%">
+<img src="./Standup_Picker_1-0-0_480p.gif?raw=true" width="100%">
 
 # Features
 
