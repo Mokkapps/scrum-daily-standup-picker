@@ -18,7 +18,9 @@ Design by [Angular Material](https://material.angular.io).
 
 # Releases
 
-Check [releases](https://github.com/Mokkapps/scrum-daily-standup-picker/releases) for latest releases.
+All releases are available [here](https://github.com/Mokkapps/scrum-daily-standup-picker/releases).
+
+If you want to use the deprecated Angular standalone version without Electron you can use [Release 0.1.0](https://github.com/Mokkapps/scrum-daily-standup-picker/releases/tag/v0.1.0).
 
 # Getting Started
 
