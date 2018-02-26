@@ -2,18 +2,18 @@
     <mat-toolbar color="primary" class="mat-elevation-z4">
         <mat-toolbar-row>
             {{title}}
-            <span class="mat-toolbar-row mat-toolbar-row__spacer"></span>
+            <span class="mat-toolbar-row"></span>
             <button mat-icon-button (click)="triggerPicker()">
-                <mat-icon aria-label="Start" class="mat-toolbar-row__icon mat-toolbar-row__icon--scale">play_arrow</mat-icon>
+                <mat-icon aria-label="Start" class="toolbar-icon--scale">play_arrow</mat-icon>
             </button>
             <button mat-icon-button (click)="reset()">
-                <mat-icon aria-label="Reset" class="mat-toolbar-row__icon--rotate">refresh</mat-icon>
+                <mat-icon aria-label="Reset" class="toolbar-icon--rotate">refresh</mat-icon>
             </button>
             <button mat-icon-button (click)="invertTextColor()">
-                <mat-icon aria-label="Invert text color" class="mat-toolbar-row__icon--scale">invert_colors</mat-icon>
+                <mat-icon aria-label="Invert text color" class="toolbar-icon--scale">invert_colors</mat-icon>
             </button>
             <button mat-icon-button (click)="goToSettings()">
-                <mat-icon aria-label="Settings" class="mat-toolbar-row__icon--rotate">settings</mat-icon>
+                <mat-icon aria-label="Settings" class="toolbar-icon--rotate">settings</mat-icon>
             </button>
         </mat-toolbar-row>
     </mat-toolbar>

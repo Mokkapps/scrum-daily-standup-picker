@@ -1,4 +1,5 @@
 @import '../../../scss/variables.scss';
+@import '../../../scss/toolbar-icon.scss';
 
 .background {
   background-color: $color-settings-background;
@@ -6,17 +7,6 @@
 
   &--white {
     background-color: $color-white;
-  }
-}
-
-.mat-toolbar-row__icon {
-  &--scale {
-    transform: scale(1);
-    transition: all 0.5s;
-
-    &:hover {
-      transform: scale(1.25);
-    }
   }
 }
 
