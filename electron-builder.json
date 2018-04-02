@@ -6,15 +6,15 @@
     "output": "app-builds"
   },
   "win": {
-    "icon": "dist/favicon",
+    "icon": "dist/icon.png",
     "target": ["portable"]
   },
   "mac": {
-    "icon": "dist/favicon",
+    "icon": "dist/icon.png",
     "target": ["dmg"]
   },
   "linux": {
-    "icon": "dist",
+    "icon": "dist/icon.png",
     "category": "Utility",
     "target": ["deb"]
   }
