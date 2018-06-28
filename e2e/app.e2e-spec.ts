@@ -1,5 +1,5 @@
-import { browser, by, element } from 'protractor';
 import { AngularElectronPage } from './app.po';
+import { browser, element, by } from 'protractor';
 
 describe('angular-electron App', () => {
   let page: AngularElectronPage;
@@ -9,6 +9,7 @@ describe('angular-electron App', () => {
   });
 
   it('should display message saying App works !', () => {
+    page.navigateTo('/');
     expect(element(by.css('app-home h1')).getText()).toMatch('App works !');
   });
 });

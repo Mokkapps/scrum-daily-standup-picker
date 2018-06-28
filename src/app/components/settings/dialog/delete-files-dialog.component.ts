@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
-import { FileService } from 'app/providers/file.service';
+import { FileService } from '../../../providers/file.service';
 
 @Component({
   selector: 'app-delete-files-dialog',

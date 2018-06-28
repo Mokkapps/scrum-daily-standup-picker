@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs';
 
 export const TEST_SETTINGS = {
   version: 1,
@@ -36,7 +36,7 @@ export function createSettingsServiceMock() {
   const settingsServiceMock = jasmine.createSpyObj('SettingsService', [
     'settings'
   ]);
-  settingsServiceMock.settings = Observable.of(TEST_SETTINGS);
+  settingsServiceMock.settings = of(TEST_SETTINGS);
   return settingsServiceMock;
 }
 

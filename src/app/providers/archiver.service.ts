@@ -3,8 +3,8 @@ import * as archiver from 'archiver';
 import * as decompress from 'decompress';
 import * as fs from 'fs';
 
-import { ElectronService } from 'app/providers/electron.service';
-import { SettingsService } from 'app/providers/settings.service';
+import { ElectronService } from './electron.service';
+import { SettingsService } from './settings.service';
 
 @Injectable()
 export class ArchiverService {

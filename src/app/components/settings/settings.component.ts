@@ -9,17 +9,15 @@ import {
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { readFile } from 'jsonfile';
 import * as random_name from 'node-random-name';
-import { Observable } from 'rxjs/Observable';
+import { filter, take } from 'rxjs/operators';
 import { ElectronService } from './../../providers/electron.service';
 
-import { AboutDialogComponent } from 'app/components/settings/dialog/about-dialog.component';
-import { DeleteFilesDialogComponent } from 'app/components/settings/dialog/delete-files-dialog.component';
-import { AppSettings } from 'app/models/app-settings';
-import { TeamMember } from 'app/models/team-member';
-import { FileService } from 'app/providers/file.service';
-import { SettingsService } from 'app/providers/settings.service';
+import { AboutDialogComponent } from '../../components/settings/dialog/about-dialog.component';
+import { DeleteFilesDialogComponent } from '../../components/settings/dialog/delete-files-dialog.component';
+import { AppSettings } from '../../models/app-settings';
+import { FileService } from '../../providers/file.service';
+import { SettingsService } from '../../providers/settings.service';
 import { StandupSound } from '../../models/app-settings';
 import { ArchiverService } from './../../providers/archiver.service';
 import { ConfirmDialogComponent } from './dialog/confirm-dialog.component';
@@ -77,8 +75,7 @@ export class SettingsComponent {
     this.createForm();
 
     settingsService.settings
-      .filter(settings => settings !== undefined)
-      .first()
+      .pipe(filter(settings => settings !== undefined), take(1))
       .subscribe(settings => {
         this.appSettings = settings;
         this.updateForm(settings);
@@ -186,7 +183,7 @@ export class SettingsComponent {
 
         dialogRef
           .afterClosed()
-          .first()
+          .pipe(take(1))
           .subscribe(result => {
             if (result === true) {
               this.showSnackbar(
@@ -224,7 +221,7 @@ export class SettingsComponent {
 
       dialogRef
         .afterClosed()
-        .first()
+        .pipe(take(1))
         .subscribe(result => {
           if (result === true) {
             this.router.navigate(['../']);
@@ -353,6 +350,7 @@ export class SettingsComponent {
   }
 
   private async importFiles(type: string) {
+    // tslint:disable-next-line:no-shadowed-variable
     const filter = type === 'image' ? IMAGES_FILTER : SOUNDS_FILTER;
     // Dialog
     const paths = await this.electronService.showOpenDialog(

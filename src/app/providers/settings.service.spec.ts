@@ -1,12 +1,12 @@
 import { fakeAsync, tick } from '@angular/core/testing';
-import { SettingsService } from 'app/providers/settings.service';
+import { SettingsService } from './settings.service';
 import {
   createElectronServiceMock,
   createFileServiceMock,
   createNgZoneMock,
   createSnackBarMock,
   TEST_SETTINGS
-} from 'tests/mocks';
+} from '../mocks';
 
 describe('SettingsService', () => {
   let sut: SettingsService;

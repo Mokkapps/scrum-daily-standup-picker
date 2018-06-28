@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { ElectronService } from 'app/providers/electron.service';
+
+import { ElectronService } from '../../../providers/electron.service';
 
 const GITHUB_URL = 'https://github.com/Mokkapps/scrum-daily-standup-picker';
 const MOKKAPPS_URL = 'https://www.mokkapps.de';

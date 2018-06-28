@@ -1,14 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { LocalStorageService } from 'angular-2-local-storage';
-import { Observable, Subscription } from 'rxjs/Rx';
+import { Subscription, interval, from, timer, zip } from 'rxjs';
+import { finalize, map, take } from 'rxjs/operators';
 import * as shuffle from 'shuffle-array';
 
-import { AppSettings } from 'app/models/app-settings';
-import { TeamMember } from 'app/models/team-member';
-import { SettingsService } from 'app/providers/settings.service';
+import { AppSettings } from '../../models/app-settings';
+import { TeamMember } from '../../models/team-member';
+import { SettingsService } from '../../providers/settings.service';
 
 const DEFAULT_COLOR_LOCAL_STORAGE_KEY = 'DEFAULT_COLOR';
 
@@ -61,7 +61,7 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.translateService
       .get('PAGES.STANDUP_PICKER.CLICK_TO_SELECT_TEAM_MEMBER')
-      .first()
+      .pipe(take(1))
       .subscribe(text => {
         this.title = text;
       });
@@ -77,8 +77,8 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
     this.teamMembers = this.shuffleMembers();
 
     // Play standup sound at certain time of day
-    this.standupSoundTimerSubscription = Observable.interval(60 * 1000)
-      .map(() => new Date())
+    this.standupSoundTimerSubscription = interval(60 * 1000)
+      .pipe(map(() => new Date()))
       .subscribe(date => {
         if (
           date.getHours() === Number(this.settings.standupPicker.standupHour) &&
@@ -126,14 +126,14 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
     const shuffledMembers = this.shuffleMembers();
     const availableMembers = this.getAvailableMembers();
 
-    this.shuffleSubscription = Observable.zip(
-      Observable.from(availableMembers),
-      Observable.timer(500, 500),
+    this.shuffleSubscription = zip(
+      from(availableMembers),
+      timer(500, 500),
       (item, i) => {
         return item;
       }
     )
-      .finally(() => this.onPickComplete())
+      .pipe(finalize(() => this.onPickComplete()))
       .subscribe((member: TeamMember) => {
         this.teamMembers = this.shuffleMembers();
       });
@@ -183,9 +183,8 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
     let standupTimeInSec = this.settings.standupPicker.standupTimeInMin * 60;
     let tickSoundPlayed = false;
 
-    this.timerSubscription = Observable.timer(0, 1000)
-      .take(standupTimeInSec)
-      .map(() => --standupTimeInSec)
+    this.timerSubscription = timer(0, 1000)
+      .pipe(take(standupTimeInSec), map(() => --standupTimeInSec))
       .subscribe((secondsPassed: number) => {
         const remainingMinutes = Math.round(secondsPassed / 60);
 

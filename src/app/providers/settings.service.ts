@@ -1,11 +1,9 @@
 import { Injectable, NgZone } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
+import { Observable, BehaviorSubject } from 'rxjs';
 
-import { AppSettings } from 'app/models/app-settings';
-import { TeamMember } from 'app/models/team-member';
-import { FileService } from 'app/providers/file.service';
+import { AppSettings } from '../models/app-settings';
+import { FileService } from './file.service';
 import { ElectronService } from './electron.service';
 
 const SETTINGS_VERSION = 1;
@@ -52,7 +50,7 @@ export class SettingsService {
         });
       })
       .catch(err => {
-        console.log(err);
+        console.log('No stored settings available, load default settings', err);
         // Store default settings if no settings are available
         this.storeDefaultSettings();
       });
@@ -73,7 +71,10 @@ export class SettingsService {
         });
       })
       .catch(err => {
-        console.log(err);
+        console.error(
+          `Error storing default settings to ${settingsFilePath}`,
+          err
+        );
         this.snackBar.open(err, undefined, {
           duration: 2000
         });

@@ -1,41 +1,37 @@
-import { app, BrowserWindow, globalShortcut, screen } from 'electron';
+import { app, BrowserWindow, screen } from 'electron';
 import * as path from 'path';
+import * as url from 'url';
 
 let win, serve;
 const args = process.argv.slice(1);
 serve = args.some(val => val === '--serve');
-import * as url from 'url';
-
-if (serve) {
-  require('electron-reload')(__dirname, {});
-}
 
 function createWindow() {
+
   const electronScreen = screen;
   const size = electronScreen.getPrimaryDisplay().workAreaSize;
 
   // Create the browser window.
   win = new BrowserWindow({
-    icon: __dirname + '/favicon.png',
     x: 0,
     y: 0,
     width: size.width,
     height: size.height
   });
 
-  // and load the index.html of the app.
-  win.loadURL(
-    url.format({
-      protocol: 'file:',
-      pathname: path.join(__dirname, '/index.html'),
-      slashes: true
-    })
-  );
-
-  // Open the DevTools.
   if (serve) {
-    win.webContents.openDevTools();
+    require('electron-reload')(__dirname, {
+     electron: require(`${__dirname}/node_modules/electron`)});
+    win.loadURL('http://localhost:4200');
+  } else {
+    win.loadURL(url.format({
+      pathname: path.join(__dirname, 'dist/index.html'),
+      protocol: 'file:',
+      slashes: true
+    }));
   }
+
+  win.webContents.openDevTools();
 
   // Emitted when the window is closed.
   win.on('closed', () => {
@@ -47,17 +43,11 @@ function createWindow() {
 }
 
 try {
+
   // This method will be called when Electron has finished
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
   app.on('ready', createWindow);
-
-  app.on('ready', () => {
-    // Define global shortcut to open developer tools even in production builds
-    globalShortcut.register('CommandOrControl+Shift+Z', () => {
-      win.webContents.openDevTools();
-    });
-  });
 
   // Quit when all windows are closed.
   app.on('window-all-closed', () => {
@@ -75,6 +65,7 @@ try {
       createWindow();
     }
   });
+
 } catch (e) {
   // Catch Error
   // throw e;

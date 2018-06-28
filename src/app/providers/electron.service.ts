@@ -3,14 +3,19 @@ import { TranslateService } from '@ngx-translate/core';
 
 // If you import a module but never use any of the imported values other than as TypeScript types,
 // the resulting javascript file will look as if you never imported the module at all.
+import { ipcRenderer, webFrame, remote } from 'electron';
 import * as childProcess from 'child_process';
-import { ipcRenderer } from 'electron';
+import * as fs from 'fs';
 import * as path from 'path';
 
 @Injectable()
 export class ElectronService {
   ipcRenderer: typeof ipcRenderer;
+  webFrame: typeof webFrame;
+  remote: typeof remote;
   childProcess: typeof childProcess;
+  fs: typeof fs;
+
   electron: any;
 
   private _imagesPath: string;
@@ -22,17 +27,33 @@ export class ElectronService {
     // Conditional imports
     if (this.isElectron()) {
       this.electron = window.require('electron');
-      this.ipcRenderer = this.electron.ipcRenderer;
-      this.childProcess = window.require('child_process');
-    }
 
-    // App paths
-    const appPath = this.electron.remote.app.getAppPath();
-    this._imagesPath = path.join(appPath, '/assets/images/');
-    this._soundsPath = path.join(appPath, '/assets/sounds/');
-    this._assetsPath = path.join(appPath, '/assets/');
-    this._settingsFilePath = path.join(appPath, '/assets/settings.json');
+      this.ipcRenderer = this.electron.ipcRenderer;
+      this.webFrame = this.electron.webFrame;
+      this.remote = this.electron.remote;
+
+      this.childProcess = window.require('child_process');
+      this.fs = window.require('fs');
+
+      const appPath = this.electron.remote.app.getAppPath();
+      // App paths
+      this._imagesPath = path.join(appPath, 'dist/assets/images/');
+      this._soundsPath = path.join(appPath, 'dist/assets/sounds/');
+      this._assetsPath = path.join(appPath, 'dist/assets/');
+      this._settingsFilePath = path.join(appPath, 'dist/assets/settings.json');
+
+      console.log(
+        this._imagesPath,
+        this._soundsPath,
+        this._assetsPath,
+        this._settingsFilePath
+      );
+    }
   }
+
+  isElectron = () => {
+    return window && window.process && window.process.type;
+  };
 
   get imagesPath(): string {
     return this._imagesPath;
@@ -56,10 +77,6 @@ export class ElectronService {
 
   openExternal(url: string) {
     this.electron.shell.openExternal(url);
-  }
-
-  isElectron() {
-    return window && window.process && window.process.type;
   }
 
   showSaveDialog(title: string): Promise<string> {

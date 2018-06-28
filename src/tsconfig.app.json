@@ -7,9 +7,9 @@
     "types": []
   },
   "exclude": [
-    "test.ts",
+    "src/test.ts",
+    "mocks.ts",
     "**/*.spec.ts",
-    "**/mocks.ts",
     "dist",
     "app-builds",
     "node_modules"

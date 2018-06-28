@@ -1,40 +1,33 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatIconModule } from '@angular/material';
-import { By } from '@angular/platform-browser';
+import { TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { TranslateModule } from '@ngx-translate/core';
-
-import { ElectronService } from 'app/providers/electron.service';
-import { createElectronServiceMock } from 'tests/mocks';
 import { AppComponent } from './app.component';
-
-let component: AppComponent;
-let fixture: ComponentFixture<AppComponent>;
+import { TranslateModule } from '@ngx-translate/core';
+import { ElectronService } from './providers/electron.service';
 
 describe('AppComponent', () => {
-  let electronService: any;
-  beforeEach(
-    async(() => {
-      electronService = createElectronServiceMock();
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      declarations: [
+        AppComponent
+      ],
+      providers: [
+        ElectronService
+      ],
+      imports: [
+        RouterTestingModule,
+        TranslateModule.forRoot()
+      ]
+    }).compileComponents();
+  }));
 
-      TestBed.configureTestingModule({
-        declarations: [AppComponent],
-        providers: [{ provide: ElectronService, useValue: electronService }],
-        imports: [RouterTestingModule, MatIconModule, TranslateModule.forRoot()]
-      }).compileComponents();
-    })
-  );
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(AppComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it(
-    'should create the app',
-    async(() => {
-      expect(component).toBeTruthy();
-    })
-  );
+  it('should create the app', async(() => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.debugElement.componentInstance;
+    expect(app).toBeTruthy();
+  }));
 });
+
+class TranslateServiceStub {
+  setDefaultLang(lang: string): void {
+  }
+}

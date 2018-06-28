@@ -1,6 +1,11 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import 'zone.js/dist/zone-mix';
+import 'reflect-metadata';
+import '../polyfills';
+import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LocalStorageModule } from 'angular-2-local-storage';
 import {
   MAT_LABEL_GLOBAL_OPTIONS,
   MatButtonModule,
@@ -16,28 +21,24 @@ import {
   MatToolbarModule,
   MatTooltipModule
 } from '@angular/material';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterModule, Routes } from '@angular/router';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { LocalStorageModule } from 'angular-2-local-storage';
-import 'polyfills';
-import 'reflect-metadata';
-import 'zone.js/dist/zone-mix';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 
-import { AboutDialogComponent } from 'app/components/settings/dialog/about-dialog.component';
-import { DeleteFilesDialogComponent } from 'app/components/settings/dialog/delete-files-dialog.component';
-import { SettingsComponent } from 'app/components/settings/settings.component';
-import { StandupPickerComponent } from 'app/components/standup-picker/standup-picker.component';
-import { BackgroundImageDirective } from 'app/directives/background-image.directive';
-import { ArchiverService } from 'app/providers/archiver.service';
-import { SettingsService } from 'app/providers/settings.service';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
+import { BackgroundImageDirective } from './directives/background-image.directive';
+import { SettingsComponent } from './components/settings/settings.component';
+import { StandupPickerComponent } from './components/standup-picker/standup-picker.component';
 import { AppRoutingModule } from './app-routing.module';
+import { ElectronService } from './providers/electron.service';
+import { ArchiverService } from './providers/archiver.service';
+import { SettingsService } from './providers/settings.service';
+import { FileService } from './providers/file.service';
+import { WebviewDirective } from './directives/webview.directive';
 import { AppComponent } from './app.component';
 import { ConfirmDialogComponent } from './components/settings/dialog/confirm-dialog.component';
-import { ElectronService } from './providers/electron.service';
-import { FileService } from './providers/file.service';
+import { DeleteFilesDialogComponent } from 'app/components/settings/dialog/delete-files-dialog.component';
+import { AboutDialogComponent } from 'app/components/settings/dialog/about-dialog.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -52,7 +53,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     ConfirmDialogComponent,
     AboutDialogComponent,
     DeleteFilesDialogComponent,
-    BackgroundImageDirective
+    BackgroundImageDirective,
+    WebviewDirective
   ],
   imports: [
     BrowserModule,
