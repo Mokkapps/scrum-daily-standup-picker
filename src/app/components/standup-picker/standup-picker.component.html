@@ -37,7 +37,7 @@
                         <mat-card-subtitle *ngIf="member.disabled">{{'PAGES.STANDUP_PICKER.OUT_OF_OFFICE' | translate}}</mat-card-subtitle>
                         <mat-card-subtitle *ngIf="member.selected">{{'PAGES.STANDUP_PICKER.STARTS' | translate}}</mat-card-subtitle>
                     </mat-card-header>
-                    <img mat-card-image src="{{member.image}}" alt="{{member.name}}">
+                    <img mat-card-image [src]="sanitize(member.image)" alt="{{member.name}}">
                 </mat-card>
             </div>
         </div>

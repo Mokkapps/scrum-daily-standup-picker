@@ -36,11 +36,16 @@ export class ElectronService {
       this.fs = window.require('fs');
 
       const appPath = this.electron.remote.app.getAppPath();
+      const assetsPath = '/dist/assets';
+
       // App paths
-      this._imagesPath = path.join(appPath, 'dist/assets/images/');
-      this._soundsPath = path.join(appPath, 'dist/assets/sounds/');
-      this._assetsPath = path.join(appPath, 'dist/assets/');
-      this._settingsFilePath = path.join(appPath, 'dist/assets/settings.json');
+      this._imagesPath = path.join(appPath, `${assetsPath}/images/`);
+      this._soundsPath = path.join(appPath, `${assetsPath}/sounds/`);
+      this._assetsPath = path.join(appPath, assetsPath);
+      this._settingsFilePath = path.join(
+        appPath,
+        `${assetsPath}/settings.json`
+      );
 
       console.log(
         this._imagesPath,
@@ -51,9 +56,9 @@ export class ElectronService {
     }
   }
 
-  isElectron = () => {
+  isElectron(): any {
     return window && window.process && window.process.type;
-  };
+  }
 
   get imagesPath(): string {
     return this._imagesPath;

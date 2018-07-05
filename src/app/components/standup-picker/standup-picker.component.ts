@@ -5,6 +5,7 @@ import { LocalStorageService } from 'angular-2-local-storage';
 import { Subscription, interval, from, timer, zip } from 'rxjs';
 import { finalize, map, take } from 'rxjs/operators';
 import * as shuffle from 'shuffle-array';
+import { DomSanitizer } from '@angular/platform-browser';
 
 import { AppSettings } from '../../models/app-settings';
 import { TeamMember } from '../../models/team-member';
@@ -39,7 +40,8 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
     settingsService: SettingsService,
     private translateService: TranslateService,
     private router: Router,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private sanitizer: DomSanitizer
   ) {
     this.audio = new Audio();
 
@@ -159,6 +161,10 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
     this.time = '';
   }
 
+  sanitize(url: string) {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
+
   private getFileNameWithExtension(path: string): string {
     return (path.toString().match(/[^\\/]+\.[^\\/]+$/) || []).pop();
   }
@@ -184,7 +190,10 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
     let tickSoundPlayed = false;
 
     this.timerSubscription = timer(0, 1000)
-      .pipe(take(standupTimeInSec), map(() => --standupTimeInSec))
+      .pipe(
+        take(standupTimeInSec),
+        map(() => --standupTimeInSec)
+      )
       .subscribe((secondsPassed: number) => {
         const remainingMinutes = Math.round(secondsPassed / 60);
 
