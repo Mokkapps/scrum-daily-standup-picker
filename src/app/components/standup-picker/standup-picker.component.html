@@ -6,6 +6,9 @@
             <button mat-icon-button (click)="triggerPicker()">
                 <mat-icon aria-label="Start" class="toolbar-icon--scale">play_arrow</mat-icon>
             </button>
+            <button *ngIf="isAudioPlaying" mat-icon-button (click)="pauseAudio()">
+                <mat-icon aria-label="Mute Audio">volume_off</mat-icon>
+            </button>
             <button mat-icon-button (click)="reset()">
                 <mat-icon aria-label="Reset" class="toolbar-icon--rotate">refresh</mat-icon>
             </button>

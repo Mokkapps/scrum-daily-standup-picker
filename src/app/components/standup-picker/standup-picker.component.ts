@@ -5,7 +5,8 @@ import { LocalStorageService } from 'angular-2-local-storage';
 import { Subscription, interval, from, timer, zip } from 'rxjs';
 import { finalize, map, take } from 'rxjs/operators';
 import * as shuffle from 'shuffle-array';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { Howl } from 'howler';
 
 import { AppSettings } from '../../models/app-settings';
 import { TeamMember } from '../../models/team-member';
@@ -30,7 +31,9 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
 
   defaultColor = true;
 
-  private audio: HTMLAudioElement;
+  isAudioPlaying = false;
+
+  private currentPlayingSound: Howl;
   private settings: AppSettings;
   private timerSubscription: Subscription;
   private standupSoundTimerSubscription: Subscription;
@@ -43,8 +46,6 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
     private localStorageService: LocalStorageService,
     private sanitizer: DomSanitizer
   ) {
-    this.audio = new Audio();
-
     settingsService.settings.subscribe(settings => {
       if (!settings) {
         return;
@@ -125,7 +126,6 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
       'PAGES.STANDUP_PICKER.PLEASE_WAIT'
     );
 
-    const shuffledMembers = this.shuffleMembers();
     const availableMembers = this.getAvailableMembers();
 
     this.shuffleSubscription = zip(
@@ -141,11 +141,11 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
       });
   }
 
-  goToSettings() {
+  goToSettings(): void {
     this.router.navigate(['settings']);
   }
 
-  reset() {
+  reset(): void {
     if (this.timerSubscription) {
       this.timerSubscription.unsubscribe();
     }
@@ -161,8 +161,13 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
     this.time = '';
   }
 
-  sanitize(url: string) {
+  sanitize(url: string): SafeResourceUrl {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
+
+  pauseAudio(): void {
+    this.currentPlayingSound.stop();
+    this.isAudioPlaying = false;
   }
 
   private getFileNameWithExtension(path: string): string {
@@ -240,18 +245,18 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
   }
 
   private playAudio(filePath: string): void {
-    if (!this.isAudioPlaying()) {
-      this.audio.src = filePath;
-      this.audio.msAudioCategory = 'BackgroundCapableMedia';
-      this.audio.load();
-      this.audio.play();
-    } else {
-      console.log('Cannot play audio', this.audio);
+    if (!this.currentPlayingSound || !this.currentPlayingSound.playing()) {
+      this.currentPlayingSound = new Howl({
+        src: filePath
+      });
+      this.currentPlayingSound.play();
+      this.isAudioPlaying = true;
     }
-  }
 
-  private isAudioPlaying(): boolean {
-    return !this.audio.paused;
+    // Fires when the sound finishes playing.
+    this.currentPlayingSound.on('end', () => {
+      this.isAudioPlaying = false;
+    });
   }
 }
 

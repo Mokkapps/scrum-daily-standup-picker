@@ -75,7 +75,10 @@ export class SettingsComponent {
     this.createForm();
 
     settingsService.settings
-      .pipe(filter(settings => settings !== undefined), take(1))
+      .pipe(
+        filter(settings => settings !== undefined),
+        take(1)
+      )
       .subscribe(settings => {
         this.appSettings = settings;
         this.updateForm(settings);
@@ -90,7 +93,7 @@ export class SettingsComponent {
     return <FormArray>this.getStandupPickerFormGroup().controls.standupMusic;
   }
 
-  exportSettings() {
+  exportSettings(): void {
     const errText = this.translateService.instant(
       'PAGES.SETTINGS.FORM.FILE_UPLOAD.EXPORT_BACKUP.ERROR'
     );
@@ -121,7 +124,7 @@ export class SettingsComponent {
       });
   }
 
-  importSettings() {
+  importSettings(): void {
     const errText = this.translateService.instant(
       'PAGES.SETTINGS.FORM.FILE_UPLOAD.IMPORT_BACKUP.ERROR'
     );
@@ -153,7 +156,7 @@ export class SettingsComponent {
       });
   }
 
-  deleteFiles(type: FileType) {
+  deleteFiles(type: FileType): void {
     this.fileService
       .readDirectory(this.getPathForFileType(type))
       .then((files: string[]) => {
@@ -263,20 +266,23 @@ export class SettingsComponent {
   }
 
   addNewStandupSound(sound: StandupSound): void {
-    const control = <FormArray>this.getStandupPickerFormGroup().controls
-      .standupMusic;
+    const control = <FormArray>(
+      this.getStandupPickerFormGroup().controls.standupMusic
+    );
     control.push(this.createStandupSoundGroup(sound));
   }
 
   addNewTeamMemberRow(name?: string, image?: string): void {
-    const control = <FormArray>this.getStandupPickerFormGroup().controls
-      .teamMembers;
+    const control = <FormArray>(
+      this.getStandupPickerFormGroup().controls.teamMembers
+    );
     control.push(this.createTeamMemberGroup(name, image));
   }
 
   deleteTeamMemberRow(index: number): void {
-    const control = <FormArray>this.getStandupPickerFormGroup().controls
-      .teamMembers;
+    const control = <FormArray>(
+      this.getStandupPickerFormGroup().controls.teamMembers
+    );
     control.removeAt(index);
   }
 
@@ -319,7 +325,7 @@ export class SettingsComponent {
     });
   }
 
-  private async importBackup(zipPath: string) {
+  private async importBackup(zipPath: string): Promise<void> {
     await this.fileService.deleteFile(this.electronService.settingsFilePath);
     await this.fileService.deleteDirFiles(this.electronService.imagesPath);
     await this.fileService.deleteDirFiles(this.electronService.soundsPath);
@@ -349,7 +355,7 @@ export class SettingsComponent {
     });
   }
 
-  private async importFiles(type: string) {
+  private async importFiles(type: string): Promise<void> {
     // tslint:disable-next-line:no-shadowed-variable
     const filter = type === 'image' ? IMAGES_FILTER : SOUNDS_FILTER;
     // Dialog
@@ -386,7 +392,7 @@ export class SettingsComponent {
     });
   }
 
-  private updateForm(settings: AppSettings) {
+  private updateForm(settings: AppSettings): void {
     this.readFilesFromFileSystem().then(values => {
       this.imageFiles = values[0];
       this.soundFiles = values[1];
@@ -401,7 +407,7 @@ export class SettingsComponent {
     ]);
   }
 
-  private showSnackbar(message: string, duration: number = 2000) {
+  private showSnackbar(message: string, duration: number = 2000): void {
     this.snackBar.open(message, undefined, {
       duration
     });
