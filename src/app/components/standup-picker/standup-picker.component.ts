@@ -174,8 +174,10 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
     return (path.toString().match(/[^\\/]+\.[^\\/]+$/) || []).pop();
   }
 
-  private onMemberClick(member: TeamMember): void {
-    member.disabled = !member.disabled;
+  private onMemberClick(member: Member): void {
+    if (!member.selected) {
+      member.disabled = !member.disabled;
+    }
   }
 
   private onPickComplete(): void {

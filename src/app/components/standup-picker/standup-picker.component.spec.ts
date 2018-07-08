@@ -1,6 +1,5 @@
 import {
   ComponentFixture,
-  discardPeriodicTasks,
   fakeAsync,
   TestBed,
   tick
@@ -16,15 +15,8 @@ import { TranslateModule } from '@ngx-translate/core';
 import { LocalStorageService } from 'angular-2-local-storage';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
-import { TeamMember } from 'app/models/team-member';
-import { getTestScheduler } from 'jasmine-marbles';
 import { AppSettings } from './../../models/app-settings';
-
-import {
-  createLocalStorageServiceMock,
-  createSettingsServiceMock,
-  TEST_SETTINGS
-} from 'tests/mocks';
+import { createLocalStorageServiceMock, TEST_SETTINGS } from '../../../mocks';
 import { BackgroundImageDirective } from '../../directives/background-image.directive';
 import { SettingsService } from '../../providers/settings.service';
 import { StandupPickerComponent } from './standup-picker.component';
@@ -62,7 +54,7 @@ describe('StandupPickerComponent', () => {
     router = TestBed.get(Router);
   });
 
-  it('gets initialised correctly', () => {
+  it('gets initialized correctly', () => {
     expect(fixture).toBeDefined();
     expect(comp).toBeDefined();
   });
@@ -70,6 +62,7 @@ describe('StandupPickerComponent', () => {
   it('should show default values', () => {
     expect(comp.backgroundImage).toBe('./assets/images/background.jpg');
     expect(comp.title).toBe('');
+    expect(comp.isAudioPlaying).toBe(false);
     expect(comp.defaultColor).toBe(true);
     expect(comp.teamMembers.length).toBe(2);
   });
@@ -114,20 +107,6 @@ describe('StandupPickerComponent', () => {
     expect(comp.defaultColor).toBe(false);
     expect(localStorageService.set).toHaveBeenCalled();
   });
-
-  it(
-    'should correctly trigger standup',
-    fakeAsync(() => {
-      comp.triggerPicker();
-      expect(comp.title).toBe('PAGES.STANDUP_PICKER.PLEASE_WAIT');
-
-      tick(1000);
-      expect(comp.title).toBe('PAGES.STANDUP_PICKER.STARTS_TODAY');
-      expect(comp.time).toBe('PAGES.STANDUP_PICKER.REMAINING_STANDUP_TIME');
-
-      discardPeriodicTasks();
-    })
-  );
 
   it('should correctly navigate to settings', () => {
     spyOn(router, 'navigate').and.callFake(() => {});

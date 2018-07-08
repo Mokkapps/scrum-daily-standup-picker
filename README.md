@@ -1,4 +1,6 @@
-[![Angular Logo](./logo-angular.jpg)](https://angular.io/) [![Electron Logo](./logo-electron.jpg)](https://electron.atom.io/)
+[![Travis Build Status][build-badge]][build]
+[![Make a pull request][prs-badge]][prs]
+[![License](http://img.shields.io/badge/Licence-MIT-brightgreen.svg)](LICENSE.md)
 
 # Standup Picker
 
@@ -71,3 +73,8 @@ Note that you can't use Electron or NodeJS native libraries in this case. Please
 * Wallpaper: http://www.wallpapersbrowse.com/wallpaper/17862
 * Success sound: http://freesound.org/people/grunz/sounds/109662/
 * Tick tock sound: http://freesound.org/people/FoolBoyMedia/sounds/264498/
+
+[build-badge]: https://travis-ci.org/Mokkapps/scrum-daily-standup-picker.svg?branch=master
+[build]: https://travis-ci.org/Mokkapps/scrum-daily-standup-picker.svg?branch=master
+[prs-badge]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
+[prs]: http://makeapullrequest.com

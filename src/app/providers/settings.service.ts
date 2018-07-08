@@ -22,7 +22,7 @@ export class SettingsService {
   constructor(
     public snackBar: MatSnackBar,
     private zone: NgZone,
-    private electronService: ElectronService,
+    electronService: ElectronService,
     private fileService: FileService
   ) {
     assetsPath = electronService.assetsPath;

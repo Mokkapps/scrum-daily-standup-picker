@@ -6,7 +6,7 @@ import {
   createNgZoneMock,
   createSnackBarMock,
   TEST_SETTINGS
-} from '../mocks';
+} from '../../mocks';
 
 describe('SettingsService', () => {
   let sut: SettingsService;
@@ -24,7 +24,7 @@ describe('SettingsService', () => {
     sut = new SettingsService(snackBar, ngZone, electronService, fileService);
   });
 
-  it('gets initialised correctly', () => {
+  it('gets initialized correctly', () => {
     expect(sut).toBeDefined();
   });
 
