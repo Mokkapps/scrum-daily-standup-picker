@@ -1,10 +1,15 @@
-import { AfterViewInit, Directive, ElementRef, Input } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  Input,
+  OnChanges
+} from '@angular/core';
 
 @Directive({
   // tslint:disable-next-line:directive-selector
   selector: '[background-image]'
 })
-export class BackgroundImageDirective implements AfterViewInit {
+export class BackgroundImageDirective implements OnChanges {
   // tslint:disable-next-line:no-input-rename
   @Input('background-image') backgroundImage: string;
 
@@ -14,7 +19,7 @@ export class BackgroundImageDirective implements AfterViewInit {
     this.el = el.nativeElement;
   }
 
-  ngAfterViewInit() {
+  ngOnChanges() {
     this.el.style.backgroundImage = 'url(' + this.backgroundImage + ')';
   }
 }

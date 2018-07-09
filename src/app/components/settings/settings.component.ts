@@ -6,6 +6,7 @@ import {
   FormGroup,
   Validators
 } from '@angular/forms';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -67,7 +68,8 @@ export class SettingsComponent {
     private translateService: TranslateService,
     private electronService: ElectronService,
     private fileService: FileService,
-    private archiverService: ArchiverService
+    private archiverService: ArchiverService,
+    private sanitizer: DomSanitizer
   ) {
     this.imagesPath = electronService.imagesPath;
     this.soundsPath = electronService.soundsPath;
@@ -243,7 +245,9 @@ export class SettingsComponent {
       );
       return;
     }
+
     console.log('Submit', this.settingsForm.value.standupPicker);
+
     this.settingsService
       .updateSettings({
         version: this.appSettings.version,
@@ -325,6 +329,10 @@ export class SettingsComponent {
     });
   }
 
+  sanitize(url: string): SafeResourceUrl {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
+
   private async importBackup(zipPath: string): Promise<void> {
     await this.fileService.deleteFile(this.electronService.settingsFilePath);
     await this.fileService.deleteDirFiles(this.electronService.imagesPath);
@@ -400,7 +408,7 @@ export class SettingsComponent {
     });
   }
 
-  private async readFilesFromFileSystem(): Promise<any> {
+  private async readFilesFromFileSystem(): Promise<[any, any]> {
     return Promise.all([
       this.fileService.readDirectory(this.getPathForFileType('image')),
       this.fileService.readDirectory(this.getPathForFileType('sound'))
@@ -425,16 +433,15 @@ export class SettingsComponent {
       standupEndReminderSound: settings.standupPicker.standupEndReminderSound
     });
 
-    // First clear existing FormArray
+    // First clear existing FormArray and then fill again
     while (this.standupMusic.length) {
       this.standupMusic.removeAt(this.standupMusic.length - 1);
     }
-    // Fill again
     this.getStandupSounds().forEach(sound => {
       this.addNewStandupSound(sound);
     });
 
-    // First clear existing FormArray anf then fill again
+    // First clear existing FormArray and then fill again
     while (this.teamMembers.length) {
       this.teamMembers.removeAt(this.teamMembers.length - 1);
     }

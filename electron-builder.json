@@ -2,7 +2,7 @@
   "productName": "Standup Picker",
   "asar": "false",
   "directories": {
-    "output": "app-builds"
+    "output": "app-builds",
   },
     "files": [
         "**/*",
@@ -21,21 +21,21 @@
         "!tslint.json"
     ],
   "win": {
-    "icon": "dist/icon.png",
+    "icon": "dist/icon.ico",
     "target": [
-      "portable"
+      "nsis"
     ]
   },
   "mac": {
-    "icon": "dist/icon.png",
+    "icon": "dist/icon.icns",
     "target": [
       "dmg"
     ]
   },
   "linux": {
-    "icon": "dist/icon.png",
+    "category": "Utility",
     "target": [
-      "AppImage"
+      "deb"
     ]
   }
 }
