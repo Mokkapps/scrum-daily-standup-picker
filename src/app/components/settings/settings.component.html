@@ -1,7 +1,7 @@
-<div class="background">
+<div id="settings-background" class="background">
     <mat-toolbar color="primary" class="mat-elevation-z4">
         <mat-toolbar-row>
-            <button mat-icon-button class="mr-4" (click)="navigateBack()">
+            <button id="settings-back-button" mat-icon-button class="mr-4" (click)="navigateBack()">
                 <mat-icon aria-label="Navigate back" class="toolbar-icon--scale">navigate_before</mat-icon>
             </button>
             {{'PAGES.SETTINGS.TITLE' | translate}}
@@ -9,7 +9,7 @@
             <button mat-icon-button (click)="showAboutDialog()">
                 <mat-icon aria-label="About" class="toolbar-icon--scale">help_outline</mat-icon>
             </button>
-            <button mat-icon-button (click)="onSubmit()">
+            <button id="save-button" mat-icon-button (click)="onSubmit()">
                 <mat-icon aria-label="Save" class="toolbar-icon--scale">save</mat-icon>
             </button>
         </mat-toolbar-row>
@@ -122,7 +122,7 @@
                                 <button mat-raised-button color="warn" type="button" *ngIf="teamMembers.controls.length > 1" (click)="deleteTeamMemberRow(i)">Teammitglied entfernen</button>
                                 <mat-divider class="mx-2 my-4"></mat-divider>
                             </div>
-                            <button mat-raised-button mat-primary type="button" (click)="addNewTeamMemberRow()">{{'PAGES.SETTINGS.FORM.STANDUP_PICKER.ADD_NEW_TEAM_MEMBER' | translate}}</button>
+                            <button id="add-team-member" mat-raised-button mat-primary type="button" (click)="addNewTeamMemberRow()">{{'PAGES.SETTINGS.FORM.STANDUP_PICKER.ADD_NEW_TEAM_MEMBER' | translate}}</button>
                         </div>
                     </div>
 

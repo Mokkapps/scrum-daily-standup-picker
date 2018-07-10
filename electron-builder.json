@@ -12,7 +12,6 @@
         "!package.json",
         "!package-lock.json",
         "!src/",
-        "!e2e/",
         "!hooks/",
         "!.angular-cli.json",
         "!_config.yml",
