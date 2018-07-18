@@ -3,6 +3,8 @@ import { ElectronService } from './providers/electron.service';
 import { TranslateService } from '@ngx-translate/core';
 import { AppConfig } from '../environments/environment';
 
+export const AVAILABLE_LANGUAGES = ['de_DE', 'en_US'];
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -11,9 +13,10 @@ import { AppConfig } from '../environments/environment';
 export class AppComponent {
   constructor(
     public electronService: ElectronService,
-    private translate: TranslateService
+    translate: TranslateService
   ) {
-    translate.setDefaultLang('de');
+    translate.setDefaultLang('en_US');
+    translate.use('en_US');
 
     console.log('AppConfig', AppConfig);
 

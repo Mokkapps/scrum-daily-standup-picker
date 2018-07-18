@@ -1,0 +1,124 @@
+{
+  "GENERAL": {
+    "YES": "Yes",
+    "NO": "No",
+    "CLOSE": "Close",
+    "ABORT": "Cancel",
+    "CONFIRM": "Confirm"
+  },
+  "LANGUAGES": {
+    "en_US": "English",
+    "de_DE": "German"
+  },
+  "PAGES": {
+    "STANDUP_PICKER": {
+      "TITLE": "Standup Picker",
+      "CLICK_TO_SELECT_TEAM_MEMBER":
+        "Click play icon on the right side to start",
+      "STARTS_TODAY": "{{name}} starts today",
+      "STARTS": "starts today",
+      "REMAINING_STANDUP_TIME":
+        "Remaining standup time: {{remainingMinutes}} minutes",
+      "PLEASE_WAIT": "Please wait...",
+      "HINT": {
+        "1": "1. What did you do yesterday?",
+        "2": "2. What will you do today?",
+        "3": "3. Are there any impediments in your way?"
+      },
+      "OUT_OF_OFFICE": "is out of office"
+    },
+    "SETTINGS": {
+      "FORM": {
+        "BACKGROUND": "Background image",
+        "STANDUP_HOUR": "Standup music start time (hour)",
+        "STANDUP_MINUTE": "Standup music start time (minute)",
+        "STANDUP_DURATION": "Standup duration in minutes",
+        "STANDUP_REMINDER_SOUND_MINUTES": "Reminder sound after x minutes",
+        "STANDUP_REMINDER_SOUND": "Reminder sound",
+        "SUCCESS_SOUND": "Team member selection sound",
+        "MEMBER_PICTURE": "Picture",
+        "MEMBER_NAME": "Name",
+        "SOUND_TITLE": "Title",
+        "SAVE": "Save",
+        "RESET": "Reset",
+        "SAVE_ERROR": "Error while saving the settings:",
+        "SAVE_SUCCESS": "Successfully saved settings",
+        "VALIDATORS": {
+          "REQUIRED": "This field is mandatory",
+          "NUMBER_PATTERN": "Please enter a valid number"
+        },
+        "INVALID_FORM": "Please enter all required fields before saving",
+        "LANGUAGE": {
+          "DESCRIPTION": "Switch language"
+        },
+        "FILE_UPLOAD": {
+          "TITLE": "File Import",
+          "DESCRIPTION": "Recommended picture size is 640x480px, recommended sound length is 30 seconds",
+          "SUPPORTED_IMAGE_FORMATS": "Supported picture files: jpg, jpeg, png",
+          "SUPPORTED_SOUND_FORMATS":
+            "Supported sound files: wav, mp3, ogg, m4a",
+          "BACKUP_DESCRIPTION":
+            "Existing settings can be exported or imported.",
+          "BACKUP_WARNING":
+            "WARNING: Backup import only works on the same machine with the same user.",
+          "EXPORT_BACKUP": {
+            "BUTTON": "Create backup",
+            "TITLE": "Choose folder for your backup",
+            "ERROR": "Error while exporting the backup:",
+            "SUCCESS": "Backup successfully exported to {{path}}"
+          },
+          "IMPORT_BACKUP": {
+            "BUTTON": "Import backup",
+            "TITLE": "Choose folder of your backup",
+            "ERROR": "Error while importing the backup:",
+            "SUCCESS": "Backup successfully imported"
+          },
+          "DELETE": {
+            "DESCRIPTION":
+              "These buttons can be used to delete on or multiple pictures and sounds",
+            "IMAGES": "Delete picture(s)",
+            "SOUNDS": "Delete sound(s)",
+            "DIALOG_IMAGES_TITLE": "Delete pictures",
+            "DIALOG_IMAGES_MESSAGE":
+              "Please select all pictures which should be deleted. This action is irreversible.",
+            "DIALOG_SOUNDS_TITLE": "Delete sounds",
+            "DIALOG_SOUNDS_MESSAGE":
+              "Please select all sounds which should be deleted. This action is irreversible.",
+            "SUCCESS": "Successfully deletes file(s)",
+            "ERROR": "Error while deleting file(s):"
+          },
+          "NO_FOLDER_SELECTED": "No file selected",
+          "IMAGE_UPLOAD": "Picture import",
+          "SOUND_UPLOAD": "Sound import",
+          "IMPORT_SUCCESS":
+            "Successfully imported file(s). You can now select them in the settings.",
+          "IMPORT_ERROR": "Error while file import:"
+        },
+        "STANDUP_PICKER": {
+          "TITLE": "Standup Picker",
+          "TEAM_MEMBERS": "Team member",
+          "TEAM_MEMBER": "Team member {{count}}",
+          "ADD_NEW_TEAM_MEMBER": "Add new team member",
+          "STANDUP_MUSIC": {
+            "TITLE": "Standup music",
+            "SOUND": "Sound {{count}}",
+            "ADD": "Add new standup music"
+          }
+        }
+      },
+      "TITLE": "Settings",
+      "LEAVE_DIALOG": {
+        "TITLE": "Leave settings",
+        "MESSAGE":
+          "Do you really want to leave the settings? Non-saved settings will be lost."
+      },
+      "ABOUT_DIALOG": {
+        "TITLE": "Standup Picker",
+        "MESSAGE_PART_1": "Developed with",
+        "MESSAGE_PART_2": "from © Mokkapps",
+        "GITHUB_BUTTON": "Visit GitHub project page",
+        "WEBSITE_BUTTON": "Visit Mokkapps website"
+      }
+    }
+  }
+}

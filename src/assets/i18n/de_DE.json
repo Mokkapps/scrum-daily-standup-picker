@@ -6,6 +6,10 @@
     "ABORT": "Abbrechen",
     "CONFIRM": "Bestätigen"
   },
+  "LANGUAGES": {
+    "en_US": "Englisch",
+    "de_DE": "Deutsch"
+  },
   "PAGES": {
     "STANDUP_PICKER": {
       "TITLE": "Standup Picker",
@@ -16,9 +20,9 @@
         "Restliche Standup Zeit: {{remainingMinutes}} Minuten",
       "PLEASE_WAIT": "Bitte warten...",
       "HINT": {
-        "1": "1. Was hast du gestern gemacht",
-        "2": "2. Was nimmst du dir für heute vor",
-        "3": "3. Was blockiert dich, um das Sprint Ziel zu erreichen"
+        "1": "1. Was hast du gestern gemacht?",
+        "2": "2. Was nimmst du dir für heute vor?",
+        "3": "3. Was blockiert dich, um das Sprint Ziel zu erreichen?"
       },
       "OUT_OF_OFFICE": "ist heute nicht da"
     },
@@ -44,9 +48,13 @@
         },
         "INVALID_FORM":
           "Bitte erst alle erforderlichen Felder vor dem Speichern ausfüllen.",
+        "LANGUAGE": {
+          "DESCRIPTION": "Sprache wechseln"
+        },
         "FILE_UPLOAD": {
           "TITLE": "Datei Import",
-          "DESCRIPTION": "Empfohlenes Bildformat: 640 x 480",
+          "DESCRIPTION":
+            "Empfohlenes Bildformat ist 640x480px, empfohlene Soundlänge ist 30 Sekunden",
           "SUPPORTED_IMAGE_FORMATS": "Unterstütze Bild-Formate: jpg, jpeg, png",
           "SUPPORTED_SOUND_FORMATS":
             "Unterstütze Sound-Formate: wav, mp3, ogg, m4a",
@@ -103,11 +111,14 @@
       "LEAVE_DIALOG": {
         "TITLE": "Seite verlassen",
         "MESSAGE":
-          "Wollen Sie die Seite wirklich verlassen? Nicht gespeicherte Einstellungen gehen dabei verloren."
+          "Wollen Sie die Einstellungen wirklich verlassen? Nicht gespeicherte Einstellungen gehen dabei verloren."
       },
       "ABOUT_DIALOG": {
         "TITLE": "Standup Picker",
-        "CONTACT_ME": "Schick mir eine E-Mail"
+        "MESSAGE_PART_1": "Entwickelt mit",
+        "MESSAGE_PART_2": "von © Mokkapps",
+        "GITHUB_BUTTON": "Zur GitHub Projekt-Seite",
+        "WEBSITE_BUTTON": "Zur Mokkapps Website"
       }
     }
   }

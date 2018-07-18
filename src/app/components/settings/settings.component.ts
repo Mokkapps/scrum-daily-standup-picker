@@ -16,12 +16,13 @@ import { ElectronService } from './../../providers/electron.service';
 
 import { AboutDialogComponent } from '../../components/settings/dialog/about-dialog.component';
 import { DeleteFilesDialogComponent } from '../../components/settings/dialog/delete-files-dialog.component';
-import { AppSettings } from '../../models/app-settings';
+import { AppSettings, StandupPicker } from '../../models/app-settings';
 import { FileService } from '../../providers/file.service';
 import { SettingsService } from '../../providers/settings.service';
 import { StandupSound } from '../../models/app-settings';
 import { ArchiverService } from './../../providers/archiver.service';
 import { ConfirmDialogComponent } from './dialog/confirm-dialog.component';
+import { AVAILABLE_LANGUAGES } from '../../app.component';
 
 const DIALOG_WIDTH = '500px';
 const WIDE_DIALOG_WIDTH = '80vw';
@@ -36,10 +37,6 @@ const SOUNDS_FILTER = {
   name: 'Sounds',
   extensions: ['wav', 'mp3', 'ogg', 'm4a']
 };
-const BACKUP_FILTER = {
-  name: 'Backup',
-  extensions: ['json']
-};
 
 @Component({
   selector: 'app-settings',
@@ -48,14 +45,11 @@ const BACKUP_FILTER = {
 })
 export class SettingsComponent {
   settingsForm: FormGroup;
-
   imageFiles: string[];
-
   soundFiles: string[];
-
   imagesPath = '';
-
   soundsPath = '';
+  languages = AVAILABLE_LANGUAGES;
 
   private appSettings: AppSettings;
 
@@ -248,6 +242,10 @@ export class SettingsComponent {
 
     console.log('Submit', this.settingsForm.value.standupPicker);
 
+    // Update translations
+    this.translateService.use(this.settingsForm.value.standupPicker.language);
+
+    // Upadte settings™
     this.settingsService
       .updateSettings({
         version: this.appSettings.version,
@@ -454,13 +452,10 @@ export class SettingsComponent {
     return <FormGroup>this.settingsForm.controls.standupPicker;
   }
 
-  private getSlideshowFormGroup(): FormGroup {
-    return <FormGroup>this.settingsForm.controls.slideshow;
-  }
-
   private createForm(): void {
     this.settingsForm = this.formBuilder.group({
       standupPicker: this.formBuilder.group({
+        language: [this.translateService.currentLang],
         background: [undefined, Validators.required],
         teamMembers: this.formBuilder.array([]),
         standupMusic: this.formBuilder.array([]),

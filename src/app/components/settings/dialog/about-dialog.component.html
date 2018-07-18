@@ -1,9 +1,10 @@
 <h2 mat-dialog-title>{{'PAGES.SETTINGS.ABOUT_DIALOG.TITLE' | translate}} (Version {{appVersion}})</h2>
 <mat-dialog-content>
-    <p>Entwickelt mit &hearts; von © Mokkapps {{year}}</p>
+    <p>{{'PAGES.SETTINGS.ABOUT_DIALOG.MESSAGE_PART_1' | translate}} &hearts; {{'PAGES.SETTINGS.ABOUT_DIALOG.MESSAGE_PART_2'
+        | translate}} {{year}}</p>
     <div class="flex-container mb-4">
-        <button mat-button (click)="openGitHubUrl()">Zur GitHub Projekt-Seite</button>
-        <button mat-button (click)="openMokkappsUrl()">Mokkapps Website</button>
+        <button mat-button (click)="openGitHubUrl()">{{'PAGES.SETTINGS.ABOUT_DIALOG.GITHUB_BUTTON' | translate}}</button>
+        <button mat-button (click)="openMokkappsUrl()">{{'PAGES.SETTINGS.ABOUT_DIALOG.WEBSITE_BUTTON' | translate}}</button>
     </div>
 </mat-dialog-content>
 <mat-dialog-actions>

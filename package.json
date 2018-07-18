@@ -1,7 +1,7 @@
 {
   "name": "scrum-daily-standup-picker",
-  "version": "1.1.1",
-  "description": "Tool for scrum teams to initiate the daily standup meeting",
+  "version": "1.2.0",
+  "description": "Tool for Scrum teams to initiate the daily standup meeting",
   "homepage": "https://github.com/Mokkapps/scrum-daily-standup-picker",
   "author": {
     "name": "Michael Hoffmann",
@@ -14,7 +14,6 @@
     "standup",
     "picker",
     "angular",
-    "angular 5",
     "electron",
     "typescript",
     "sass"
@@ -43,7 +42,6 @@
     "test:dev": "npm run postinstall:web && ng test --watch",
     "test:electron": "npm run build && mocha"
   },
-  "dependencies": {},
   "devDependencies": {
     "@angular-devkit/build-angular": "0.6.3",
     "@angular/animations": "6.0.6",

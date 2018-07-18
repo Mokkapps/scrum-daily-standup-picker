@@ -16,7 +16,7 @@
     </mat-toolbar>
 
     <div class="p-5">
-        <div class="background--white p-3 mat-elevation-z1">
+        <div class="background--white my-5 p-3 mat-elevation-z1">
             <h2 class="mb-4">{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.TITLE' | translate}}</h2>
             <p>{{'PAGES.SETTINGS.FORM.FILE_UPLOAD.DESCRIPTION' | translate}}</p>
             <div class="flex-buttons">
@@ -43,11 +43,16 @@
         <div class="background--white my-5 p-3 mat-elevation-z1">
             <form [formGroup]="settingsForm" (ngSubmit)="onSubmit()" novalidate>
                 <div class="form-group-container" formGroupName="standupPicker">
-
                     <h2 class="mb-4">{{'PAGES.SETTINGS.FORM.STANDUP_PICKER.TITLE' | translate}}</h2>
-
                     <div class="container">
                         <div class="row">
+                            <mat-form-field class="col-6 mb-1">
+                                <mat-select formControlName="language" placeholder="{{ 'PAGES.SETTINGS.FORM.LANGUAGE.DESCRIPTION' | translate}}">
+                                    <mat-option *ngFor="let language of languages" [value]="language">
+                                        {{'LANGUAGES.' + language | translate}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
                             <mat-form-field class="col-6 mb-1">
                                 <mat-select formControlName="background" placeholder="{{ 'PAGES.SETTINGS.FORM.BACKGROUND' | translate}}" required>
                                     <mat-option *ngFor="let file of imageFiles" value="{{imagesPath + file}}">

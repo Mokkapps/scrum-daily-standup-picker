@@ -22,7 +22,6 @@ import {
   MatTooltipModule
 } from '@angular/material';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
-
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
@@ -37,8 +36,8 @@ import { FileService } from './providers/file.service';
 import { WebviewDirective } from './directives/webview.directive';
 import { AppComponent } from './app.component';
 import { ConfirmDialogComponent } from './components/settings/dialog/confirm-dialog.component';
-import { DeleteFilesDialogComponent } from 'app/components/settings/dialog/delete-files-dialog.component';
-import { AboutDialogComponent } from 'app/components/settings/dialog/about-dialog.component';
+import { AboutDialogComponent } from './components/settings/dialog/about-dialog.component';
+import { DeleteFilesDialogComponent } from './components/settings/dialog/delete-files-dialog.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {

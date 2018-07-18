@@ -68,7 +68,7 @@ describe('Application launch', function() {
     await this.app.client.waitForVisible('#trigger-picker');
     await this.app.client.click('#trigger-picker');
     await this.app.client.waitForVisible('#hint1');
-    assert.equal(await this.app.client.getText('#timeText'), 'Restliche Standup Zeit: 15 Minuten');
+    assert.equal(await this.app.client.getText('#timeText'), 'Remaining standup time: 15 minutes');
   });
 
   it('should correctly add a new team member', async function() {
