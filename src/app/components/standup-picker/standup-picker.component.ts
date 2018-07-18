@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { LocalStorageService } from 'angular-2-local-storage';
 import { Subscription, interval, from, timer, zip } from 'rxjs';
-import { finalize, map, take } from 'rxjs/operators';
+import { finalize, map, take, startWith } from 'rxjs/operators';
 import * as shuffle from 'shuffle-array';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Howl } from 'howler';
@@ -20,17 +20,12 @@ const DEFAULT_COLOR_LOCAL_STORAGE_KEY = 'DEFAULT_COLOR';
   styleUrls: ['./standup-picker.component.scss']
 })
 export class StandupPickerComponent implements OnInit, OnDestroy {
-  title = '';
-
+  title: string;
   time: string;
-
   teamMembers: Member[] = [];
-
   // CSS style need a relative path, we also set a default background
   backgroundImage = './assets/images/background.jpg';
-
   defaultColor = true;
-
   isAudioPlaying = false;
 
   private currentPlayingSound: Howl;
@@ -46,25 +41,22 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
     private localStorageService: LocalStorageService,
     private sanitizer: DomSanitizer
   ) {
-    settingsService.settings.subscribe(settings => {
-      if (!settings) {
-        return;
-      }
-      this.settings = settings;
-      this.translateService.use(this.settings.standupPicker.language);
-      // CSS style need a relative path
-      this.backgroundImage = `./assets/images/${this.getFileNameWithExtension(
-        this.settings.standupPicker.background
-      )}`;
-      this.teamMembers = this.shuffleMembers(
-        this.settings.standupPicker.teamMembers
-      );
-    });
+    settingsService.setting$
+      .pipe(startWith(settingsService.settings))
+      .subscribe(settings => {
+        this.settings = settings;
+
+        // CSS style need a relative path
+        this.backgroundImage = `./assets/images/${this.getFileNameWithExtension(
+          this.settings.standupPicker.background
+        )}`;
+        this.teamMembers = this.shuffleMembers(
+          this.settings.standupPicker.teamMembers
+        );
+      });
   }
 
   ngOnInit(): void {
-    this.translateService.use(this.settings.standupPicker.language);
-
     this.translateService
       .get('PAGES.STANDUP_PICKER.CLICK_TO_SELECT_TEAM_MEMBER')
       .pipe(take(1))

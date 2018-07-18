@@ -1,8 +1,11 @@
 import { TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { AppComponent } from './app.component';
+import { LocalStorageModule } from 'angular-2-local-storage';
 import { TranslateModule } from '@ngx-translate/core';
+
+import { AppComponent } from './app.component';
 import { ElectronService } from './providers/electron.service';
+import { SettingsService } from './providers/settings.service';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -11,11 +14,16 @@ describe('AppComponent', () => {
         AppComponent
       ],
       providers: [
-        ElectronService
+        ElectronService,
+        SettingsService
       ],
       imports: [
         RouterTestingModule,
-        TranslateModule.forRoot()
+        TranslateModule.forRoot(),
+        LocalStorageModule.withConfig({
+          prefix: 'StandupPicker',
+          storageType: 'localStorage'
+        }),
       ]
     }).compileComponents();
   }));

@@ -1,89 +1,53 @@
-import { Injectable, NgZone } from '@angular/core';
-import { MatSnackBar } from '@angular/material';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { LocalStorageService } from 'angular-2-local-storage';
 
 import { AppSettings } from '../models/app-settings';
-import { FileService } from './file.service';
 import { ElectronService } from './electron.service';
+import { Subject, Observable } from 'rxjs';
 
 const SETTINGS_VERSION = 1;
+const LOCAL_STORAGE_KEY = `SETTINGS_V${SETTINGS_VERSION}`;
 
-let settingsFilePath = '';
 let imagesPath = '';
 let soundsPath = '';
 
 @Injectable()
 export class SettingsService {
-  private appSettings: BehaviorSubject<
-    AppSettings | undefined
-  > = new BehaviorSubject(undefined);
+  private settingsSubject = new Subject<AppSettings>();
+  private _settings: AppSettings;
 
   constructor(
-    public snackBar: MatSnackBar,
-    private zone: NgZone,
     electronService: ElectronService,
-    private fileService: FileService
+    private localStorageService: LocalStorageService
   ) {
-    settingsFilePath = electronService.settingsFilePath;
     imagesPath = electronService.imagesPath;
     soundsPath = electronService.soundsPath;
 
-    this.readStoredSettings();
+    const localStorageSettings: string = this.localStorageService.get(
+      LOCAL_STORAGE_KEY
+    );
+    this._settings = localStorageSettings
+      ? JSON.parse(localStorageSettings)
+      : this.getDefaultSettings();
+    this.settingsSubject.next(this._settings);
   }
 
   get settingsVersion(): number {
     return SETTINGS_VERSION;
   }
 
-  get settings(): Observable<AppSettings | undefined> {
-    return this.appSettings.asObservable();
+  get setting$(): Observable<AppSettings> {
+    return this.settingsSubject.asObservable();
   }
 
-  readStoredSettings(): void {
-    this.fileService
-      .readFile(settingsFilePath)
-      .then(data => {
-        this.zone.run(() => {
-          this.appSettings.next(JSON.parse(data));
-        });
-      })
-      .catch(err => {
-        console.log('No stored settings available, load default settings', err);
-        // Store default settings if no settings are available
-        this.storeDefaultSettings();
-      });
+  get settings(): AppSettings {
+    return this._settings;
   }
 
-  updateSettings(settings: AppSettings): Promise<any> {
-    this.zone.run(() => {
-      this.appSettings.next(settings);
-    });
-    return this.storeSettings(settings);
-  }
-
-  private storeDefaultSettings() {
-    this.storeSettings(this.getDefaultSettings())
-      .then(() => {
-        this.zone.run(() => {
-          this.appSettings.next(this.getDefaultSettings());
-        });
-      })
-      .catch(err => {
-        console.error(
-          `Error storing default settings to ${settingsFilePath}`,
-          err
-        );
-        this.snackBar.open(err, undefined, {
-          duration: 2000
-        });
-      });
-  }
-
-  private storeSettings(settings: AppSettings): Promise<any> {
-    return this.fileService.writeFile(
-      settingsFilePath,
-      JSON.stringify(settings)
-    );
+  updateSettings(settings: AppSettings): void {
+    this.localStorageService.set(LOCAL_STORAGE_KEY, JSON.stringify(settings));
+    this._settings = settings;
+    this.settingsSubject.next(settings);
   }
 
   private getDefaultSettings(): AppSettings {

@@ -11,7 +11,7 @@ import { MatDialog, MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import * as random_name from 'node-random-name';
-import { filter, take } from 'rxjs/operators';
+import { filter, take, startWith } from 'rxjs/operators';
 import { ElectronService } from './../../providers/electron.service';
 
 import { AboutDialogComponent } from '../../components/settings/dialog/about-dialog.component';
@@ -70,11 +70,8 @@ export class SettingsComponent {
 
     this.createForm();
 
-    settingsService.settings
-      .pipe(
-        filter(settings => settings !== undefined),
-        take(1)
-      )
+    settingsService.setting$
+      .pipe(startWith(settingsService.settings))
       .subscribe(settings => {
         this.appSettings = settings;
         this.updateForm(settings);
@@ -245,26 +242,17 @@ export class SettingsComponent {
     // Update translations
     this.translateService.use(this.settingsForm.value.standupPicker.language);
 
-    // Upadte settings™
-    this.settingsService
-      .updateSettings({
-        version: this.appSettings.version,
-        standupPicker: this.settingsForm.value.standupPicker
-      })
-      .then(() => {
-        this.showSnackbar(
-          this.translateService.instant('PAGES.SETTINGS.FORM.SAVE_SUCCESS'),
-          3000
-        );
-        this.settingsForm.markAsPristine();
-        this.router.navigate(['../']);
-      })
-      .catch(err => {
-        const errorText = this.translateService.instant(
-          'PAGES.SETTINGS.FORM.SAVE_ERROR'
-        );
-        this.showSnackbar(`${errorText} ${err}`, ERROR_DURATION_IN_MS);
-      });
+    // Update settings
+    this.settingsService.updateSettings({
+      version: this.appSettings.version,
+      standupPicker: this.settingsForm.value.standupPicker
+    });
+    this.showSnackbar(
+      this.translateService.instant('PAGES.SETTINGS.FORM.SAVE_SUCCESS'),
+      3000
+    );
+    this.settingsForm.markAsPristine();
+    this.router.navigate(['../']);
   }
 
   addNewStandupSound(sound: StandupSound): void {
@@ -336,7 +324,6 @@ export class SettingsComponent {
     await this.fileService.deleteDirFiles(this.electronService.imagesPath);
     await this.fileService.deleteDirFiles(this.electronService.soundsPath);
     await this.archiverService.readArchive(zipPath);
-    this.settingsService.readStoredSettings();
   }
 
   private getPathForFileType(fileType: FileType): string {

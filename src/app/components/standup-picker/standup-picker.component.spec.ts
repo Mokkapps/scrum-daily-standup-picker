@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
 import { LocalStorageService } from 'angular-2-local-storage';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subject } from 'rxjs';
 
 import { AppSettings } from './../../models/app-settings';
 import { createLocalStorageServiceMock, TEST_SETTINGS } from '../../../mocks';
@@ -29,8 +29,9 @@ describe('StandupPickerComponent', () => {
   let localStorageService: any;
 
   beforeEach(() => {
-    settingsService = jasmine.createSpyObj('SettingsService', ['settings']);
-    settingsService.settings = new BehaviorSubject<AppSettings>(TEST_SETTINGS);
+    settingsService = jasmine.createSpyObj('SettingsService', ['settings', 'setting$']);
+    settingsService.settings = TEST_SETTINGS;
+    settingsService.setting$ = new Subject<AppSettings>();
 
     localStorageService = createLocalStorageServiceMock();
 
@@ -61,7 +62,7 @@ describe('StandupPickerComponent', () => {
 
   it('should show default values', () => {
     expect(comp.backgroundImage).toBe('./assets/images/background.jpg');
-    expect(comp.title).toBe('');
+    expect(comp.title).toBeUndefined();
     expect(comp.isAudioPlaying).toBe(false);
     expect(comp.defaultColor).toBe(true);
     expect(comp.teamMembers.length).toBe(2);
@@ -70,7 +71,7 @@ describe('StandupPickerComponent', () => {
   it(
     'should update values for new settings',
     fakeAsync(() => {
-      settingsService.settings.next({
+      settingsService.setting$.next({
         ...TEST_SETTINGS,
         standupPicker: {
           ...TEST_SETTINGS.standupPicker,

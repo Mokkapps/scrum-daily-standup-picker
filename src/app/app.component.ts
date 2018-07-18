@@ -1,3 +1,4 @@
+import { SettingsService } from './providers/settings.service';
 import { Component } from '@angular/core';
 import { ElectronService } from './providers/electron.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -12,10 +13,12 @@ export const AVAILABLE_LANGUAGES = ['de_DE', 'en_US'];
 })
 export class AppComponent {
   constructor(
-    public electronService: ElectronService,
-    translate: TranslateService
+    electronService: ElectronService,
+    translate: TranslateService,
+    settingsService: SettingsService
   ) {
     translate.setDefaultLang('en_US');
+    translate.use(settingsService.settings.standupPicker.language);
 
     console.log('AppConfig', AppConfig);
 
