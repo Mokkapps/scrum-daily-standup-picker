@@ -8,7 +8,6 @@ import { ElectronService } from './electron.service';
 
 const SETTINGS_VERSION = 1;
 
-let assetsPath = '';
 let settingsFilePath = '';
 let imagesPath = '';
 let soundsPath = '';
@@ -25,7 +24,6 @@ export class SettingsService {
     electronService: ElectronService,
     private fileService: FileService
   ) {
-    assetsPath = electronService.assetsPath;
     settingsFilePath = electronService.settingsFilePath;
     imagesPath = electronService.imagesPath;
     soundsPath = electronService.soundsPath;
@@ -92,6 +90,7 @@ export class SettingsService {
     return {
       version: SETTINGS_VERSION,
       standupPicker: {
+        language: 'en_US',
         background: `${imagesPath}background.jpg`,
         standupHour: 9,
         standupMinute: 59,

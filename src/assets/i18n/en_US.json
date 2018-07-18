@@ -99,6 +99,7 @@
           "TEAM_MEMBERS": "Team member",
           "TEAM_MEMBER": "Team member {{count}}",
           "ADD_NEW_TEAM_MEMBER": "Add new team member",
+          "REMOVE_TEAM_MEMBER": "Remove team member",
           "STANDUP_MUSIC": {
             "TITLE": "Standup music",
             "SOUND": "Sound {{count}}",

@@ -100,6 +100,7 @@
           "TEAM_MEMBERS": "Team Mitglieder",
           "TEAM_MEMBER": "Team Mitglied {{count}}",
           "ADD_NEW_TEAM_MEMBER": "Neues Teammitglied hinzufügen",
+          "REMOVE_TEAM_MEMBER": "Teammitglied entfernen",
           "STANDUP_MUSIC": {
             "TITLE": "Standup Musik",
             "SOUND": "Sound {{count}}",

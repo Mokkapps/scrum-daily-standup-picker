@@ -3,9 +3,18 @@ exports.__esModule = true;
 var electron_1 = require("electron");
 var path = require("path");
 var url = require("url");
+var log = require('electron-log');
+var autoUpdater = require('electron-updater').autoUpdater;
 var win, serve;
 var args = process.argv.slice(1);
 serve = args.some(function (val) { return val === '--serve'; });
+autoUpdater.logger = log;
+autoUpdater.logger.transports.file.level = 'info';
+log.info('App starting...');
+function sendStatusToWindow(text) {
+    log.info(text);
+    win.webContents.send('message', text);
+}
 function createWindow() {
     var electronScreen = electron_1.screen;
     var size = electronScreen.getPrimaryDisplay().workAreaSize;
@@ -33,6 +42,8 @@ function createWindow() {
     if (serve) {
         win.webContents.openDevTools();
     }
+    // Check for updates
+    autoUpdater.checkForUpdatesAndNotify();
     // Emitted when the window is closed.
     win.on('closed', function () {
         // Dereference the window object, usually you would store window
@@ -61,8 +72,37 @@ try {
             createWindow();
         }
     });
+    // Auto Updater
+    autoUpdater.on('checking-for-update', function () {
+        sendStatusToWindow('Checking for update...');
+    });
+    autoUpdater.on('update-available', function (info) {
+        sendStatusToWindow('Update available.');
+    });
+    autoUpdater.on('update-not-available', function (info) {
+        sendStatusToWindow('Update not available.');
+    });
+    autoUpdater.on('error', function (err) {
+        sendStatusToWindow('Error in auto-updater. ' + err);
+    });
+    autoUpdater.on('download-progress', function (progressObj) {
+        var log_message = 'Download speed: ' + progressObj.bytesPerSecond;
+        log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
+        log_message =
+            log_message +
+                ' (' +
+                progressObj.transferred +
+                '/' +
+                progressObj.total +
+                ')';
+        sendStatusToWindow(log_message);
+    });
+    autoUpdater.on('update-downloaded', function (info) {
+        sendStatusToWindow('Update downloaded');
+    });
 }
 catch (e) {
     // Catch Error
+    log.error(e);
     // throw e;
 }

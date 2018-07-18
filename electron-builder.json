@@ -2,39 +2,32 @@
   "productName": "Standup Picker",
   "asar": "false",
   "directories": {
-    "output": "app-builds",
+    "output": "app-builds"
   },
-    "files": [
-        "**/*",
-        "!*.ts",
-        "!*.code-workspace",
-        "!LICENSE.md",
-        "!package.json",
-        "!package-lock.json",
-        "!src/",
-        "!hooks/",
-        "!.angular-cli.json",
-        "!_config.yml",
-        "!karma.conf.js",
-        "!tsconfig.json",
-        "!tslint.json"
-    ],
+  "files": [
+    "**/*",
+    "!*.ts",
+    "!*.code-workspace",
+    "!LICENSE.md",
+    "!package.json",
+    "!package-lock.json",
+    "!src/",
+    "!hooks/",
+    "!.angular-cli.json",
+    "!_config.yml",
+    "!karma.conf.js",
+    "!tsconfig.json",
+    "!tslint.json"
+  ],
   "win": {
     "icon": "dist/icon.ico",
-    "target": [
-      "nsis"
-    ]
+    "target": ["nsis"]
   },
   "mac": {
-    "icon": "dist/icon.icns",
-    "target": [
-      "dmg"
-    ]
+    "icon": "dist/icon.icns"
   },
   "linux": {
     "category": "Utility",
-    "target": [
-      "deb"
-    ]
+    "target": ["deb"]
   }
 }

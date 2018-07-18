@@ -6,6 +6,7 @@ export interface AppSettings {
 }
 
 export interface StandupPicker {
+  language: string;
   background: string;
   standupHour: number;
   standupMinute: number;

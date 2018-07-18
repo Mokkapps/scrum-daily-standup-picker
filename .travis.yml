@@ -36,7 +36,11 @@ script:
 - npm run test
 - npm run test:electron
 
+after_success:
+  - test $TRAVIS_BRANCH = "master" &&
+    npm ship:windows && npm ship:mac && npm ship:linux && npm ship:linux:arm
+
 notifications:
   email:
-    on_success: never
+    on_success: change
     on_failure: change

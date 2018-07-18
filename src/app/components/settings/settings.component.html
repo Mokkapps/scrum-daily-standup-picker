@@ -124,7 +124,7 @@
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
-                                <button mat-raised-button color="warn" type="button" *ngIf="teamMembers.controls.length > 1" (click)="deleteTeamMemberRow(i)">Teammitglied entfernen</button>
+                                <button mat-raised-button color="warn" type="button" *ngIf="teamMembers.controls.length > 1" (click)="deleteTeamMemberRow(i)">{{'PAGES.SETTINGS.FORM.STANDUP_PICKER.REMOVE_TEAM_MEMBER' | translate}}</button>
                                 <mat-divider class="mx-2 my-4"></mat-divider>
                             </div>
                             <button id="add-team-member" mat-raised-button mat-primary type="button" (click)="addNewTeamMemberRow()">{{'PAGES.SETTINGS.FORM.STANDUP_PICKER.ADD_NEW_TEAM_MEMBER' | translate}}</button>

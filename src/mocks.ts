@@ -3,6 +3,7 @@ import { of } from 'rxjs';
 export const TEST_SETTINGS = {
   version: 1,
   standupPicker: {
+    language: 'en_US',
     background: 'imagesPath/background.jpg',
     standupHour: 9,
     standupMinute: 59,

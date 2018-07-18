@@ -421,6 +421,7 @@ export class SettingsComponent {
 
   private patchFormValues(settings: AppSettings): void {
     this.getStandupPickerFormGroup().patchValue({
+      language: settings.standupPicker.language,
       background: settings.standupPicker.background,
       standupHour: settings.standupPicker.standupHour,
       standupMinute: settings.standupPicker.standupMinute,
