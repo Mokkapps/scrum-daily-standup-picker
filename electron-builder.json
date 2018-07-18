@@ -1,5 +1,6 @@
 {
   "productName": "Standup Picker",
+  "appId": "de.mokkapps.standupPicker",
   "asar": "false",
   "directories": {
     "output": "app-builds"

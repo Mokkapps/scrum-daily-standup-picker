@@ -51,6 +51,7 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
         return;
       }
       this.settings = settings;
+      this.translateService.use(this.settings.standupPicker.language);
       // CSS style need a relative path
       this.backgroundImage = `./assets/images/${this.getFileNameWithExtension(
         this.settings.standupPicker.background
@@ -62,6 +63,8 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.translateService.use(this.settings.standupPicker.language);
+
     this.translateService
       .get('PAGES.STANDUP_PICKER.CLICK_TO_SELECT_TEAM_MEMBER')
       .pipe(take(1))

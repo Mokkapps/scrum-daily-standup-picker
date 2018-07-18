@@ -16,7 +16,6 @@ export class AppComponent {
     translate: TranslateService
   ) {
     translate.setDefaultLang('en_US');
-    translate.use('en_US');
 
     console.log('AppConfig', AppConfig);
 

@@ -8,8 +8,7 @@ var autoUpdater = require('electron-updater').autoUpdater;
 var win, serve;
 var args = process.argv.slice(1);
 serve = args.some(function (val) { return val === '--serve'; });
-autoUpdater.logger = log;
-autoUpdater.logger.transports.file.level = 'info';
+log.transports.file.level = 'info';
 log.info('App starting...');
 function sendStatusToWindow(text) {
     log.info(text);
@@ -104,5 +103,6 @@ try {
 catch (e) {
     // Catch Error
     log.error(e);
+    electron_1.dialog.showErrorBox('Error', e);
     // throw e;
 }

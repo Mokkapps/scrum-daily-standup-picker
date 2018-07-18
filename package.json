@@ -21,9 +21,6 @@
   ],
   "main": "main.js",
   "private": true,
-  "build": {
-    "appId": "de.mokkapps.standupPicke"
-  },
   "scripts": {
     "postinstall": "npm run postinstall:electron && npx electron-builder install-app-deps",
     "postinstall:web": "node postinstall-web",

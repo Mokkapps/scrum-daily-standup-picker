@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, screen } from 'electron';
+import { app, BrowserWindow, screen, dialog } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 
@@ -9,8 +9,7 @@ let win, serve;
 const args = process.argv.slice(1);
 serve = args.some(val => val === '--serve');
 
-autoUpdater.logger = log;
-autoUpdater.logger.transports.file.level = 'info';
+log.transports.file.level = 'info';
 log.info('App starting...');
 
 function sendStatusToWindow(text) {
@@ -116,5 +115,6 @@ try {
 } catch (e) {
   // Catch Error
   log.error(e);
+  dialog.showErrorBox('Error', e);
   // throw e;
 }
