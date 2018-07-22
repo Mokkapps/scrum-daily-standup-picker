@@ -25,6 +25,7 @@
     "postinstall": "npm run postinstall:electron && npx electron-builder install-app-deps",
     "postinstall:web": "node postinstall-web",
     "postinstall:electron": "node postinstall",
+    "clear:temp": "rm -rf dist",
     "ng": "ng",
     "start": "npm run postinstall:electron && npm-run-all -p ng:serve electron:serve",
     "build": "npm run postinstall:electron && npm run electron:tsc && ng build",
@@ -45,7 +46,8 @@
     "ship:linux:arm": "npm run build:prod && npx electron-builder build --linux --armv7l -p always",
     "test": "npm run postinstall:web && ng test",
     "test:dev": "npm run postinstall:web && ng test --watch",
-    "test:electron": "npm run build && mocha"
+    "pretest:electron": "npm run clear:temp",
+    "test:electron": "npm run build:dev --e2e && mocha"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "0.6.3",
@@ -76,6 +78,7 @@
     "decompress": "^4.2.0",
     "electron": "2.0.3",
     "electron-builder": "20.14.7",
+    "electron-is-dev": "^0.3.0",
     "electron-reload": "1.2.2",
     "howler": "^2.0.13",
     "jasmine": "^3.1.0",

@@ -4,18 +4,28 @@ import * as url from 'url';
 
 const log = require('electron-log');
 const { autoUpdater } = require('electron-updater');
+const isDev = require('electron-is-dev');
 
 let win, serve;
 const args = process.argv.slice(1);
 serve = args.some(val => val === '--serve');
 
-log.transports.file.level = 'info';
+log.transports.file.level = 'debug';
+autoUpdater.logger = log;
+// Disable auto download as ASAR is disabled and therefore code signing cannot be done
+autoUpdater.autoDownload = false;
+
 log.info('App starting...');
 
-function sendStatusToWindow(text) {
-  log.info(text);
-  win.webContents.send('message', text);
-}
+// Manage unhandled exceptions as early as possible
+process.on('uncaughtException', e => {
+  console.error(`Caught unhandled exception: ${e}`);
+  dialog.showErrorBox(
+    'Caught unhandled exception',
+    e.message || 'Unknown error message'
+  );
+  app.quit();
+});
 
 function createWindow() {
   const electronScreen = screen;
@@ -49,8 +59,9 @@ function createWindow() {
     win.webContents.openDevTools();
   }
 
-  // Check for updates
-  autoUpdater.checkForUpdatesAndNotify();
+  if (!isDev) {
+    autoUpdater.checkForUpdates();
+  }
 
   // Emitted when the window is closed.
   win.on('closed', () => {
@@ -85,36 +96,49 @@ try {
   });
 
   // Auto Updater
-  autoUpdater.on('checking-for-update', () => {
-    sendStatusToWindow('Checking for update...');
+  autoUpdater.on('error', error => {
+    dialog.showErrorBox(
+      'Error while looking for updates: ',
+      error == null ? 'unknown' : (error.stack || error).toString()
+    );
   });
-  autoUpdater.on('update-available', info => {
-    sendStatusToWindow('Update available.');
+
+  autoUpdater.on('update-available', () => {
+    dialog.showMessageBox(
+      {
+        type: 'info',
+        title: 'Found Updates',
+        message: 'Found updates, do you want update now?',
+        buttons: ['Sure', 'No']
+      },
+      buttonIndex => {
+        if (buttonIndex === 0) {
+          autoUpdater.downloadUpdate();
+        }
+      }
+    );
   });
-  autoUpdater.on('update-not-available', info => {
-    sendStatusToWindow('Update not available.');
+
+  autoUpdater.on('update-not-available', () => {
+    dialog.showMessageBox({
+      title: 'No Updates',
+      message: 'Current version is up-to-date.'
+    });
   });
-  autoUpdater.on('error', err => {
-    sendStatusToWindow('Error in auto-updater. ' + err);
-  });
-  autoUpdater.on('download-progress', progressObj => {
-    let log_message = 'Download speed: ' + progressObj.bytesPerSecond;
-    log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
-    log_message =
-      log_message +
-      ' (' +
-      progressObj.transferred +
-      '/' +
-      progressObj.total +
-      ')';
-    sendStatusToWindow(log_message);
-  });
-  autoUpdater.on('update-downloaded', info => {
-    sendStatusToWindow('Update downloaded');
+
+  autoUpdater.on('update-downloaded', () => {
+    dialog.showMessageBox(
+      {
+        title: 'Install Updates',
+        message: 'Updates downloaded, application will be quit for update...'
+      },
+      () => {
+        setImmediate(() => autoUpdater.quitAndInstall());
+      }
+    );
   });
 } catch (e) {
   // Catch Error
   log.error(e);
-  dialog.showErrorBox('Error', e);
   // throw e;
 }

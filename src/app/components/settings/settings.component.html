@@ -47,7 +47,7 @@
                     <div class="container">
                         <div class="row">
                             <mat-form-field class="col-6 mb-1">
-                                <mat-select formControlName="language" placeholder="{{ 'PAGES.SETTINGS.FORM.LANGUAGE.DESCRIPTION' | translate}}">
+                                <mat-select id="switch-language" formControlName="language" placeholder="{{ 'PAGES.SETTINGS.FORM.LANGUAGE.DESCRIPTION' | translate}}">
                                     <mat-option *ngFor="let language of languages" [value]="language">
                                         {{'LANGUAGES.' + language | translate}}
                                     </mat-option>

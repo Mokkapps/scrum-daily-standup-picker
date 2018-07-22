@@ -4,6 +4,19 @@ const electronPath = require('electron'); // Require Electron from the binaries 
 const path = require('path');
 
 describe('Application launch', function() {
+  const MAT_CARD = 'mat-card';
+  const GO_TO_SETTINGS = '#go-to-settings';
+  const SETTINGS_BACKGROUND = '#settings-background';
+  const TRIGGER_PICKER = '#trigger-picker';
+  const FIRST_HINT = '#hint1';
+  const TIME_TEXT = '#timeText';
+  const ADD_TEAM_MEMBER = '#add-team-member';
+  const SAVE_BUTTON = '#save-button';
+  const PICKER_BACKGROUND = '#picker-background';
+  const STANDUP_PICKER_TOOLBAR_TITLE = '#standup-picker-toolbar-title';
+  const SWITCH_LANGUAGE = '#switch-language';
+  const DE_OPTION = '#mat-option-0';
+
   this.timeout(10000);
 
   beforeEach(function() {
@@ -33,6 +46,7 @@ describe('Application launch', function() {
 
   afterEach(function() {
     if (this.app && this.app.isRunning()) {
+      this.app.client.localStorage('DELETE');
       return this.app.stop();
     }
   });
@@ -53,38 +67,68 @@ describe('Application launch', function() {
   });
 
   it('shows two member cards per default', async function() {
-    const memberCardNodes = await this.app.client.$$('mat-card');
+    const memberCardNodes = await this.app.client.$$(MAT_CARD);
     assert.equal(memberCardNodes.length === 2, true);
   });
 
   it('switches to settings page if settings button is pressed', async function() {
     await this.app.browserWindow.isVisible();
-    await this.app.client.click('#go-to-settings');
-    await this.app.client.waitForVisible('#settings-background');
+    await this.app.client.click(GO_TO_SETTINGS);
+    await this.app.client.waitForVisible(SETTINGS_BACKGROUND);
   });
 
   it('should start picker if play icon is pressed', async function() {
     await this.app.browserWindow.isVisible();
-    await this.app.client.waitForVisible('#trigger-picker');
-    await this.app.client.click('#trigger-picker');
-    await this.app.client.waitForVisible('#hint1');
-    assert.equal(await this.app.client.getText('#timeText'), 'Remaining standup time: 15 minutes');
+    await this.app.client.waitForVisible(TRIGGER_PICKER);
+    await this.app.client.click(TRIGGER_PICKER);
+    await this.app.client.waitForVisible(FIRST_HINT);
+    assert.equal(
+      await this.app.client.getText(TIME_TEXT),
+      'Remaining standup time: 15 minutes'
+    );
   });
 
   it('should correctly add a new team member', async function() {
     await this.app.browserWindow.isVisible();
-    await this.app.client.click('#go-to-settings');
-    await this.app.client.waitForVisible('#settings-background');
+    await this.app.client.click(GO_TO_SETTINGS);
+    await this.app.client.waitForVisible(SETTINGS_BACKGROUND);
 
-    await this.app.client.scroll('#add-team-member')
-    await this.app.client.click('#add-team-member');
+    await this.app.client.scroll(ADD_TEAM_MEMBER);
+    await this.app.client.click(ADD_TEAM_MEMBER);
 
-    await this.app.client.scroll('#save-button')
-    await this.app.client.click('#save-button');
+    await this.app.client.scroll(SAVE_BUTTON);
+    await this.app.client.click(SAVE_BUTTON);
 
-    await this.app.client.waitForVisible('#picker-background');
+    await this.app.client.waitForVisible(PICKER_BACKGROUND);
 
     const memberCardNodes = await this.app.client.$$('mat-card');
     assert.equal(memberCardNodes.length === 3, true);
+  });
+
+  it('should correctly switch language', async function() {
+    await this.app.browserWindow.isVisible();
+
+    assert.equal(
+      await this.app.client.getText(STANDUP_PICKER_TOOLBAR_TITLE),
+      'Click play icon on the right side to start'
+    );
+
+    await this.app.client.click(GO_TO_SETTINGS);
+    await this.app.client.waitForVisible(SETTINGS_BACKGROUND);
+
+    await this.app.client.scroll(SWITCH_LANGUAGE);
+    await this.app.client.click(SWITCH_LANGUAGE);
+    await this.app.client.click(DE_OPTION);
+
+    await this.app.client.scroll(SAVE_BUTTON);
+    await this.app.client.waitForVisible(SAVE_BUTTON);
+    await this.app.client.click(SAVE_BUTTON);
+
+    await this.app.client.waitForVisible(PICKER_BACKGROUND);
+
+    assert.equal(
+      await this.app.client.getText(STANDUP_PICKER_TOOLBAR_TITLE),
+      'Zum Starten rechts auf Play-Icon klicken'
+    );
   });
 });

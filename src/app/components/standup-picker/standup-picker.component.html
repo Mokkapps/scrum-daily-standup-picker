@@ -1,7 +1,7 @@
 <div id="picker-background" class="background" background-image="{{ backgroundImage }}">
     <mat-toolbar color="primary" class="mat-elevation-z4">
         <mat-toolbar-row>
-            {{title}}
+            <span id="standup-picker-toolbar-title">{{title}}</span>
             <span class="mat-toolbar-row"></span>
             <button id="trigger-picker" mat-icon-button (click)="triggerPicker()">
                 <mat-icon aria-label="Start" class="toolbar-icon--scale">play_arrow</mat-icon>
