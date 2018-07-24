@@ -10,7 +10,7 @@ This project was bootstrapped with [angular-electron](https://github.com/maximeg
 
 Design by [Angular Material](https://material.angular.io).
 
-<img src="./Standup_Picker_1-0-0_480p.gif?raw=true" width="100%">
+[![Standup Picker](./youtube_video_thumbnail.png)](https://youtu.be/7MHk09N5APM "Standup Picker - Click to Watch!")
 
 # Features
 
