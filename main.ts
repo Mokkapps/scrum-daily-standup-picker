@@ -1,4 +1,4 @@
-import { app, BrowserWindow, screen, dialog } from 'electron';
+import { app, BrowserWindow, screen, dialog, shell } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 
@@ -9,6 +9,9 @@ const isDev = require('electron-is-dev');
 let win, serve;
 const args = process.argv.slice(1);
 serve = args.some(val => val === '--serve');
+
+const GITHUB_RELEASE_URL =
+  'https://github.com/Mokkapps/scrum-daily-standup-picker/releases';
 
 log.transports.file.level = 'debug';
 autoUpdater.logger = log;
@@ -114,7 +117,7 @@ try {
       },
       buttonIndex => {
         if (buttonIndex === 0) {
-          autoUpdater.downloadUpdate();
+          shell.openExternal(GITHUB_RELEASE_URL);
         }
       }
     );
@@ -122,18 +125,6 @@ try {
 
   autoUpdater.on('update-not-available', () => {
     log.info('Current version is up-to-date');
-  });
-
-  autoUpdater.on('update-downloaded', () => {
-    dialog.showMessageBox(
-      {
-        title: 'Install Updates',
-        message: 'Updates downloaded, application will be quit for update...'
-      },
-      () => {
-        setImmediate(() => autoUpdater.quitAndInstall());
-      }
-    );
   });
 } catch (e) {
   log.error(e);

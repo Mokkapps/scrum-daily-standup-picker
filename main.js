@@ -9,6 +9,7 @@ var isDev = require('electron-is-dev');
 var win, serve;
 var args = process.argv.slice(1);
 serve = args.some(function (val) { return val === '--serve'; });
+var GITHUB_RELEASE_URL = 'https://github.com/Mokkapps/scrum-daily-standup-picker/releases';
 log.transports.file.level = 'debug';
 autoUpdater.logger = log;
 // Disable auto download as ASAR is disabled and therefore code signing cannot be done
@@ -17,6 +18,7 @@ log.info('App starting...');
 // Manage unhandled exceptions as early as possible
 process.on('uncaughtException', function (e) {
     console.error("Caught unhandled exception: " + e);
+    log.error("Caught unhandled exception: " + e);
     electron_1.dialog.showErrorBox('Caught unhandled exception', e.message || 'Unknown error message');
     electron_1.app.quit();
 });
@@ -90,27 +92,15 @@ try {
             buttons: ['Sure', 'No']
         }, function (buttonIndex) {
             if (buttonIndex === 0) {
-                autoUpdater.downloadUpdate();
+                electron_1.shell.openExternal(GITHUB_RELEASE_URL);
             }
         });
     });
     autoUpdater.on('update-not-available', function () {
-        electron_1.dialog.showMessageBox({
-            title: 'No Updates',
-            message: 'Current version is up-to-date.'
-        });
-    });
-    autoUpdater.on('update-downloaded', function () {
-        electron_1.dialog.showMessageBox({
-            title: 'Install Updates',
-            message: 'Updates downloaded, application will be quit for update...'
-        }, function () {
-            setImmediate(function () { return autoUpdater.quitAndInstall(); });
-        });
+        log.info('Current version is up-to-date');
     });
 }
 catch (e) {
-    // Catch Error
     log.error(e);
     // throw e;
 }
