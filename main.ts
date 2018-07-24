@@ -20,6 +20,7 @@ log.info('App starting...');
 // Manage unhandled exceptions as early as possible
 process.on('uncaughtException', e => {
   console.error(`Caught unhandled exception: ${e}`);
+  log.error(`Caught unhandled exception: ${e}`);
   dialog.showErrorBox(
     'Caught unhandled exception',
     e.message || 'Unknown error message'
@@ -120,10 +121,7 @@ try {
   });
 
   autoUpdater.on('update-not-available', () => {
-    dialog.showMessageBox({
-      title: 'No Updates',
-      message: 'Current version is up-to-date.'
-    });
+    log.info('Current version is up-to-date');
   });
 
   autoUpdater.on('update-downloaded', () => {
@@ -138,7 +136,6 @@ try {
     );
   });
 } catch (e) {
-  // Catch Error
   log.error(e);
   // throw e;
 }

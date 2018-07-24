@@ -34,19 +34,19 @@ install:
 
 script:
 - echo "Unit Tests"
-- xvfb-run yarn test
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then xvfb-run yarn test; else yarn test; fi
 
 - echo "E2E Tests"
-- xvfb-run yarn test:electron
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then xvfb-run yarn test:electron; else yarn test:electron; fi
 
 - echo "Deploy linux version to GitHub"
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then yarn release; fi
+- if [[ "$TRAVIS_BRANCH" == "master" ]] && [[ "$TRAVIS_OS_NAME" == "linux" ]]; then yarn release; fi
 
 - echo "Deploy windows version to GitHub"
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then yarn release:win; fi
+- if [[ "$TRAVIS_BRANCH" == "master" ]] && [[ "$TRAVIS_OS_NAME" == "osx" ]]; then yarn release:win; fi
 
 - echo "Deploy mac version to GitHub"
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then yarn release:mac; fi
+- if [[ "$TRAVIS_BRANCH" == "master" ]] && [[ "$TRAVIS_OS_NAME" == "osx" ]]; then yarn release:mac; fi
 
 before_cache:
-  - rm -rf $HOME/.cache/electron-builder/wine
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then rm -rf $HOME/.cache/electron-builder/wine; fi
