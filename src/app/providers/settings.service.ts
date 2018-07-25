@@ -5,7 +5,7 @@ import { AppSettings } from '../models/app-settings';
 import { ElectronService } from './electron.service';
 import { Subject, Observable } from 'rxjs';
 
-const SETTINGS_VERSION = 1;
+const SETTINGS_VERSION = 2;
 const LOCAL_STORAGE_KEY = `SETTINGS_V${SETTINGS_VERSION}`;
 
 let imagesPath = '';

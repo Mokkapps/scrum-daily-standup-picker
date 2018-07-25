@@ -30,7 +30,7 @@ import { SettingsComponent } from './components/settings/settings.component';
 import { StandupPickerComponent } from './components/standup-picker/standup-picker.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ElectronService } from './providers/electron.service';
-import { ArchiverService } from './providers/archiver.service';
+import { BackupService } from './providers/backup.service';
 import { SettingsService } from './providers/settings.service';
 import { FileService } from './providers/file.service';
 import { WebviewDirective } from './directives/webview.directive';
@@ -95,7 +95,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   providers: [
     ElectronService,
     SettingsService,
-    ArchiverService,
+    BackupService,
     FileService,
     { provide: MAT_LABEL_GLOBAL_OPTIONS, useValue: { float: 'always' } }
   ],

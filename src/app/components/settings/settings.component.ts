@@ -11,16 +11,16 @@ import { MatDialog, MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import * as random_name from 'node-random-name';
-import { filter, take, startWith } from 'rxjs/operators';
-import { ElectronService } from './../../providers/electron.service';
+import { take, startWith } from 'rxjs/operators';
+import { ElectronService } from '../../providers/electron.service';
 
-import { AboutDialogComponent } from '../../components/settings/dialog/about-dialog.component';
-import { DeleteFilesDialogComponent } from '../../components/settings/dialog/delete-files-dialog.component';
-import { AppSettings, StandupPicker } from '../../models/app-settings';
+import { AboutDialogComponent } from './dialog/about-dialog.component';
+import { DeleteFilesDialogComponent } from './dialog/delete-files-dialog.component';
+import { AppSettings } from '../../models/app-settings';
 import { FileService } from '../../providers/file.service';
 import { SettingsService } from '../../providers/settings.service';
 import { StandupSound } from '../../models/app-settings';
-import { ArchiverService } from './../../providers/archiver.service';
+import { BackupService } from '../../providers/backup.service';
 import { ConfirmDialogComponent } from './dialog/confirm-dialog.component';
 import { AVAILABLE_LANGUAGES } from '../../app.component';
 
@@ -62,7 +62,7 @@ export class SettingsComponent {
     private translateService: TranslateService,
     private electronService: ElectronService,
     private fileService: FileService,
-    private archiverService: ArchiverService,
+    private backupService: BackupService,
     private sanitizer: DomSanitizer
   ) {
     this.imagesPath = electronService.imagesPath;
@@ -98,8 +98,8 @@ export class SettingsComponent {
         )
       )
       .then(folderPath => {
-        this.archiverService
-          .createArchive(folderPath)
+        this.backupService
+          .createBackup(folderPath)
           .then(() => {
             this.showSnackbar(
               this.translateService.instant(
@@ -320,10 +320,7 @@ export class SettingsComponent {
   }
 
   private async importBackup(zipPath: string): Promise<void> {
-    await this.fileService.deleteFile(this.electronService.settingsFilePath);
-    await this.fileService.deleteDirFiles(this.electronService.imagesPath);
-    await this.fileService.deleteDirFiles(this.electronService.soundsPath);
-    await this.archiverService.readArchive(zipPath);
+    await this.backupService.readBackup(zipPath);
   }
 
   private getPathForFileType(fileType: FileType): string {

@@ -15,7 +15,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { LocalStorageService } from 'angular-2-local-storage';
 import { Subject } from 'rxjs';
 
-import { AppSettings } from './../../models/app-settings';
+import { AppSettings } from '../../models/app-settings';
 import { createLocalStorageServiceMock, TEST_SETTINGS } from '../../../mocks';
 import { BackgroundImageDirective } from '../../directives/background-image.directive';
 import { SettingsService } from '../../providers/settings.service';
