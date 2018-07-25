@@ -1,18 +1,18 @@
+import { Archiver } from 'archiver';
 import { Injectable } from '@angular/core';
-import * as archiver from 'archiver';
-import * as decompress from 'decompress';
-import * as fs from 'fs';
 
 import { ElectronService } from './electron.service';
 import { SettingsService } from './settings.service';
 import { FileService } from './file.service';
+import { ArchiveService } from './archiver.service';
 
 @Injectable()
 export class BackupService {
   constructor(
     private electronService: ElectronService,
     private settingsService: SettingsService,
-    private fileService: FileService
+    private fileService: FileService,
+    private archiveService: ArchiveService
   ) {}
 
   async readBackup(zipPath: string): Promise<void> {
@@ -38,7 +38,10 @@ export class BackupService {
     await this.fileService.deleteDirFiles(this.electronService.soundsPath);
 
     // Decompress backup to assets folder
-    await decompress(zipPath, this.electronService.assetsPath);
+    await this.archiveService.decompress(
+      zipPath,
+      this.electronService.assetsPath
+    );
 
     // Update settings
     const settings = await this.fileService.readFile(
@@ -50,14 +53,12 @@ export class BackupService {
   createBackup(zipPath: string): Promise<void> {
     return new Promise((resolve, reject) => {
       // create a file to stream archive data to.
-      const output = fs.createWriteStream(
+      const output = this.fileService.createWriteStream(
         `${zipPath}_StandupPickerBackup_v${
           this.settingsService.settingsVersion
         }.zip`
       );
-      const archive = archiver('zip', {
-        zlib: { level: 9 } // Sets the compression level.
-      });
+      const archive: Archiver = this.archiveService.archive();
 
       // listen for all archive data to be written
       // 'close' event is fired only when a file descriptor is involved

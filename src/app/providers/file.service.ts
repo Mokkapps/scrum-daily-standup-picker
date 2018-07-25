@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as fs from 'fs';
+import { WriteStream } from 'fs';
 
 @Injectable()
 export class FileService {
@@ -42,12 +43,12 @@ export class FileService {
     return new Promise((resolve, reject) => {
       fs.access(filePath, error => {
         if (!error) {
-          fs.unlink(filePath, error => {
-            if (!error) {
+          fs.unlink(filePath, err => {
+            if (!err) {
               resolve();
             } else {
-              console.log(error);
-              reject(error);
+              console.log(err);
+              reject(err);
             }
           });
         } else {
@@ -69,10 +70,10 @@ export class FileService {
 
         // iterate through the found file names
         for (const name of fileNames) {
-          fs.unlink(`${dirPath}${name}`, err => {
-            if (err) {
-              console.log(err);
-              reject(err);
+          fs.unlink(`${dirPath}${name}`, error => {
+            if (error) {
+              console.log(error);
+              reject(error);
             }
             console.log(`Deleted ${name}`);
           });
@@ -81,5 +82,9 @@ export class FileService {
         resolve();
       });
     });
+  }
+
+  createWriteStream(path: string): WriteStream {
+    return fs.createWriteStream(path);
   }
 }

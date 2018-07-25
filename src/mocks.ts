@@ -42,9 +42,10 @@ export function createSettingsServiceMock() {
 }
 
 export function createLocalStorageServiceMock() {
-  const localStorageServiceMock = jasmine.createSpyObj('LocalStorageServiceMock', [
-    'get', 'set'
-  ]);
+  const localStorageServiceMock = jasmine.createSpyObj(
+    'LocalStorageServiceMock',
+    ['get', 'set']
+  );
   localStorageServiceMock.get.and.returnValue(false);
   localStorageServiceMock.set.and.returnValue(true);
   return localStorageServiceMock;
@@ -63,10 +64,12 @@ export function createElectronServiceMock() {
 export function createFileServiceMock() {
   const fileServiceMock = jasmine.createSpyObj('FileService', [
     'readFile',
-    'writeFile'
+    'writeFile',
+    'writeFileStream'
   ]);
   fileServiceMock.readFile.and.returnValue(Promise.resolve('path'));
   fileServiceMock.writeFile.and.returnValue(Promise.resolve());
+  fileServiceMock.writeFileStream.and.returnValue(Promise.resolve());
   return fileServiceMock;
 }
 
@@ -86,4 +89,8 @@ export function createSnackBarMock() {
   ]);
   snackBarMock.open.and.callFake(fn => fn());
   return snackBarMock;
+}
+
+export function createArchiveServiceMock() {
+  jasmine.createSpyObj('mockArchiveService', ['decompress', 'archiver']);
 }
