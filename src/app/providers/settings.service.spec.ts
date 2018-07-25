@@ -23,14 +23,14 @@ describe('SettingsService', () => {
   });
 
   it('returns correct settings version', () => {
-    expect(sut.settingsVersion).toBe(1);
+    expect(sut.settingsVersion).toBe(2);
   });
 
   it('returns default settings', () => {
     const imagesPath = 'imagesPath/';
     const soundsPath = 'soundsPath/';
     expect(sut.settings).toEqual({
-      version: 1,
+      version: 2,
       standupPicker: {
         language: 'en_US',
         background: `${imagesPath}background.jpg`,
