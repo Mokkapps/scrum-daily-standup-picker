@@ -5,19 +5,49 @@ import * as fs from 'fs';
 
 import { ElectronService } from './electron.service';
 import { SettingsService } from './settings.service';
+import { FileService } from './file.service';
 
 @Injectable()
-export class ArchiverService {
+export class BackupService {
   constructor(
     private electronService: ElectronService,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
+    private fileService: FileService
   ) {}
 
-  readArchive(zipPath: string, ): Promise<any> {
-    return decompress(zipPath, this.electronService.assetsPath);
+  async readBackup(zipPath: string): Promise<void> {
+    // Check if backup version is valid
+    const regex = new RegExp(/_v(\d).zip$/gi);
+    const backupVersion = regex.exec(zipPath)[1];
+    if (!backupVersion) {
+      return Promise.reject(
+        'Cannot read backup. It seems that you did not provide a valid backup file'
+      );
+    }
+    if (this.settingsService.settingsVersion > Number(backupVersion)) {
+      return Promise.reject(
+        'Sorry, your backup is incompatible with current version'
+      );
+    }
+
+    // Delete existing settings
+    try {
+      await this.fileService.deleteFile(this.electronService.settingsFilePath);
+    } catch (e) {}
+    await this.fileService.deleteDirFiles(this.electronService.imagesPath);
+    await this.fileService.deleteDirFiles(this.electronService.soundsPath);
+
+    // Decompress backup to assets folder
+    await decompress(zipPath, this.electronService.assetsPath);
+
+    // Update settings
+    const settings = await this.fileService.readFile(
+      this.electronService.settingsFilePath
+    );
+    this.settingsService.updateSettings(JSON.parse(settings));
   }
 
-  createArchive(zipPath: string): Promise<any> {
+  createBackup(zipPath: string): Promise<void> {
     return new Promise((resolve, reject) => {
       // create a file to stream archive data to.
       const output = fs.createWriteStream(
@@ -32,21 +62,9 @@ export class ArchiverService {
       // listen for all archive data to be written
       // 'close' event is fired only when a file descriptor is involved
       output.on('close', function() {
-        console.log(archive.pointer() + ' total bytes');
-        console.log(
-          'archiver has been finalized and the output file descriptor has closed.'
-        );
         resolve();
       });
 
-      // This event is fired when the data source is drained no matter what was the data source.
-      // It is not part of this library but rather from the NodeJS Stream API.
-      // @see: https://nodejs.org/api/stream.html#stream_event_end
-      output.on('end', function() {
-        console.log('Data has been drained');
-      });
-
-      // good practice to catch warnings (ie stat failures and other non-blocking errors)
       archive.on('warning', function(err) {
         if (err.code === 'ENOENT') {
           // log warning
@@ -57,13 +75,18 @@ export class ArchiverService {
         }
       });
 
-      // good practice to catch this error explicitly
       archive.on('error', function(err) {
         reject(err);
       });
 
       // pipe archive data to the file
       archive.pipe(output);
+
+      // Write current settings as file
+      this.fileService.writeFile(
+        this.electronService.settingsFilePath,
+        JSON.stringify(this.settingsService.settings)
+      );
 
       // append files from a sub-directory, putting its contents at the root of archive
       archive.directory(this.electronService.assetsPath, false);

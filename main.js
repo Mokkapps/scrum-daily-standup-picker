@@ -17,6 +17,7 @@ log.info('App starting...');
 // Manage unhandled exceptions as early as possible
 process.on('uncaughtException', function (e) {
     console.error("Caught unhandled exception: " + e);
+    log.error("Caught unhandled exception: " + e);
     electron_1.dialog.showErrorBox('Caught unhandled exception', e.message || 'Unknown error message');
     electron_1.app.quit();
 });
@@ -95,10 +96,7 @@ try {
         });
     });
     autoUpdater.on('update-not-available', function () {
-        electron_1.dialog.showMessageBox({
-            title: 'No Updates',
-            message: 'Current version is up-to-date.'
-        });
+        log.info('Current version is up-to-date');
     });
     autoUpdater.on('update-downloaded', function () {
         electron_1.dialog.showMessageBox({
@@ -110,7 +108,6 @@ try {
     });
 }
 catch (e) {
-    // Catch Error
     log.error(e);
     // throw e;
 }
