@@ -2,7 +2,8 @@ import {
   ComponentFixture,
   fakeAsync,
   TestBed,
-  tick
+  tick,
+  discardPeriodicTasks
 } from '@angular/core/testing';
 import {
   MatCardModule,
@@ -14,6 +15,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
 import { LocalStorageService } from 'angular-2-local-storage';
 import { Subject } from 'rxjs';
+import * as Howl from 'howler';
 
 import { AppSettings } from '../../models/app-settings';
 import { createLocalStorageServiceMock, TEST_SETTINGS } from '../../../mocks';
@@ -27,9 +29,18 @@ describe('StandupPickerComponent', () => {
   let router: Router;
   let settingsService: any;
   let localStorageService: any;
+  let howlerMock: any;
 
   beforeEach(() => {
-    settingsService = jasmine.createSpyObj('SettingsService', ['settings', 'setting$']);
+    howlerMock = spyOn(Howl, 'Howl').and.returnValue({
+      play: () => {},
+      on: () => {}
+    });
+
+    settingsService = jasmine.createSpyObj('SettingsService', [
+      'settings',
+      'setting$'
+    ]);
     settingsService.settings = TEST_SETTINGS;
     settingsService.setting$ = new Subject<AppSettings>();
 
@@ -121,4 +132,32 @@ describe('StandupPickerComponent', () => {
     expect(comp.title).toBe('PAGES.STANDUP_PICKER.CLICK_TO_SELECT_TEAM_MEMBER');
     expect(comp.time).toBe('');
   });
+
+  it('should correctly reset', () => {
+    comp.reset();
+
+    expect(comp.title).toBe('PAGES.STANDUP_PICKER.CLICK_TO_SELECT_TEAM_MEMBER');
+    expect(comp.time).toBe('');
+  });
+
+  it(
+    'should correctly trigger picker',
+    fakeAsync(() => {
+      comp.triggerPicker();
+
+      // Picker is selecting
+      expect(comp.title).toBe('PAGES.STANDUP_PICKER.PLEASE_WAIT');
+      expect(comp.time).toBe(undefined);
+
+      tick(1100);
+
+      // Picker finished selection
+      expect(comp.title).toBe('PAGES.STANDUP_PICKER.STARTS_TODAY');
+      expect(comp.time).toBe('PAGES.STANDUP_PICKER.REMAINING_STANDUP_TIME');
+      expect(comp.isAudioPlaying).toBe(true);
+
+      fixture.detectChanges();
+      discardPeriodicTasks();
+    })
+  );
 });
