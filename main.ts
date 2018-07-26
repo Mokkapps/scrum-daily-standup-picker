@@ -13,6 +13,8 @@ serve = args.some(val => val === '--serve');
 const GITHUB_RELEASE_URL =
   'https://github.com/Mokkapps/scrum-daily-standup-picker/releases';
 
+const isLinux = process.platform === 'linux';
+
 log.transports.file.level = 'debug';
 autoUpdater.logger = log;
 // Disable auto download as ASAR is disabled and therefore code signing cannot be done
@@ -63,7 +65,9 @@ function createWindow() {
     win.webContents.openDevTools();
   }
 
-  if (!isDev) {
+  // Standup picker only works with .deb on Linux but auto-updater
+  // does not work for .deb and only for AppImage and Snap
+  if (!isDev && !isLinux) {
     autoUpdater.checkForUpdates();
   }
 

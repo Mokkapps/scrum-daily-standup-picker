@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import * as fs from 'fs';
-import { WriteStream } from 'fs';
 
 @Injectable()
 export class FileService {
@@ -84,7 +83,7 @@ export class FileService {
     });
   }
 
-  createWriteStream(path: string): WriteStream {
+  createWriteStream(path: string): fs.WriteStream {
     return fs.createWriteStream(path);
   }
 }

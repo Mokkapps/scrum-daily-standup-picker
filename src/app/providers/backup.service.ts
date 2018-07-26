@@ -18,13 +18,13 @@ export class BackupService {
   async readBackup(zipPath: string): Promise<void> {
     // Check if backup version is valid
     const regex = new RegExp(/_v(\d).zip$/gi);
-    const backupVersion = regex.exec(zipPath)[1];
+    const backupVersion = regex.exec(zipPath);
     if (!backupVersion) {
       return Promise.reject(
         'Cannot read backup. It seems that you did not provide a valid backup file'
       );
     }
-    if (this.settingsService.settingsVersion > Number(backupVersion)) {
+    if (this.settingsService.settingsVersion > Number(backupVersion[1])) {
       return Promise.reject(
         'Sorry, your backup is incompatible with current version'
       );
@@ -33,7 +33,12 @@ export class BackupService {
     // Delete existing settings
     try {
       await this.fileService.deleteFile(this.electronService.settingsFilePath);
-    } catch (e) {}
+    } catch (err) {
+      console.warn(
+        `Could not delete file from ${this.electronService.settingsFilePath}`,
+        err
+      );
+    }
     await this.fileService.deleteDirFiles(this.electronService.imagesPath);
     await this.fileService.deleteDirFiles(this.electronService.soundsPath);
 

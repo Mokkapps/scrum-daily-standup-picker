@@ -47,7 +47,7 @@
     "release:linux": "npm run build:prod && npx electron-builder build --linux -p always",
     "release:linux:arm": "npm run build:prod && npx electron-builder build --linux --armv7l -p always",
     "test": "npm run postinstall:web && ng test",
-    "test:dev": "npm run postinstall:web && ng test --watch",
+    "test:dev": "npm run postinstall:web && ng test --browsers Chrome --environment dev --watch",
     "pretest:electron": "npm run clear:temp",
     "test:electron": "npm run build:dev --e2e && mocha",
     "tslint": "tslint --project tsconfig.json"

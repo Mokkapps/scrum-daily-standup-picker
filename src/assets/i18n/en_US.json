@@ -53,14 +53,15 @@
         },
         "FILE_UPLOAD": {
           "TITLE": "File Import",
-          "DESCRIPTION": "Recommended picture size is 640x480px, recommended sound length is 30 seconds",
+          "DESCRIPTION":
+            "Recommended picture size is 640x480px, recommended sound length is 30 seconds",
           "SUPPORTED_IMAGE_FORMATS": "Supported picture files: jpg, jpeg, png",
           "SUPPORTED_SOUND_FORMATS":
             "Supported sound files: wav, mp3, ogg, m4a",
           "BACKUP_DESCRIPTION":
             "Existing settings can be exported or imported.",
           "BACKUP_WARNING":
-            "WARNING: Backup import only works on the same machine with the same user.",
+            "WARNING: Backup import only works on the same machine with the same user. All existing settings will be overwritten!",
           "EXPORT_BACKUP": {
             "BUTTON": "Create backup",
             "TITLE": "Choose folder for your backup",

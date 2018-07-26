@@ -38,6 +38,7 @@ import { AppComponent } from './app.component';
 import { ConfirmDialogComponent } from './components/settings/dialog/confirm-dialog.component';
 import { AboutDialogComponent } from './components/settings/dialog/about-dialog.component';
 import { DeleteFilesDialogComponent } from './components/settings/dialog/delete-files-dialog.component';
+import { ArchiveService } from './providers/archiver.service';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -96,6 +97,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ElectronService,
     SettingsService,
     BackupService,
+    ArchiveService,
     FileService,
     { provide: MAT_LABEL_GLOBAL_OPTIONS, useValue: { float: 'always' } }
   ],

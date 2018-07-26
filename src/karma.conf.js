@@ -35,6 +35,12 @@ module.exports = function(config) {
       }
     },
     singleRun: true,
-    webpack: { node: { fs: 'empty' } }
+    webpack: {
+      node: { fs: 'empty' },
+      externals: {
+        'fs-extra': '{}',
+        'graceful-fs': '{}'
+      }
+    }
   });
 };

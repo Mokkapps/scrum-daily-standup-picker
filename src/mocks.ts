@@ -35,9 +35,14 @@ export const TEST_SETTINGS = {
 
 export function createSettingsServiceMock() {
   const settingsServiceMock = jasmine.createSpyObj('SettingsService', [
-    'settings'
+    'settings',
+    'setting$',
+    'settingsVersion',
+    'updateSettings'
   ]);
-  settingsServiceMock.settings = of(TEST_SETTINGS);
+  settingsServiceMock.settings = TEST_SETTINGS;
+  settingsServiceMock.setting$ = of(TEST_SETTINGS);
+  settingsServiceMock.settingsVersion = 2;
   return settingsServiceMock;
 }
 
@@ -58,6 +63,8 @@ export function createElectronServiceMock() {
   electronServiceMock.isElectron.and.returnValue(false);
   electronServiceMock.imagesPath = 'imagesPath/';
   electronServiceMock.soundsPath = 'soundsPath/';
+  electronServiceMock.settingsFilePath = 'settingsFilePath/';
+  electronServiceMock.assetsPath = 'assetsPath/';
   return electronServiceMock;
 }
 
@@ -65,11 +72,17 @@ export function createFileServiceMock() {
   const fileServiceMock = jasmine.createSpyObj('FileService', [
     'readFile',
     'writeFile',
-    'writeFileStream'
+    'deleteDirFiles',
+    'deleteFile',
+    'createWriteStream'
   ]);
-  fileServiceMock.readFile.and.returnValue(Promise.resolve('path'));
+  fileServiceMock.readFile.and.returnValue(
+    Promise.resolve(JSON.stringify({ prop: 'path' }))
+  );
   fileServiceMock.writeFile.and.returnValue(Promise.resolve());
-  fileServiceMock.writeFileStream.and.returnValue(Promise.resolve());
+  fileServiceMock.deleteFile.and.returnValue(Promise.resolve());
+  fileServiceMock.deleteDirFiles.and.returnValue(Promise.resolve());
+  fileServiceMock.createWriteStream.and.returnValue(new WriteStreamMock());
   return fileServiceMock;
 }
 
@@ -92,5 +105,46 @@ export function createSnackBarMock() {
 }
 
 export function createArchiveServiceMock() {
-  jasmine.createSpyObj('mockArchiveService', ['decompress', 'archiver']);
+  const archiverServiceMock = jasmine.createSpyObj('mockArchiverService', [
+    'archive',
+    'decompress'
+  ]);
+  archiverServiceMock.decompress.and.returnValue(Promise.resolve());
+  archiverServiceMock.archive.and.returnValue(new ArchiverMock());
+
+  return archiverServiceMock;
+}
+
+class WriteStreamMock {
+  events: any;
+
+  constructor() {
+    this.events = {};
+  }
+
+  on(event, func) {
+    this.events[event] = func;
+    return this;
+  }
+}
+
+class ArchiverMock {
+  events: any;
+
+  constructor() {
+    this.events = {};
+  }
+
+  on(event, func) {
+    this.events[event] = func;
+    return this;
+  }
+
+  pipe() {
+    return this;
+  }
+
+  directory() {}
+
+  finalize() {}
 }

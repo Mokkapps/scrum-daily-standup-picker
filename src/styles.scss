@@ -1,10 +1,21 @@
 /* You can add global styles to this file, and also import other style files */
 
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
-@import "./scss/variables.scss";
-@import "./scss/toolbar-icon.scss";
+// see https://github.com/angular/material2/issues/8416
+@import '~@angular/material/theming';
+.mat-checkbox-layout {
+  white-space: normal !important;
+}
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core();
 
-html, body {
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+@import './scss/variables.scss';
+@import './scss/toolbar-icon.scss';
+
+html,
+body {
   margin: 0;
   padding: 0;
 

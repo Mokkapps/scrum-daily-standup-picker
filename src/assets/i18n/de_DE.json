@@ -61,7 +61,7 @@
           "BACKUP_DESCRIPTION":
             "Es können die aktuellen Einstellungen exportiert oder bestehende importiert werden.",
           "BACKUP_WARNING":
-            "ACHTUNG: Backup-Import funktioniert nur auf dem gleichen Rechner und dem gleichen Benutzer.",
+            "ACHTUNG: Backup-Import funktioniert nur auf dem gleichen Rechner und dem gleichen Benutzer. Alle aktuellen Einstellungen werden überschrieben!",
           "EXPORT_BACKUP": {
             "BUTTON": "Backup erstellen",
             "TITLE": "Ordner zum Speichern des Backups auswählen",
