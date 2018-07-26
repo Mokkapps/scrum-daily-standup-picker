@@ -1,4 +1,5 @@
 [![Travis Build Status][build-badge]][build]
+[![Coverage Status][coverage-badge]][coverage]
 [![Make a pull request][prs-badge]][prs]
 [![License](http://img.shields.io/badge/Licence-MIT-brightgreen.svg)](LICENSE.md)
 
@@ -78,3 +79,5 @@ Note that you can't use Electron or NodeJS native libraries in this case. Please
 [build]: https://travis-ci.org/Mokkapps/scrum-daily-standup-picker.svg?branch=master
 [prs-badge]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
 [prs]: http://makeapullrequest.com
+[coverage-badge]: https://coveralls.io/repos/github/Mokkapps/scrum-daily-standup-picker/badge.svg?branch=master
+[coverage]: https://coveralls.io/github/Mokkapps/scrum-daily-standup-picker?branch=master

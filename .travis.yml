@@ -30,6 +30,7 @@ addons:
 
 install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install yarn; fi
+  - export {no_proxy,NO_PROXY}="127.0.0.1,localhost" # see https://github.com/electron/spectron/issues/144
   - yarn
 
 script:

@@ -50,6 +50,8 @@ function createWindow() {
     if (serve) {
         win.webContents.openDevTools();
     }
+    // Standup picker only works with .deb on Linux but auto-updater
+    // does not work for .deb and only for AppImage and Snap
     if (!isDev && !isLinux) {
         autoUpdater.checkForUpdates();
     }
