@@ -69,7 +69,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         deps: [HttpClient]
       }
     }),
-    LocalStorageModule.withConfig({
+    LocalStorageModule.forRoot({
       prefix: 'StandupPicker',
       storageType: 'localStorage'
     }),

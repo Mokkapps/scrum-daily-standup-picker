@@ -18,10 +18,10 @@ export class ElectronService {
 
   electron: any;
 
-  private _imagesPath: string;
-  private _soundsPath: string;
-  private _assetsPath: string;
-  private _settingsFilePath: string;
+  private readonly _imagesPath: string;
+  private readonly _soundsPath: string;
+  private readonly _assetsPath: string;
+  private readonly _settingsFilePath: string;
 
   constructor(private translateService: TranslateService) {
     // Conditional imports

@@ -20,7 +20,7 @@ describe('AppComponent', () => {
       imports: [
         RouterTestingModule,
         TranslateModule.forRoot(),
-        LocalStorageModule.withConfig({
+        LocalStorageModule.forRoot({
           prefix: 'StandupPicker',
           storageType: 'localStorage'
         }),
