@@ -3,18 +3,18 @@ exports.__esModule = true;
 var electron_1 = require("electron");
 var path = require("path");
 var url = require("url");
-var log = require('electron-log');
-var autoUpdater = require('electron-updater').autoUpdater;
-var isDev = require('electron-is-dev');
+var log = require("electron-log");
+var electron_updater_1 = require("electron-updater");
+var isDev = require("electron-is-dev");
 var win, serve;
 var args = process.argv.slice(1);
 serve = args.some(function (val) { return val === '--serve'; });
 var GITHUB_RELEASE_URL = 'https://github.com/Mokkapps/scrum-daily-standup-picker/releases';
 var isLinux = process.platform === 'linux';
 log.transports.file.level = 'debug';
-autoUpdater.logger = log;
+electron_updater_1.autoUpdater.logger = log;
 // Disable auto download as ASAR is disabled and therefore code signing cannot be done
-autoUpdater.autoDownload = false;
+electron_updater_1.autoUpdater.autoDownload = false;
 log.info('App starting...');
 // Manage unhandled exceptions as early as possible
 process.on('uncaughtException', function (e) {
@@ -53,7 +53,7 @@ function createWindow() {
     // Standup picker only works with .deb on Linux but auto-updater
     // does not work for .deb and only for AppImage and Snap
     if (!isDev && !isLinux) {
-        autoUpdater.checkForUpdates();
+        electron_updater_1.autoUpdater.checkForUpdates();
     }
     // Emitted when the window is closed.
     win.on('closed', function () {
@@ -84,10 +84,10 @@ try {
         }
     });
     // Auto Updater
-    autoUpdater.on('error', function (error) {
+    electron_updater_1.autoUpdater.on('error', function (error) {
         electron_1.dialog.showErrorBox('Error while looking for updates: ', error == null ? 'unknown' : (error.stack || error).toString());
     });
-    autoUpdater.on('update-available', function () {
+    electron_updater_1.autoUpdater.on('update-available', function () {
         electron_1.dialog.showMessageBox({
             type: 'info',
             title: 'Found Updates',
@@ -99,7 +99,7 @@ try {
             }
         });
     });
-    autoUpdater.on('update-not-available', function () {
+    electron_updater_1.autoUpdater.on('update-not-available', function () {
         log.info('Current version is up-to-date');
     });
 }

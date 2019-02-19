@@ -1,10 +1,9 @@
 import { app, BrowserWindow, screen, dialog, shell } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
-
-const log = require('electron-log');
-const { autoUpdater } = require('electron-updater');
-const isDev = require('electron-is-dev');
+import * as log from 'electron-log';
+import { autoUpdater } from 'electron-updater';
+import * as isDev from 'electron-is-dev';
 
 let win, serve;
 const args = process.argv.slice(1);
