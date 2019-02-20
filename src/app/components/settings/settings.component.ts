@@ -310,7 +310,7 @@ export class SettingsComponent {
   }
 
   showAboutDialog(): void {
-    const dialogRef = this.dialog.open(AboutDialogComponent, {
+    this.dialog.open(AboutDialogComponent, {
       width: DIALOG_WIDTH
     });
   }
@@ -367,7 +367,7 @@ export class SettingsComponent {
     }
   }
 
-  private getFileNameWithExtension(path: string): string {
+  private getFileNameWithExtension(path: string): string | undefined {
     return (path.toString().match(/[^\\/]+\.[^\\/]+$/) || []).pop();
   }
 

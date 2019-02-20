@@ -126,7 +126,7 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
     this.shuffleSubscription = zip(
       from(availableMembers),
       timer(500, 500),
-      (item, i) => {
+      (item) => {
         return item;
       }
     )
@@ -165,7 +165,7 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
     this.isAudioPlaying = false;
   }
 
-  private getFileNameWithExtension(path: string): string {
+  private getFileNameWithExtension(path: string): string | undefined {
     return (path.toString().match(/[^\\/]+\.[^\\/]+$/) || []).pop();
   }
 
