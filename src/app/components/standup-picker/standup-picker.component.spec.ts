@@ -5,11 +5,9 @@ import {
   tick,
   discardPeriodicTasks
 } from '@angular/core/testing';
-import {
-  MatCardModule,
-  MatIconModule,
-  MatToolbarModule
-} from '@angular/material';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
@@ -33,7 +31,9 @@ describe('StandupPickerComponent', () => {
 
   beforeEach(() => {
     howlerMock = spyOn(Howl, 'Howl').and.returnValue({
+      // @ts-ignore
       play: () => {},
+      // @ts-ignore
       on: () => {}
     });
 
@@ -121,6 +121,7 @@ describe('StandupPickerComponent', () => {
   });
 
   it('should correctly navigate to settings', () => {
+    // @ts-ignore
     spyOn(router, 'navigate').and.callFake(() => {});
     comp.goToSettings();
     expect(router.navigate).toHaveBeenCalledWith(['settings']);
