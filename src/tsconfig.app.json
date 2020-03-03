@@ -5,12 +5,11 @@
     "baseUrl": "",
     "types": []
   },
-  "exclude": [
-    "src/test.ts",
-    "mocks.ts",
-    "**/*.spec.ts",
-    "dist",
-    "app-builds",
-    "node_modules"
+  "files": [
+    "main.ts",
+    "polyfills.ts"
+  ],
+  "include": [
+    "src/**/*.d.ts"
   ]
 }
