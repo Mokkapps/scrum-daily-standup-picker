@@ -115,18 +115,18 @@ try {
 
   autoUpdater.on('update-available', () => {
     dialog.showMessageBox(
+      win,
       {
         type: 'info',
         title: 'Found Updates',
         message: 'Found updates, do you want update now?',
         buttons: ['Sure', 'No']
-      },
-      buttonIndex => {
-        if (buttonIndex === 0) {
-          shell.openExternal(GITHUB_RELEASE_URL);
-        }
       }
-    );
+    ).then(res => {
+      if (res.response === 0) {
+        shell.openExternal(GITHUB_RELEASE_URL);
+      }
+    });
   });
 
   autoUpdater.on('update-not-available', () => {

@@ -9,7 +9,7 @@ import { LocalStorageModule } from 'angular-2-local-storage';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MAT_LABEL_GLOBAL_OPTIONS } from '@angular/material/core';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -97,7 +97,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     BackupService,
     ArchiveService,
     FileService,
-    { provide: MAT_LABEL_GLOBAL_OPTIONS, useValue: { float: 'always' } }
+    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { float: 'always' } }
   ],
   bootstrap: [AppComponent]
 })

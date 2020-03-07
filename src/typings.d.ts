@@ -4,6 +4,7 @@ interface NodeModule {
   id: string;
 }
 
+// @ts-ignore
 declare var window: Window;
 interface Window {
   process: any;

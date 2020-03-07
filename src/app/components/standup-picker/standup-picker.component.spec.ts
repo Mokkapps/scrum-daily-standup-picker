@@ -63,7 +63,7 @@ describe('StandupPickerComponent', () => {
 
     fixture = TestBed.createComponent(StandupPickerComponent);
     comp = fixture.componentInstance;
-    router = TestBed.get(Router);
+    router = TestBed.inject(Router);
   });
 
   it('gets initialized correctly', () => {

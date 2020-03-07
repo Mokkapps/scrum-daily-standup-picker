@@ -1,5 +1,41 @@
 import { of } from 'rxjs';
 
+
+
+class WriteStreamMock {
+  events: any;
+
+  constructor() {
+    this.events = {};
+  }
+
+  on(event, func) {
+    this.events[event] = func;
+    return this;
+  }
+}
+
+class ArchiverMock {
+  events: any;
+
+  constructor() {
+    this.events = {};
+  }
+
+  on(event, func) {
+    this.events[event] = func;
+    return this;
+  }
+
+  pipe() {
+    return this;
+  }
+
+  directory() {}
+
+  finalize() {}
+}
+
 export const TEST_SETTINGS = {
   version: 1,
   standupPicker: {
@@ -113,38 +149,4 @@ export function createArchiveServiceMock() {
   archiverServiceMock.archive.and.returnValue(new ArchiverMock());
 
   return archiverServiceMock;
-}
-
-class WriteStreamMock {
-  events: any;
-
-  constructor() {
-    this.events = {};
-  }
-
-  on(event, func) {
-    this.events[event] = func;
-    return this;
-  }
-}
-
-class ArchiverMock {
-  events: any;
-
-  constructor() {
-    this.events = {};
-  }
-
-  on(event, func) {
-    this.events[event] = func;
-    return this;
-  }
-
-  pipe() {
-    return this;
-  }
-
-  directory() {}
-
-  finalize() {}
 }

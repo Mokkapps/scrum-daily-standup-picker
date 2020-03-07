@@ -125,12 +125,12 @@ export class StandupPickerComponent implements OnInit, OnDestroy {
 
     this.shuffleSubscription = zip(
       from(availableMembers),
-      timer(500, 500),
-      (item) => {
-        return item;
-      }
+      timer(500, 500)
     )
-      .pipe(finalize(() => this.onPickComplete()))
+      .pipe(
+        map(([_, item]) => item),
+        finalize(() => this.onPickComplete())
+      )
       .subscribe(() => {
         this.teamMembers = this.shuffleMembers();
       });
