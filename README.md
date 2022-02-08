@@ -9,7 +9,11 @@
 
 A desktop application which can be used in Scrum teams to initiate the daily Scrum meeting.
 
-[![Standup Picker](./youtube_video_thumbnail.png)](https://youtu.be/7MHk09N5APM "Standup Picker - Click to Watch!")
+![Standup Picker Start Screen](readme-images/standup-picker.jpg)
+![Standup Picker Start Settings Part 1](readme-images/standup-picker-settings-1.jpg)
+![Standup Picker Start Settings Part 2](readme-images/standup-picker-settings-2.jpg)
+
+[![Standup Picker](readme-images/youtube_video_thumbnail.png)](https://youtu.be/7MHk09N5APM "Standup Picker - Click to Watch!")
 
 # Features
 
